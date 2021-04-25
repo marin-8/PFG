@@ -1,8 +1,12 @@
-﻿using System;
+﻿
+using System;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Aplicacion
+using PFG.Aplicacion.Pantallas;
+
+namespace PFG.Aplicacion
 {
 	public partial class App : Application
 	{
@@ -10,7 +14,7 @@ namespace Aplicacion
 		{
 			InitializeComponent();
 
-			MainPage = new MainPage();
+			MainPage = new IniciarSesion();
 		}
 
 		protected override void OnStart()

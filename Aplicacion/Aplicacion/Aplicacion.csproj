@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <RootNamespace>PFG.Aplicacion</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,5 +22,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Comun\Comun.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pantallas\IniciarSesion.xaml.cs">
+      <DependentUpon>IniciarSesion.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

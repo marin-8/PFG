@@ -1,8 +1,7 @@
 ﻿
-using System;
 using System.Collections.Generic;
 
-namespace ProyectoFinal.Comun
+namespace PFG.Comun.Modelos
 {
 	public class AdaptadorDeRed
 	{

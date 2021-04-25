@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+    
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.Pantallas.IniciarSesion"
+    
+    BackgroundColor="#2196F3">
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackLayout
+            Grid.Column="1"
+            VerticalOptions="CenterAndExpand">
+
+            <Label
+                Text="Iniciar sesión"
+                FontSize="Title"
+                TextColor="White"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"/>
+
+            <BoxView
+                HeightRequest="20"
+                Color="Transparent"/>
+
+            <Entry
+                x:Name="IPGestor"
+                Placeholder="IP del Gestor (ej. 192.168.1.132)"
+                TextColor="Black"
+                BackgroundColor="White"
+                ClearButtonVisibility="WhileEditing"
+                MaxLength="15"/>
+
+            <Entry
+                x:Name="Usuario"
+                Placeholder="Usuario"
+                TextColor="Black"
+                BackgroundColor="White"
+                ClearButtonVisibility="WhileEditing"/>
+
+            <Entry
+                x:Name="Contrasena"
+                Placeholder="Contraseña"
+                TextColor="Black"
+                BackgroundColor="White"
+                ClearButtonVisibility="WhileEditing"
+                IsPassword="true"/>
+
+            <BoxView
+                HeightRequest="20"
+                Color="Transparent"/>
+
+            <Button
+                x:Name="Entrar"
+                Text="Entrar"
+                FontSize="Medium"
+                FontAttributes="Bold"
+                TextColor="Black"
+                BackgroundColor="Turquoise"
+                Clicked="EntrarClick"/>
+
+        </StackLayout>
+
+    </Grid>
+
+</ContentPage>

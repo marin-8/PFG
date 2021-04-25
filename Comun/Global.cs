@@ -5,7 +5,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 
-namespace ProyectoFinal.Comun
+using PFG.Comun.Modelos;
+
+namespace PFG.Comun
 {
 	public static class Global
 	{
