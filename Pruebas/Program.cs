@@ -8,9 +8,9 @@ namespace PFG.Pruebas
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
-			Debug.WriteLine(MensajeInicioSesion.ParametrosToString("us,r", "pwd"));
+			Debug.WriteLine(Comando_IniciarSesion.ParametrosToString("us,r", "pwd"));
 		}
 	}
 }

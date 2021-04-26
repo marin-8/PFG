@@ -19,7 +19,7 @@ namespace PFG.Aplicacion.Pantallas
 {
 	public partial class IniciarSesion : ContentPage
 	{
-		private readonly Regex FormatoIP = new Regex(@"\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b");
+		private readonly Regex FormatoIP = new(@"\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b");
 
 		public IniciarSesion()
 		{
@@ -28,11 +28,24 @@ namespace PFG.Aplicacion.Pantallas
 
 		private void Entrar_Clicked(object sender, EventArgs e)
 		{
-			if(!FormatoIP.IsMatch(IPGestor.Text)) { DisplayAlert("Alerta", "La IP introducida no es válida",              "Aceptar"); return; }
-			if(          Usuario.Text.Equals("")) { DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",    "Aceptar"); return; }
-			if(       Contrasena.Text.Equals("")) { DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio", "Aceptar"); return; }
+			string ipGestor = IPGestor.Text;
+			string usuario = Usuario.Text;
+			string contrasena = Contrasena.Text;
 
-			//
+			if(         ipGestor.Equals("")) { DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
+			if(          usuario.Equals("")) { DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
+			if(       contrasena.Equals("")) { DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio",       "Aceptar"); return; }
+
+			if(                         !FormatoIP.IsMatch(ipGestor)) { DisplayAlert("Alerta", "La IP introducida no es válida",                                "Aceptar"); return; }
+			if(         usuario.Length > Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }
+			if(      contrasena.Length > Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "La Contraseña no puede estar formada por más de 20 caracteres", "Aceptar"); return; }
+
+			GestionSesionApp.IniciarSesion
+			(
+				ipGestor,
+				usuario,
+				contrasena
+			);
 		}
 	}
 }

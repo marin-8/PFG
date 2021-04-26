@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace PFG.Comun
 {
-	public enum TiposMensaje : ushort
+	public enum TiposComando : ushort
 	{
-		InicioSesion = 1
+		IniciarSesion = 1
 	}
 }

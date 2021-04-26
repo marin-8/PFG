@@ -9,9 +9,11 @@ namespace PFG.Comun
 {
 	public static class Global
 	{
+		public const int MAX_CARACTERES_LOGIN = 20;
+
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
 		{
-			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new List<AdaptadorDeRed>();
+			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new();
 
 			foreach(NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())
 			{
@@ -19,7 +21,7 @@ namespace PFG.Comun
 					networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
 				   && networkInterface.OperationalStatus == OperationalStatus.Up)
 				{
-					AdaptadorDeRed nuevoAdaptadorDeRedDisponible = new AdaptadorDeRed() { Nombre=networkInterface.Name };
+					AdaptadorDeRed nuevoAdaptadorDeRedDisponible = new() { Nombre=networkInterface.Name };
 
 					foreach (UnicastIPAddressInformation ip in networkInterface.GetIPProperties().UnicastAddresses)
 					{

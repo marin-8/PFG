@@ -1,22 +1,20 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace PFG.Comun
 {
-	public abstract class Mensaje
+	public abstract class Comando
 	{
-		public TiposMensaje CodigoAccion { get; private set; }
+		public TiposComando TipoComando { get; private set; }
 
-		protected Mensaje(TiposMensaje CodigoAccion)
+		protected Comando(TiposComando CodigoAccion)
 		{
-			this.CodigoAccion = CodigoAccion;
+			this.TipoComando = CodigoAccion;
 		}
 
 		public override string ToString()
 		{
-			StringBuilder sb = new($"{((ushort)CodigoAccion).ToString()},");
+			StringBuilder sb = new($"{((ushort)TipoComando)},");
 
 			var propiedades = GetType().GetProperties();
 
@@ -27,16 +25,6 @@ namespace PFG.Comun
 			}
 
 			return sb.Remove(sb.Length-1, 1).ToString();
-		}
-
-		internal class Split
-		{
-			private char v;
-
-			public Split(char v)
-			{
-				this.v = v;
-			}
 		}
 
 		//public static dynamic DeString(string Mensaje)

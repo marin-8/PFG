@@ -13,14 +13,14 @@ using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
-	public static class InicioSesionApp
+	public static class GestionSesionApp
 	{
 		public static void IniciarSesion(string IPGestor, string Usuario, string Contrasena)
 		{
 			ControladorRed.Enviar
 			(
 				IPGestor,
-				MensajeInicioSesion.ParametrosToString(Usuario, Contrasena)
+				Comando_IniciarSesion.ParametrosToString(Usuario, Contrasena)
 			);
 		}
 	}
