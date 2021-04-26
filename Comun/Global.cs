@@ -5,8 +5,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 
-using PFG.Comun.Modelos;
-
 namespace PFG.Comun
 {
 	public static class Global

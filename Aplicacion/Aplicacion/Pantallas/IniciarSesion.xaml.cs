@@ -26,9 +26,13 @@ namespace PFG.Aplicacion.Pantallas
 			InitializeComponent();
 		}
 
-		private void EntrarClick()
+		private void Entrar_Clicked(object sender, EventArgs e)
 		{
+			if(!FormatoIP.IsMatch(IPGestor.Text)) { DisplayAlert("Alerta", "La IP introducida no es válida",              "Aceptar"); return; }
+			if(          Usuario.Text.Equals("")) { DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",    "Aceptar"); return; }
+			if(       Contrasena.Text.Equals("")) { DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio", "Aceptar"); return; }
 
+			//
 		}
 	}
 }

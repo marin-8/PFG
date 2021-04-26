@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace PFG.Comun.Modelos
+namespace PFG.Comun
 {
 	public class AdaptadorDeRed
 	{

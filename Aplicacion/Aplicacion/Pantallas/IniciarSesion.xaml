@@ -7,7 +7,9 @@
     
     BackgroundColor="#2196F3">
 
-    <Grid>
+    <Grid
+        ColumnSpacing="0"
+        RowSpacing="0">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -20,6 +22,7 @@
         </Grid.RowDefinitions>
 
         <StackLayout
+            Spacing="0"
             Grid.Column="1"
             VerticalOptions="CenterAndExpand">
 
@@ -30,36 +33,39 @@
                 FontAttributes="Bold"
                 HorizontalTextAlignment="Center"/>
 
-            <BoxView
-                HeightRequest="20"
-                Color="Transparent"/>
+            <BoxView HeightRequest="20" Color="Transparent"/>
 
             <Entry
                 x:Name="IPGestor"
+                Text=""
                 Placeholder="IP del Gestor (ej. 192.168.1.132)"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
                 MaxLength="15"/>
 
+            <BoxView HeightRequest="10" Color="Transparent"/>
+
             <Entry
                 x:Name="Usuario"
+                Text=""
                 Placeholder="Usuario"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"/>
 
+            <BoxView HeightRequest="10" Color="Transparent"/>
+
             <Entry
                 x:Name="Contrasena"
+                Text=""
                 Placeholder="Contraseña"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
                 IsPassword="true"/>
 
-            <BoxView
-                HeightRequest="20"
-                Color="Transparent"/>
+            <BoxView HeightRequest="20" Color="Transparent"/>
 
             <Button
                 x:Name="Entrar"
@@ -68,7 +74,7 @@
                 FontAttributes="Bold"
                 TextColor="Black"
                 BackgroundColor="Turquoise"
-                Clicked="EntrarClick"/>
+                Clicked="Entrar_Clicked"/>
 
         </StackLayout>
 
