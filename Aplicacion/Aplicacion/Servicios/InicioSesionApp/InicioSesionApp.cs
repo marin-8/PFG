@@ -20,8 +20,7 @@ namespace PFG.Aplicacion
 			ControladorRed.Enviar
 			(
 				IPGestor,
-				new MensajeInicioSesion
-				
+				MensajeInicioSesion.ParametrosToString(Usuario, Contrasena)
 			);
 		}
 	}

@@ -10,9 +10,7 @@ namespace PFG.Pruebas
 	{
 		static void Main(string[] args)
 		{
-			MensajeInicioSesion m1 = new("usr", "pwd");
-			MensajeInicioSesion m2 = new(m1.ToString());
-			Debug.WriteLine(m2.ToString());
+			Debug.WriteLine(MensajeInicioSesion.ParametrosToString("us,r", "pwd"));
 		}
 	}
 }
