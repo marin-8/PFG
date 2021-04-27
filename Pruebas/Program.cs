@@ -10,7 +10,9 @@ namespace PFG.Pruebas
 	{
 		static void Main()
 		{
-			Debug.WriteLine(Comando_IniciarSesion.ParametrosToString("us,r", "pwd"));
+			var b1 = "0".Equals("1") ? true : false;
+			var b2 = $"{(false ? "1" : "0")}"
+			;
 		}
 	}
 }

@@ -1,20 +1,20 @@
 ﻿
 namespace PFG.Comun
 {
-	public class Comando_IniciarSesion : Comando
+	public class Comando_IntentarIniciarSesion : Comando
 	{
 		public string Usuario { get; private set; }
 		public string Contrasena { get; private set; }
 
-		public Comando_IniciarSesion(string Usuario, string Contrasena)
-			: base(TiposComando.IniciarSesion)
+		public Comando_IntentarIniciarSesion(string Usuario, string Contrasena)
+			: base(TiposComando.IntentarIniciarSesion)
 		{
 			this.Usuario = Usuario;
 			this.Contrasena = Contrasena;
 		}
 
-		public Comando_IniciarSesion(string ComandoString)
-			: base(TiposComando.IniciarSesion)
+		public Comando_IntentarIniciarSesion(string ComandoString)
+			: base(TiposComando.IntentarIniciarSesion)
 		{
 			var parametrosComando = ComandoString.Split(',');
 
@@ -24,7 +24,7 @@ namespace PFG.Comun
 
 		public static string ParametrosToString(string Usuario, string Contrasena)
 		{
-			return $"{(ushort)TiposComando.IniciarSesion},{Usuario},{Contrasena}";
+			return $"{(byte)TiposComando.IntentarIniciarSesion},{Usuario},{Contrasena}";
 		}
 	}
 }

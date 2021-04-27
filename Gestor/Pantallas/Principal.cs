@@ -31,7 +31,7 @@ namespace PFG.Gestor
 		{
 			ProcesadorMensajesRecibidos = new(Registro);
 
-			string servidorIP = Global.Get_MiIP_Windows();
+			string servidorIP = Comun.Global.Get_MiIP_Windows();
 
 			Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
 

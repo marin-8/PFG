@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.483" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
@@ -25,8 +26,35 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pantallas\Ajustes.xaml.cs">
+      <DependentUpon>Ajustes.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\Usuarios.xaml.cs">
+      <DependentUpon>Usuarios.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\Mesas.xaml.cs">
+      <DependentUpon>Mesas.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\Carta.xaml.cs">
+      <DependentUpon>Carta.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\Tareas.xaml.cs">
+      <DependentUpon>Tareas.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\Acciones.xaml.cs">
+      <DependentUpon>Acciones.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\Shell_Principal.xaml.cs">
+      <DependentUpon>Shell_Principal.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pantallas\IniciarSesion.xaml.cs">
       <DependentUpon>IniciarSesion.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Pantallas\Shell_Principal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

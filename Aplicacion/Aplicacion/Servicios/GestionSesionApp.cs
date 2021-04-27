@@ -15,13 +15,20 @@ namespace PFG.Aplicacion
 {
 	public static class GestionSesionApp
 	{
+		private static bool SesionIniciada = false;
+
 		public static void IniciarSesion(string IPGestor, string Usuario, string Contrasena)
 		{
-			ControladorRed.Enviar
-			(
-				IPGestor,
-				Comando_IniciarSesion.ParametrosToString(Usuario, Contrasena)
-			);
+			if(!SesionIniciada)
+			{
+				ControladorRed.Enviar
+				(
+					IPGestor,
+					Comando_IntentarIniciarSesion.ParametrosToString(Usuario, Contrasena)
+				);
+
+				SesionIniciada = true;
+			}
 		}
 	}
 }

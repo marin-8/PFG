@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<Shell
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:pantallas="clr-namespace:PFG.Aplicacion"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.Shell_Principal">
+
+    <FlyoutItem Title="Tareas y Acciones">
+        <Tab>
+            <ShellContent
+                Title="Tareas"
+                ContentTemplate="{DataTemplate pantallas:Tareas}" />
+            <ShellContent
+                Title="Acciones"
+                ContentTemplate="{DataTemplate pantallas:Acciones}" />
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Carta">
+        <ShellContent ContentTemplate="{DataTemplate pantallas:Carta}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Mesas">
+        <ShellContent ContentTemplate="{DataTemplate pantallas:Mesas}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Usuarios">
+        <ShellContent ContentTemplate="{DataTemplate pantallas:Usuarios}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Ajustes">
+        <ShellContent ContentTemplate="{DataTemplate pantallas:Ajustes}" />
+    </FlyoutItem>
+    
+</Shell>
+    

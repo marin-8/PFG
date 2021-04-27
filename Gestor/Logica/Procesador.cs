@@ -17,13 +17,13 @@ namespace PFG.Gestor
 			this.Registro = Registro;
 		}
 
-		public void Procesar(string IP, string Mensaje)
+		public void Procesar(string IP, string ComandoString)
 		{
-			// TODO - Procesar
+			// TODO - Procesar (Gestor)
 
 			Registro.Invoke(new Action(() =>
 			{ 
-				Registro.Items.Add($"{IP} > {Mensaje}");
+				Registro.Items.Add($"{IP} > {ComandoString}");
 			}));
 		}
 	}

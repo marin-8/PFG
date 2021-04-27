@@ -8,14 +8,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Threading;
 using System.Text.RegularExpressions;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using Acr.UserDialogs;
+
 using PFG.Comun;
 
-namespace PFG.Aplicacion.Pantallas
+namespace PFG.Aplicacion
 {
 	public partial class IniciarSesion : ContentPage
 	{
@@ -36,16 +39,26 @@ namespace PFG.Aplicacion.Pantallas
 			if(          usuario.Equals("")) { DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
 			if(       contrasena.Equals("")) { DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio",       "Aceptar"); return; }
 
-			if(                         !FormatoIP.IsMatch(ipGestor)) { DisplayAlert("Alerta", "La IP introducida no es válida",                                "Aceptar"); return; }
-			if(         usuario.Length > Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }
-			if(      contrasena.Length > Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "La Contraseña no puede estar formada por más de 20 caracteres", "Aceptar"); return; }
+			if(								  !FormatoIP.IsMatch(ipGestor)) { DisplayAlert("Alerta", "La IP introducida no es válida",                                "Aceptar"); return; }
+			if(         usuario.Length > Comun.Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }
+			if(      contrasena.Length > Comun.Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "La Contraseña no puede estar formada por más de 20 caracteres", "Aceptar"); return; }
 
-			GestionSesionApp.IniciarSesion
-			(
-				ipGestor,
-				usuario,
-				contrasena
-			);
+			UserDialogs.Instance.ShowLoading("Inciando sesión...");
+
+			Task.Run(() =>
+			{
+				Global.UsuarioActual = usuario;
+				Global.ContrasenaActual = contrasena;
+
+				GestionSesionApp.IniciarSesion
+				(
+					ipGestor,
+					usuario,
+					contrasena
+				);
+
+				UserDialogs.Instance.HideLoading();
+			});
 		}
 	}
 }

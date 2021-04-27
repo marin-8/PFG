@@ -9,7 +9,7 @@ namespace PFG.Comun
 
 		protected Comando(TiposComando CodigoAccion)
 		{
-			this.TipoComando = CodigoAccion;
+			TipoComando = CodigoAccion;
 		}
 
 		public override string ToString()
