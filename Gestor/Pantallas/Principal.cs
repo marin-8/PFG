@@ -29,7 +29,7 @@ namespace PFG.Gestor
 
 		private void Principal_Load(object sender, EventArgs e)
 		{
-			ProcesadorMensajesRecibidos = new(Registro);
+			ProcesadorMensajesRecibidos = new(RegistroIPs, RegistroComandos);
 
 			string servidorIP = Comun.Global.Get_MiIP_Windows();
 

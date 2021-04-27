@@ -30,10 +30,10 @@ namespace PFG.Comun
 			return respuestaDelServidor;
 		}
 
-		public ControladorRed(string IP, Action<string,string> FuncionAlRecibir, bool EmpezarRecibir)
+		public ControladorRed(string IP, Action<string,string> FuncionAlRecibir, bool EmpezarRecibir, ushort Puerto=PUERTO)
 		{
 			Servidor = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			Servidor.Bind(new IPEndPoint(IPAddress.Parse(IP), PUERTO));
+			Servidor.Bind(new IPEndPoint(IPAddress.Parse(IP), Puerto));
 
 			this.FuncionAlRecibir = FuncionAlRecibir;
 			

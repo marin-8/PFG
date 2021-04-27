@@ -22,11 +22,46 @@ namespace PFG.Aplicacion
 {
 	public partial class IniciarSesion : ContentPage
 	{
+		private ControladorRed Servidor;
+		private Procesador ProcesadorMensajesRecibidos;
+
 		private readonly Regex FormatoIP = new(@"\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b");
 
 		public IniciarSesion()
 		{
 			InitializeComponent();
+		}
+
+		protected override async void OnAppearing()
+		{
+			string servidorIP;
+
+			ProcesadorMensajesRecibidos = new();
+
+			try { servidorIP = Comun.Global.Get_MiIP_Xamarin(); }
+			catch
+			{
+				servidorIP = await DisplayPromptAsync
+				(
+					"Ejecutando App en un emulador",
+					"Introduce manualmente la IP para el Servidor:",
+					"Aceptar",
+					"Cerrar la App",
+					"0.0.0.0",
+					15,
+					Keyboard.Numeric,
+					"10.0.2.15"
+				);
+
+				if(servidorIP == null) {
+					Process.GetCurrentProcess().Kill(); return; }
+
+				Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true, 1601);
+
+				return;
+			}
+			
+			Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
 		}
 
 		private void Entrar_Clicked(object sender, EventArgs e)

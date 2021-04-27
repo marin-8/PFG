@@ -6,25 +6,60 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using PFG.Comun;
+
 namespace PFG.Gestor
 {
 	public class Procesador
 	{
-		private ListBox Registro;
+		private ListBox RegistroIPs;
+		private ListBox RegistroComandos;
 
-		public Procesador(ListBox Registro)
+		public Procesador(ListBox RegistroIPs, ListBox RegistroComandos)
 		{
-			this.Registro = Registro;
+			this.RegistroIPs = RegistroIPs;
+			this.RegistroComandos = RegistroComandos;
 		}
 
 		public void Procesar(string IP, string ComandoString)
 		{
 			// TODO - Procesar (Gestor)
 
-			Registro.Invoke(new Action(() =>
+			RegistroIPs.Invoke(new Action(() =>
 			{ 
-				Registro.Items.Add($"{IP} > {ComandoString}");
+				RegistroIPs.Items.Add(IP);
+				RegistroComandos.Items.Add(ComandoString);
 			}));
+
+			var parametrosComando = ComandoString.Split(',');
+			var tipoComando = (TiposComando)Enum.Parse(typeof(TiposComando), parametrosComando[0]);
+
+			switch(tipoComando)
+			{
+				case TiposComando.IntentarIniciarSesion:
+				{
+					var comando = new Comando_IntentarIniciarSesion(ComandoString);
+
+					//
+
+					ControladorRed.Enviar(IP, Comando_ResultadoIntentoIniciarSesion.ParametrosToString
+					(
+						ResultadosIntentoIniciarSesion.Correcto,
+						Roles.Administrador
+					));
+
+					break;
+				}
+
+				//case TiposComando.XXXXX:
+				//{
+				//	var comando = new Comando_XXXXX(ComandoString);
+
+				//	//
+
+				//	break;
+				//}
+			}
 		}
 	}
 }

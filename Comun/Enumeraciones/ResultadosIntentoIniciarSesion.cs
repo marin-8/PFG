@@ -6,7 +6,8 @@ namespace PFG.Comun
 {
 	public enum ResultadosIntentoIniciarSesion : byte
 	{
-		UsuarioNoExiste = 1,
-		ContrasenaIncorrecta = 2
+		Correcto = 1,
+		UsuarioNoExiste = 2,
+		ContrasenaIncorrecta = 3
 	}
 }

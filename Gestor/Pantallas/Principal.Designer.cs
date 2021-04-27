@@ -32,11 +32,12 @@ namespace PFG.Gestor
 			this.label1 = new System.Windows.Forms.Label();
 			this.IPGestor = new System.Windows.Forms.TextBox();
 			this.CerrarYSalir = new System.Windows.Forms.Button();
-			this.Registro = new System.Windows.Forms.ListBox();
+			this.RegistroIPs = new System.Windows.Forms.ListBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.RegistroComandos = new System.Windows.Forms.ListBox();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -76,15 +77,15 @@ namespace PFG.Gestor
 			this.CerrarYSalir.UseVisualStyleBackColor = false;
 			this.CerrarYSalir.Click += new System.EventHandler(this.CerrarYSalir_Click);
 			// 
-			// Registro
+			// RegistroIPs
 			// 
-			this.Registro.Font = new System.Drawing.Font("Roboto Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.Registro.FormattingEnabled = true;
-			this.Registro.ItemHeight = 18;
-			this.Registro.Location = new System.Drawing.Point(12, 52);
-			this.Registro.Name = "Registro";
-			this.Registro.Size = new System.Drawing.Size(505, 436);
-			this.Registro.TabIndex = 3;
+			this.RegistroIPs.Font = new System.Drawing.Font("Roboto Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.RegistroIPs.FormattingEnabled = true;
+			this.RegistroIPs.ItemHeight = 18;
+			this.RegistroIPs.Location = new System.Drawing.Point(12, 52);
+			this.RegistroIPs.Name = "RegistroIPs";
+			this.RegistroIPs.Size = new System.Drawing.Size(128, 436);
+			this.RegistroIPs.TabIndex = 3;
 			// 
 			// panel1
 			// 
@@ -110,8 +111,9 @@ namespace PFG.Gestor
 			// panel2
 			// 
 			this.panel2.BackColor = System.Drawing.Color.Silver;
+			this.panel2.Controls.Add(this.RegistroComandos);
 			this.panel2.Controls.Add(this.label2);
-			this.panel2.Controls.Add(this.Registro);
+			this.panel2.Controls.Add(this.RegistroIPs);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel2.Location = new System.Drawing.Point(0, 67);
 			this.panel2.Name = "panel2";
@@ -127,6 +129,16 @@ namespace PFG.Gestor
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(529, 74);
 			this.panel3.TabIndex = 6;
+			// 
+			// RegistroComandos
+			// 
+			this.RegistroComandos.Font = new System.Drawing.Font("Roboto Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.RegistroComandos.FormattingEnabled = true;
+			this.RegistroComandos.ItemHeight = 18;
+			this.RegistroComandos.Location = new System.Drawing.Point(146, 52);
+			this.RegistroComandos.Name = "RegistroComandos";
+			this.RegistroComandos.Size = new System.Drawing.Size(371, 436);
+			this.RegistroComandos.TabIndex = 4;
 			// 
 			// Principal
 			// 
@@ -155,11 +167,12 @@ namespace PFG.Gestor
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox IPGestor;
 		private System.Windows.Forms.Button CerrarYSalir;
-		private System.Windows.Forms.ListBox Registro;
+		private System.Windows.Forms.ListBox RegistroIPs;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.ListBox RegistroComandos;
 	}
 }
 

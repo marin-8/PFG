@@ -29,23 +29,8 @@ namespace PFG.Aplicacion
 			{
 				case TiposComando.ResultadoDelIntentoDeIniciarSesion:
 				{
-					var comando = new Comando_ResultadoIntentoIniciarSesion(ComandoString);
-
-					if(!comando.Correcto)
-					{
-						if(comando.ResultadIntentoIniciarSesion == ResultadosIntentoIniciarSesion.UsuarioNoExiste)
-						{
-							UserDialogs.Instance.Alert("El usuario no existe", "Alerta", "Aceptar");
-						}
-						else if(comando.ResultadIntentoIniciarSesion == ResultadosIntentoIniciarSesion.ContrasenaIncorrecta)
-						{
-							UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
-						}
-					}
-					else
-					{
-						Global.RolActual = comando.Rol;
-					}
+					Procesar_ResultadoDelIntentoDeIniciarSesion(
+						new Comando_ResultadoIntentoIniciarSesion(ComandoString));
 
 					break;
 				}
@@ -54,11 +39,44 @@ namespace PFG.Aplicacion
 				//{
 				//	var comando = new Comando_XXXXX(ComandoString);
 
-				//	//
+				//	Procesar_ResultadoDelIntentoDeIniciarSesion(
+				//		new Comando_XXXXX(ComandoString));
 
 				//	break;
 				//}
 			}
 		}
+
+		private void Procesar_ResultadoDelIntentoDeIniciarSesion(Comando_ResultadoIntentoIniciarSesion Comando)
+		{
+			switch(Comando.ResultadIntentoIniciarSesion)
+			{
+				case ResultadosIntentoIniciarSesion.Correcto:
+				{
+					Global.RolActual = Comando.Rol;
+
+					//
+
+					return;
+				}
+				case ResultadosIntentoIniciarSesion.UsuarioNoExiste:
+				{
+					UserDialogs.Instance.Alert("El usuario no existe", "Alerta", "Aceptar");
+
+					return;
+				}
+				case ResultadosIntentoIniciarSesion.ContrasenaIncorrecta:
+				{
+					UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
+
+					return;
+				}
+			}
+		}
+
+		//private void Procesar_XXXXX(Comando_XXXXX Comando)
+		//{
+		//	//
+		//}
 	}
 }
