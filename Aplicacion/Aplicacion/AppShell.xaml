@@ -4,9 +4,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:pantallas="clr-namespace:PFG.Aplicacion"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="PFG.Aplicacion.Shell_Principal">
+    x:DataType="pantallas:AppShell"
+    x:Class="PFG.Aplicacion.AppShell">
 
-    <FlyoutItem Title="Tareas y Acciones">
+    <ShellContent
+        ContentTemplate="{DataTemplate pantallas:IniciarSesion}" />
+    
+    <FlyoutItem Title="Tareas y Acciones" Route="Principal">
         <Tab>
             <ShellContent
                 Title="Tareas"
@@ -32,6 +36,10 @@
     <FlyoutItem Title="Ajustes">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Ajustes}" />
     </FlyoutItem>
-    
+
+    <MenuItem
+        Text="Cerrar sesión"
+        Clicked="CerrarSesion" />
+
 </Shell>
     

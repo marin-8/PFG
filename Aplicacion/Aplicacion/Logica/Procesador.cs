@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using PFG.Comun;
+using Xamarin.Forms;
 
 using Acr.UserDialogs;
+
+using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
@@ -47,7 +49,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private void Procesar_ResultadoDelIntentoDeIniciarSesion(Comando_ResultadoIntentoIniciarSesion Comando)
+		private async void Procesar_ResultadoDelIntentoDeIniciarSesion(Comando_ResultadoIntentoIniciarSesion Comando)
 		{
 			switch(Comando.ResultadIntentoIniciarSesion)
 			{
@@ -55,7 +57,8 @@ namespace PFG.Aplicacion
 				{
 					Global.RolActual = Comando.Rol;
 
-					//
+					await Device.InvokeOnMainThreadAsync(async () =>
+						await Shell.Current.GoToAsync("//Principal") );
 
 					return;
 				}

@@ -22,6 +22,8 @@ namespace PFG.Aplicacion
 {
 	public partial class IniciarSesion : ContentPage
 	{
+		private bool Inicializado = false;
+
 		private ControladorRed Servidor;
 		private Procesador ProcesadorMensajesRecibidos;
 
@@ -34,34 +36,41 @@ namespace PFG.Aplicacion
 
 		protected override async void OnAppearing()
 		{
-			string servidorIP;
+			base.OnAppearing();
 
-			ProcesadorMensajesRecibidos = new();
-
-			try { servidorIP = Comun.Global.Get_MiIP_Xamarin(); }
-			catch
+			if(!Inicializado)
 			{
-				servidorIP = await DisplayPromptAsync
-				(
-					"Ejecutando App en un emulador",
-					"Introduce manualmente la IP para el Servidor:",
-					"Aceptar",
-					"Cerrar la App",
-					"0.0.0.0",
-					15,
-					Keyboard.Numeric,
-					"10.0.2.15"
-				);
+				string servidorIP;
 
-				if(servidorIP == null) {
-					Process.GetCurrentProcess().Kill(); return; }
+				ProcesadorMensajesRecibidos = new();
 
-				Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true, 1601);
+				try { servidorIP = Comun.Global.Get_MiIP_Xamarin(); }
+				catch
+				{
+					servidorIP = await DisplayPromptAsync
+					(
+						"Ejecutando App en un emulador",
+						"Introduce manualmente la IP para el Servidor:",
+						"Aceptar",
+						"Cerrar la App",
+						"0.0.0.0",
+						15,
+						Keyboard.Default,
+						"10.0.2.15"
+					);
 
-				return;
-			}
+					if(servidorIP == null) {
+						Process.GetCurrentProcess().Kill(); return; }
+
+					Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true, 1601);
+
+					return;
+				}
 			
-			Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
+				Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
+
+				Inicializado = true;
+			}	
 		}
 
 		private void Entrar_Clicked(object sender, EventArgs e)

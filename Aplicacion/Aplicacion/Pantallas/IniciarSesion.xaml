@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="PFG.Aplicacion.IniciarSesion"
     
+    Shell.NavBarIsVisible="False"
+    
     BackgroundColor="#2196F3">
 
     <Grid
@@ -37,8 +39,8 @@
 
             <Entry
                 x:Name="IPGestor"
-                Text=""
-                Placeholder="IP del Gestor (ej. 192.168.1.132)"
+                Text="192.168.1.130"
+                Placeholder="IP del Gestor (ej. 192.168.1.130)"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"

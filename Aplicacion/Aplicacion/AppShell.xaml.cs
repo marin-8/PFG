@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,13 +13,16 @@ using Xamarin.Forms.Xaml;
 namespace PFG.Aplicacion
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class Shell_Principal : Shell
+	public partial class AppShell : Shell
 	{
-		public Shell_Principal()
+		public AppShell()
 		{
 			InitializeComponent();
+		}
 
-			// Routing.RegisterRoute("NavegacionEnd", typeof(NavegacionEnd));
+		private void CerrarSesion(object sender, EventArgs e)
+		{
+			DisplayAlert("hey", "wow", "Aceptar");
 		}
 	}
 }

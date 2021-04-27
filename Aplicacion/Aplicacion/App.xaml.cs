@@ -16,7 +16,7 @@ namespace PFG.Aplicacion
 		{
 			InitializeComponent();
 
-			MainPage = new IniciarSesion();
+			MainPage = new AppShell();
 		}
 
 		protected override void OnStart()
