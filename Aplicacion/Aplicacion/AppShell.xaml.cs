@@ -22,6 +22,8 @@ namespace PFG.Aplicacion
 
 		private void CerrarSesion(object sender, EventArgs e)
 		{
+			// TODO - Cerrar Sesión
+
 			DisplayAlert("hey", "wow", "Aceptar");
 		}
 	}

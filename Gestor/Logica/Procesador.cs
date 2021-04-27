@@ -40,7 +40,7 @@ namespace PFG.Gestor
 				{
 					var comando = new Comando_IntentarIniciarSesion(ComandoString);
 
-					//
+					// TODO - Autenticación
 
 					ControladorRed.Enviar(IP, Comando_ResultadoIntentoIniciarSesion.ParametrosToString
 					(
