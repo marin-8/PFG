@@ -8,8 +8,10 @@
     x:Class="PFG.Aplicacion.AppShell">
 
     <ShellContent
+        Route="IniciarSesion"
+        FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate pantallas:IniciarSesion}" />
-    
+
     <FlyoutItem Title="Tareas y Acciones" Route="Principal">
         <Tab>
             <ShellContent

@@ -20,7 +20,7 @@ namespace PFG.Comun
 
 		public static string Enviar(string IP, string Mensaje)
 		{
-			Socket socketDestino = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			Socket socketDestino = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 			/*int intentosDeConexion =*/ Enviar_ConectarConDestino(socketDestino, IP);
 			Enviar_EnviarMensaje(socketDestino, Mensaje);

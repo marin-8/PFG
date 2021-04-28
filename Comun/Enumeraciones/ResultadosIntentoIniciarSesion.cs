@@ -8,6 +8,7 @@ namespace PFG.Comun
 	{
 		Correcto = 1,
 		UsuarioNoExiste = 2,
-		ContrasenaIncorrecta = 3
+		ContrasenaIncorrecta = 3,
+		UsuarioYaConectado = 4
 	}
 }

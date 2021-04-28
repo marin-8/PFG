@@ -14,17 +14,6 @@ namespace PFG.Comun
 		}
 
 		public Comando_IntentarIniciarSesion(string ComandoString)
-			: base(TiposComando.IntentarIniciarSesion)
-		{
-			var parametrosComando = ComandoString.Split(',');
-
-			Usuario = parametrosComando[1];
-			Contrasena = parametrosComando[2];
-		}
-
-		public static string ParametrosToString(string Usuario, string Contrasena)
-		{
-			return $"{(byte)TiposComando.IntentarIniciarSesion},{Usuario},{Contrasena}";
-		}
+			: base(ComandoString) { }
 	}
 }

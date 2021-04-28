@@ -6,6 +6,6 @@ namespace PFG.Comun
 	public class AdaptadorDeRed
 	{
 		public string Nombre;
-		public List<string> IPs = new List<string>();
+		public List<string> IPs = new();
 	}
 }

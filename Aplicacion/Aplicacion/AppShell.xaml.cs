@@ -10,6 +10,10 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using Acr.UserDialogs;
+
+using PFG.Comun;
+
 namespace PFG.Aplicacion
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
@@ -20,11 +24,30 @@ namespace PFG.Aplicacion
 			InitializeComponent();
 		}
 
-		private void CerrarSesion(object sender, EventArgs e)
+		private async void CerrarSesion(object sender, EventArgs e)
 		{
-			// TODO - Cerrar Sesión
+			UserDialogs.Instance.ShowLoading("Cerrando sesión...");
 
-			DisplayAlert("hey", "wow", "Aceptar");
+			await Task.Run(async () =>
+			{
+				Current.FlyoutIsPresented = false;
+
+				new Comando_CerrarSesion
+				(
+					Global.UsuarioActual,
+					false
+				)
+				.Enviar(Global.IPGestor);
+
+				Global.UsuarioActual = "";
+				Global.ContrasenaActual = "";
+				Global.RolActual = Roles.Ninguno;
+
+				await Device.InvokeOnMainThreadAsync(async () =>
+					await Shell.Current.GoToAsync("//IniciarSesion") );
+
+				UserDialogs.Instance.HideLoading();
+			});
 		}
 	}
 }

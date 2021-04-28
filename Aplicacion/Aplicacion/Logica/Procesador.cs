@@ -46,6 +46,13 @@ namespace PFG.Aplicacion
 
 				//	break;
 				//}
+
+				default:
+				{
+					UserDialogs.Instance.Alert("Se ha recibido un comando que no se puede procesar. Tranqui, no pasa nada serio. Contacta con el desarollador e infórmale sobre cómo ha pasado", "Información", "Aceptar");
+
+					break;
+				}
 			}
 		}
 
@@ -71,6 +78,12 @@ namespace PFG.Aplicacion
 				case ResultadosIntentoIniciarSesion.ContrasenaIncorrecta:
 				{
 					UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
+
+					return;
+				}
+				case ResultadosIntentoIniciarSesion.UsuarioYaConectado:
+				{
+					UserDialogs.Instance.Alert("Usuario ya conectado", "Alerta", "Aceptar");
 
 					return;
 				}

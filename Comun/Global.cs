@@ -11,6 +11,8 @@ namespace PFG.Comun
 	{
 		public const int MAX_CARACTERES_LOGIN = 20;
 
+		public static readonly List<Usuario> Usuarios = new() { new("admin", "admin", Roles.Administrador) };
+
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
 		{
 			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new();

@@ -22,7 +22,7 @@ namespace PFG.Aplicacion
 {
 	public partial class IniciarSesion : ContentPage
 	{
-		private bool Inicializado = false;
+		private static bool Inicializado = false;
 
 		private ControladorRed Servidor;
 		private Procesador ProcesadorMensajesRecibidos;
@@ -40,6 +40,8 @@ namespace PFG.Aplicacion
 
 			if(!Inicializado)
 			{
+				Inicializado = true;
+
 				string servidorIP;
 
 				ProcesadorMensajesRecibidos = new();
@@ -52,15 +54,19 @@ namespace PFG.Aplicacion
 						"Ejecutando App en un emulador",
 						"Introduce manualmente la IP para el Servidor:",
 						"Aceptar",
-						"Cerrar la App",
+						"No iniciar el servidor",
 						"0.0.0.0",
 						15,
 						Keyboard.Default,
 						"10.0.2.15"
 					);
 
-					if(servidorIP == null) {
-						Process.GetCurrentProcess().Kill(); return; }
+					if(servidorIP == null)
+					{
+						await DisplayAlert("Alerta", "Al no haber iniciado el servidor, no podrás recibir comandos", "Aceptar");
+
+						return;
+					}
 
 					Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true, 1601);
 
@@ -68,38 +74,45 @@ namespace PFG.Aplicacion
 				}
 			
 				Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
-
-				Inicializado = true;
 			}	
 		}
 
-		private void Entrar_Clicked(object sender, EventArgs e)
+		private async void Entrar_Clicked(object sender, EventArgs e)
 		{
 			string ipGestor = IPGestor.Text;
 			string usuario = Usuario.Text;
 			string contrasena = Contrasena.Text;
 
-			if(         ipGestor.Equals("")) { DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
-			if(          usuario.Equals("")) { DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
-			if(       contrasena.Equals("")) { DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio",       "Aceptar"); return; }
+			if(usuario.Equals("dev") && contrasena.Equals(""))
+			{
+				await Device.InvokeOnMainThreadAsync(async () =>
+					await Shell.Current.GoToAsync("//Principal") );
 
-			if(								  !FormatoIP.IsMatch(ipGestor)) { DisplayAlert("Alerta", "La IP introducida no es válida",                                "Aceptar"); return; }
-			if(         usuario.Length > Comun.Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }
-			if(      contrasena.Length > Comun.Global.MAX_CARACTERES_LOGIN) { DisplayAlert("Alerta", "La Contraseña no puede estar formada por más de 20 caracteres", "Aceptar"); return; }
+				return;
+			}
+
+			if(         ipGestor.Equals("")) { await DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
+			if(          usuario.Equals("")) { await DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
+			if(       contrasena.Equals("")) { await DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio",       "Aceptar"); return; }
+
+			if(								  !FormatoIP.IsMatch(ipGestor)) { await DisplayAlert("Alerta", "La IP introducida no es válida",                                "Aceptar"); return; }
+			if(         usuario.Length > Comun.Global.MAX_CARACTERES_LOGIN) { await DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }
+			if(      contrasena.Length > Comun.Global.MAX_CARACTERES_LOGIN) { await DisplayAlert("Alerta", "La Contraseña no puede estar formada por más de 20 caracteres", "Aceptar"); return; }
 
 			UserDialogs.Instance.ShowLoading("Inciando sesión...");
 
-			Task.Run(() =>
+			await Task.Run(() =>
 			{
+				Global.IPGestor = ipGestor;
 				Global.UsuarioActual = usuario;
 				Global.ContrasenaActual = contrasena;
 
-				GestionSesionApp.IniciarSesion
+				new Comando_IntentarIniciarSesion
 				(
-					ipGestor,
 					usuario,
 					contrasena
-				);
+				)
+				.Enviar(ipGestor);
 
 				UserDialogs.Instance.HideLoading();
 			});

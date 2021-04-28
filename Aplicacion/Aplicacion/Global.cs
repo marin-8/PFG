@@ -9,6 +9,8 @@ namespace PFG.Aplicacion
 {
 	public static class Global
 	{
+		public static string IPGestor = "";
+
 		public static string UsuarioActual = "";
 		public static string ContrasenaActual = "";
 		

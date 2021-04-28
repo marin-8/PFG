@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace PFG.Comun
 {
 	public class Comando_ResultadoIntentoIniciarSesion : Comando
@@ -16,17 +14,6 @@ namespace PFG.Comun
 		}
 
 		public Comando_ResultadoIntentoIniciarSesion(string ComandoString)
-			: base(TiposComando.ResultadoDelIntentoDeIniciarSesion)
-		{
-			var parametrosComando = ComandoString.Split(',');
-
-			ResultadIntentoIniciarSesion = (ResultadosIntentoIniciarSesion)Enum.Parse(typeof(ResultadosIntentoIniciarSesion), parametrosComando[1]);
-			Rol = (Roles)Enum.Parse(typeof(Roles), parametrosComando[2]);
-		}
-
-		public static string ParametrosToString(ResultadosIntentoIniciarSesion ResultadIntentoIniciarSesion, Roles Rol)
-		{
-			return $"{(byte)TiposComando.ResultadoDelIntentoDeIniciarSesion},{(byte)ResultadIntentoIniciarSesion},{(byte)Rol}";
-		}
+			: base(ComandoString) { }
 	}
 }
