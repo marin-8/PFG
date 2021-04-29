@@ -17,6 +17,15 @@ namespace PFG.Aplicacion
 
 		protected override void OnStart()
 		{
+			try
+			{
+				Global.ProcesadorMensajesRecibidos = new();
+				Global.Servidor = new(
+					Comun.Global.Get_MiIP_Xamarin(),
+					Global.ProcesadorMensajesRecibidos.Procesar,
+					true);
+			}
+			catch { }
 		}
 
 		protected override void OnSleep()

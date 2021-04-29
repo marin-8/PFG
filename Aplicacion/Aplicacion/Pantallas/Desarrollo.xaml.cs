@@ -20,23 +20,11 @@ using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
-	public partial class Usuarios : ContentPage
+	public partial class Desarrollo : ContentPage
 	{
-		public readonly ObservableCollection<Usuario> UsuariosLocal = new() { new("N", "C", Roles.Ninguno) };
-
-		public Usuarios()
+		public Desarrollo()
 		{
 			InitializeComponent();
-		}
-
-		private void NuevoUsuario_Clicked(object sender, EventArgs e)
-		{
-			UsuariosLocal.Add(new("N", "C", Roles.Ninguno));
-		}
-
-		private void Refrescar_Clicked(object sender, EventArgs e)
-		{
-
 		}
 	}
 }

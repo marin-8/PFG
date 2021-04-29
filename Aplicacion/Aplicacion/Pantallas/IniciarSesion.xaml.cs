@@ -58,8 +58,6 @@ namespace PFG.Aplicacion
 				)
 				.Enviar(ipGestor);
 			});
-
-			UserDialogs.Instance.HideLoading();
 		}
 
 		private async void EntrarOfflineDev_Clicked(object sender, EventArgs e)

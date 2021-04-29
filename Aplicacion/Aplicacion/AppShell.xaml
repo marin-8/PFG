@@ -35,6 +35,10 @@
         <ShellContent ContentTemplate="{DataTemplate pantallas:Usuarios}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="--- Desarrollo">
+        <ShellContent ContentTemplate="{DataTemplate pantallas:Desarrollo}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="Ajustes">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Ajustes}" />
     </FlyoutItem>

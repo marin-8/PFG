@@ -64,12 +64,12 @@ namespace PFG.Gestor
 
 		private static void Procesar_IntentarIniciarSesion(Comando_IntentarIniciarSesion Comando, string IP)
 		{
-			var nombresUsuarios = Comun.Global.Usuarios
+			var nombresUsuarios = Global.Usuarios
 								  .Select(u => u.Nombre);
 
 			if(nombresUsuarios.Contains(Comando.Usuario))
 			{
-				var usuario = Comun.Global.Usuarios
+				var usuario = Global.Usuarios
 						   	  .Where(u => u.Nombre.Equals(Comando.Usuario))
 							  .Select(u => u)
 							  .First();
@@ -121,7 +121,7 @@ namespace PFG.Gestor
 
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
 		{
-			var usuario = Comun.Global.Usuarios
+			var usuario = Global.Usuarios
 						 .Where(u => u.Nombre.Equals(Comando.Usuario))
 						 .Select(u => u)
 						 .First();

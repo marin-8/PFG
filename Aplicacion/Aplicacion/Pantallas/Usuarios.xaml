@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-    
+
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="PFG.Aplicacion.Usuarios"
+    xmlns:pfgcomun="clr-namespace:PFG.Comun;assembly=Comun"
     
     Title="Usuarios">
 
@@ -12,9 +13,9 @@
         RowSpacing="0">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -23,17 +24,56 @@
 
         <StackLayout
             Spacing="0"
-            Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
+            Grid.Column="1">
 
             <BoxView HeightRequest="20" Color="Transparent"/>
 
-            <Label
-                Text="Usuarios"
-                FontSize="Title"
-                TextColor="Black"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
+            <StackLayout
+                Spacing="0"
+                Orientation="Horizontal">
+
+                <Button
+                    x:Name="NuevoUsuario"
+                    Text="+ Nuevo usuario"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    TextColor="Black"
+                    BackgroundColor="LimeGreen"
+                    Clicked="NuevoUsuario_Clicked"/>
+
+                <BoxView HeightRequest="20" Color="Transparent"/>
+
+                <Button
+                    x:Name="Refrescar"
+                    Text="R"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="Magenta"
+                    Clicked="Refrescar_Clicked"/>
+
+            </StackLayout>
+
+            <BoxView HeightRequest="20" Color="Transparent"/>
+
+            <ListView
+                BackgroundColor="Transparent"
+                ItemsSource="{Binding UsuariosLocal}">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:pfgcomun:Usuario">
+                        <ViewCell>
+
+                            <ContentView>
+                                <Label
+                                    Text="hey"/>
+                            </ContentView>
+                        
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+            </ListView>
 
             <BoxView HeightRequest="20" Color="Transparent"/>
 

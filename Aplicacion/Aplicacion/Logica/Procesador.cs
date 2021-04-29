@@ -64,38 +64,36 @@ namespace PFG.Aplicacion
 				{
 					Global.RolActual = Comando.Rol;
 
-					UserDialogs.Instance.ShowLoading("Inciando sesión...");
+					await Device.InvokeOnMainThreadAsync(async () => 
+						await Shell.Current.GoToAsync("//Principal") );
 
-					await Device.InvokeOnMainThreadAsync(async () =>
-					{
-						Global.ProcesadorMensajesRecibidos = new();
-						Global.Servidor = new(
-							Comun.Global.Get_MiIP_Xamarin(),
-							Global.ProcesadorMensajesRecibidos.Procesar,
-							true);
+					UserDialogs.Instance.HideLoading();
 
-						await Shell.Current.GoToAsync("//Principal");
-					});
-
-					return;
+					break;
 				}
 				case ResultadosIntentoIniciarSesion.UsuarioNoExiste:
 				{
+					UserDialogs.Instance.HideLoading();
+
 					UserDialogs.Instance.Alert("El usuario no existe", "Alerta", "Aceptar");
 
-					return;
+					break;
 				}
 				case ResultadosIntentoIniciarSesion.ContrasenaIncorrecta:
 				{
+					UserDialogs.Instance.HideLoading();
+
 					UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
 
-					return;
+					break;
 				}
 				case ResultadosIntentoIniciarSesion.UsuarioYaConectado:
 				{
+					UserDialogs.Instance.HideLoading();
+
 					UserDialogs.Instance.Alert("Usuario ya conectado", "Alerta", "Aceptar");
 
-					return;
+					break;
 				}
 			}
 		}

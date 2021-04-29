@@ -4,14 +4,13 @@ using System.Net;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Collections.ObjectModel;
 
 namespace PFG.Comun
 {
-	public static class Global
+	public class Global
 	{
 		public const int MAX_CARACTERES_LOGIN = 20;
-
-		public static readonly List<Usuario> Usuarios = new() { new("admin", "admin", Roles.Administrador) };
 
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
 		{

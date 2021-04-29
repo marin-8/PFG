@@ -53,6 +53,8 @@ namespace PFG.Aplicacion
 
 			await Current.GoToAsync("//IniciarSesion");
 
+			await Task.Delay(600);
+
 			UserDialogs.Instance.HideLoading();
 		}
 	}
