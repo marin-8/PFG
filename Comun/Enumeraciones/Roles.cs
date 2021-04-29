@@ -11,6 +11,8 @@ namespace PFG.Comun
 
 			  Gerente = 4,
 
-		Administrador = 5
+		Administrador = 5,
+
+		Desarrollador = 6
 	}
 }

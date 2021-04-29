@@ -28,26 +28,32 @@ namespace PFG.Aplicacion
 		{
 			UserDialogs.Instance.ShowLoading("Cerrando sesión...");
 
-			await Task.Run(async () =>
+			Current.FlyoutIsPresented = false;
+
+			if(Global.RolActual != Roles.Desarrollador)
 			{
-				Current.FlyoutIsPresented = false;
+				await Task.Run(async () =>
+				{
+					new Comando_CerrarSesion
+					(
+						Global.UsuarioActual,
+						false
+					)
+					.Enviar(Global.IPGestor);
 
-				new Comando_CerrarSesion
-				(
-					Global.UsuarioActual,
-					false
-				)
-				.Enviar(Global.IPGestor);
+					Global.ContrasenaActual = "";
 
-				Global.UsuarioActual = "";
-				Global.ContrasenaActual = "";
-				Global.RolActual = Roles.Ninguno;
+					await Device.InvokeOnMainThreadAsync(async () =>
+						await Current.GoToAsync("//IniciarSesion") );
+				});
+			}
 
-				await Device.InvokeOnMainThreadAsync(async () =>
-					await Shell.Current.GoToAsync("//IniciarSesion") );
+			Global.UsuarioActual = "";
+			Global.RolActual = Roles.Ninguno;
 
-				UserDialogs.Instance.HideLoading();
-			});
+			await Current.GoToAsync("//IniciarSesion");
+
+			UserDialogs.Instance.HideLoading();
 		}
 	}
 }

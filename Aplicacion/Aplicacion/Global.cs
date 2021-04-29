@@ -15,5 +15,8 @@ namespace PFG.Aplicacion
 		public static string ContrasenaActual = "";
 		
 		public static Roles RolActual = Roles.Ninguno;
+
+		public static ControladorRed Servidor;
+		public static Procesador ProcesadorMensajesRecibidos;
 	}
 }

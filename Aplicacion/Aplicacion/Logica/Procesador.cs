@@ -64,8 +64,18 @@ namespace PFG.Aplicacion
 				{
 					Global.RolActual = Comando.Rol;
 
+					UserDialogs.Instance.ShowLoading("Inciando sesión...");
+
 					await Device.InvokeOnMainThreadAsync(async () =>
-						await Shell.Current.GoToAsync("//Principal") );
+					{
+						Global.ProcesadorMensajesRecibidos = new();
+						Global.Servidor = new(
+							Comun.Global.Get_MiIP_Xamarin(),
+							Global.ProcesadorMensajesRecibidos.Procesar,
+							true);
+
+						await Shell.Current.GoToAsync("//Principal");
+					});
 
 					return;
 				}

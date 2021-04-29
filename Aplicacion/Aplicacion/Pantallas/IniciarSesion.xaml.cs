@@ -22,11 +22,6 @@ namespace PFG.Aplicacion
 {
 	public partial class IniciarSesion : ContentPage
 	{
-		private static bool Inicializado = false;
-
-		private ControladorRed Servidor;
-		private Procesador ProcesadorMensajesRecibidos;
-
 		private readonly Regex FormatoIP = new(@"\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b");
 
 		public IniciarSesion()
@@ -34,62 +29,11 @@ namespace PFG.Aplicacion
 			InitializeComponent();
 		}
 
-		protected override async void OnAppearing()
-		{
-			base.OnAppearing();
-
-			if(!Inicializado)
-			{
-				Inicializado = true;
-
-				string servidorIP;
-
-				ProcesadorMensajesRecibidos = new();
-
-				try { servidorIP = Comun.Global.Get_MiIP_Xamarin(); }
-				catch
-				{
-					servidorIP = await DisplayPromptAsync
-					(
-						"Ejecutando App en un emulador",
-						"Introduce manualmente la IP para el Servidor:",
-						"Aceptar",
-						"No iniciar el servidor",
-						"0.0.0.0",
-						15,
-						Keyboard.Default,
-						"10.0.2.15"
-					);
-
-					if(servidorIP == null)
-					{
-						await DisplayAlert("Alerta", "Al no haber iniciado el servidor, no podrás recibir comandos", "Aceptar");
-
-						return;
-					}
-
-					Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true, 1601);
-
-					return;
-				}
-			
-				Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
-			}	
-		}
-
-		private async void Entrar_Clicked(object sender, EventArgs e)
+		private async void IniciarSesion_Clicked(object sender, EventArgs e)
 		{
 			string ipGestor = IPGestor.Text;
 			string usuario = Usuario.Text;
 			string contrasena = Contrasena.Text;
-
-			if(usuario.Equals("dev") && contrasena.Equals(""))
-			{
-				await Device.InvokeOnMainThreadAsync(async () =>
-					await Shell.Current.GoToAsync("//Principal") );
-
-				return;
-			}
 
 			if(         ipGestor.Equals("")) { await DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
 			if(          usuario.Equals("")) { await DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
@@ -99,7 +43,7 @@ namespace PFG.Aplicacion
 			if(         usuario.Length > Comun.Global.MAX_CARACTERES_LOGIN) { await DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }
 			if(      contrasena.Length > Comun.Global.MAX_CARACTERES_LOGIN) { await DisplayAlert("Alerta", "La Contraseña no puede estar formada por más de 20 caracteres", "Aceptar"); return; }
 
-			UserDialogs.Instance.ShowLoading("Inciando sesión...");
+			UserDialogs.Instance.ShowLoading("Intentando iniciar sesión...");
 
 			await Task.Run(() =>
 			{
@@ -113,9 +57,17 @@ namespace PFG.Aplicacion
 					contrasena
 				)
 				.Enviar(ipGestor);
-
-				UserDialogs.Instance.HideLoading();
 			});
+
+			UserDialogs.Instance.HideLoading();
+		}
+
+		private async void EntrarOfflineDev_Clicked(object sender, EventArgs e)
+		{
+			Global.UsuarioActual = "dev";
+			Global.RolActual = Roles.Desarrollador;
+
+			await Shell.Current.GoToAsync("//Principal");
 		}
 	}
 }

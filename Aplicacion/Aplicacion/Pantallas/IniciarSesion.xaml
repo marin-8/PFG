@@ -30,17 +30,18 @@
 
             <Label
                 Text="Iniciar sesión"
-                FontSize="Title"
+                FontSize="64"
                 TextColor="White"
                 FontAttributes="Bold"
                 HorizontalTextAlignment="Center"/>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+            <BoxView HeightRequest="60" Color="Transparent"/>
 
             <Entry
                 x:Name="IPGestor"
                 Text="192.168.1.130"
                 Placeholder="IP del Gestor (ej. 192.168.1.130)"
+                FontSize="24"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
@@ -52,6 +53,7 @@
                 x:Name="Usuario"
                 Text=""
                 Placeholder="Usuario"
+                FontSize="24"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"/>
@@ -62,21 +64,33 @@
                 x:Name="Contrasena"
                 Text=""
                 Placeholder="Contraseña"
+                FontSize="24"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
                 IsPassword="true"/>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+            <BoxView HeightRequest="60" Color="Transparent"/>
 
             <Button
-                x:Name="Entrar"
-                Text="Entrar"
-                FontSize="Medium"
+                x:Name="IniciarSesionB"
+                Text="Iniciar sesión"
+                FontSize="24"
                 FontAttributes="Bold"
                 TextColor="Black"
-                BackgroundColor="Turquoise"
-                Clicked="Entrar_Clicked"/>
+                BackgroundColor="LimeGreen"
+                Clicked="IniciarSesion_Clicked"/>
+
+            <BoxView HeightRequest="10" Color="Transparent"/>
+
+            <Button
+                x:Name="EntrarOfflineDev"
+                Text="Entrar offline (dev)"
+                FontSize="24"
+                FontAttributes="Bold"
+                TextColor="Black"
+                BackgroundColor="Tomato"
+                Clicked="EntrarOfflineDev_Clicked"/>
 
         </StackLayout>
 

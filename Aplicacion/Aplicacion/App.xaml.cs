@@ -4,10 +4,6 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-using Acr.UserDialogs;
-
-using PFG.Comun;
-
 namespace PFG.Aplicacion
 {
 	public partial class App : Application
