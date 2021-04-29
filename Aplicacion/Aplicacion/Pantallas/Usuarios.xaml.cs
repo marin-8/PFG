@@ -22,21 +22,38 @@ namespace PFG.Aplicacion
 {
 	public partial class Usuarios : ContentPage
 	{
-		public readonly ObservableCollection<Usuario> UsuariosLocal = new() { new("N", "C", Roles.Ninguno) };
+		public readonly ObservableCollection<Usuario> UsuariosLocal = new() { new("Administrador", "admin", "admin", Roles.Administrador) };
 
 		public Usuarios()
 		{
 			InitializeComponent();
+
+			Shell.Current.Navigated += OnNavigatedTo;
+
+			ListaUsuarios.ItemsSource = UsuariosLocal;
+		}
+
+		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		{
+			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
+			{
+				RefrescarUsuarios();
+			}
 		}
 
 		private void NuevoUsuario_Clicked(object sender, EventArgs e)
 		{
-			UsuariosLocal.Add(new("N", "C", Roles.Ninguno));
+			// TODO - NuevoUsuario
+		}
+
+		private void RefrescarUsuarios()
+		{
+			// TODO - RefrescarUsuarios
 		}
 
 		private void Refrescar_Clicked(object sender, EventArgs e)
 		{
-
+			RefrescarUsuarios();
 		}
 	}
 }

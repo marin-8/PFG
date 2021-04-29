@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Comun\Comun.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Archivos\Usuarios.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

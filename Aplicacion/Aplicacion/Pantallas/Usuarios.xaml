@@ -23,8 +23,8 @@
         </Grid.RowDefinitions>
 
         <StackLayout
-            Spacing="0"
-            Grid.Column="1">
+            Grid.Column="1"
+            Spacing="0">
 
             <BoxView HeightRequest="20" Color="Transparent"/>
 
@@ -39,9 +39,8 @@
                     FontAttributes="Bold"
                     TextColor="Black"
                     BackgroundColor="LimeGreen"
-                    Clicked="NuevoUsuario_Clicked"/>
-
-                <BoxView HeightRequest="20" Color="Transparent"/>
+                    Clicked="NuevoUsuario_Clicked"
+                    HorizontalOptions="FillAndExpand"/>
 
                 <Button
                     x:Name="Refrescar"
@@ -50,29 +49,38 @@
                     FontAttributes="Bold"
                     TextColor="White"
                     BackgroundColor="Magenta"
-                    Clicked="Refrescar_Clicked"/>
+                    Clicked="Refrescar_Clicked"
+                    WidthRequest="50"
+                    Margin="20,0,0,0"/>
 
             </StackLayout>
 
             <BoxView HeightRequest="20" Color="Transparent"/>
 
             <ListView
+                x:Name="ListaUsuarios"
+                SelectionMode="None"
+                HasUnevenRows="True"
                 BackgroundColor="Transparent"
-                ItemsSource="{Binding UsuariosLocal}">
-
+                SeparatorVisibility="None">
+                
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:pfgcomun:Usuario">
+                    <DataTemplate x:DataType="pfgcomun:Usuario">
                         <ViewCell>
+                            
+                            <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                                <Frame BackgroundColor="LightGray" Padding="10">
+                                    <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                        <Label FontSize="Medium" Text="{Binding Nombre}" TextColor="Black"></Label>
+                                        <Label FontSize="Medium" Text="{Binding NombreUsuario, StringFormat='Nombre de usuario: {0}'}"></Label>
+                                        <Label FontSize="Medium" Text="{Binding Rol, StringFormat='Rol: {0}'}"></Label>
+                                    </StackLayout>
+                                </Frame>
+                            </Frame>
 
-                            <ContentView>
-                                <Label
-                                    Text="hey"/>
-                            </ContentView>
-                        
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                
             </ListView>
 
             <BoxView HeightRequest="20" Color="Transparent"/>

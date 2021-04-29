@@ -22,8 +22,6 @@ namespace PFG.Aplicacion
 
 		public void Procesar(string IP, string ComandoString)
 		{
-			// TODO - Procesar (App)
-
 			var parametrosComando = ComandoString.Split(',');
 			var tipoComando = (TiposComando)Enum.Parse(typeof(TiposComando), parametrosComando[0]);
 

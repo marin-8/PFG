@@ -23,8 +23,6 @@ namespace PFG.Gestor
 
 		public void Procesar(string IP, string ComandoString)
 		{
-			// TODO - Procesar (Gestor)
-
 			RegistroIPs.Invoke(new Action(() =>
 			{ 
 				RegistroIPs.Items.Add(IP);
@@ -64,13 +62,13 @@ namespace PFG.Gestor
 
 		private static void Procesar_IntentarIniciarSesion(Comando_IntentarIniciarSesion Comando, string IP)
 		{
-			var nombresUsuarios = Global.Usuarios
-								  .Select(u => u.Nombre);
+			var nombresUsuarios = GestionUsuarios.Usuarios
+								  .Select(u => u.NombreUsuario);
 
 			if(nombresUsuarios.Contains(Comando.Usuario))
 			{
-				var usuario = Global.Usuarios
-						   	  .Where(u => u.Nombre.Equals(Comando.Usuario))
+				var usuario = GestionUsuarios.Usuarios
+						   	  .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
 							  .Select(u => u)
 							  .First();
 
@@ -121,8 +119,8 @@ namespace PFG.Gestor
 
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
 		{
-			var usuario = Global.Usuarios
-						 .Where(u => u.Nombre.Equals(Comando.Usuario))
+			var usuario = GestionUsuarios.Usuarios
+						 .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
 						 .Select(u => u)
 						 .First();
 

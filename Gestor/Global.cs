@@ -9,6 +9,8 @@ namespace PFG.Gestor
 {
 	public static class Global
 	{
-		public static readonly List<Usuario> Usuarios = new() { new("admin","admin", Roles.Administrador) };
+		
+
+
 	}
 }

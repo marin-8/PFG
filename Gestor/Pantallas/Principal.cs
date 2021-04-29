@@ -29,6 +29,8 @@ namespace PFG.Gestor
 
 		private void Principal_Load(object sender, EventArgs e)
 		{
+			GestionUsuarios.Cargar();
+
 			ProcesadorMensajesRecibidos = new(RegistroIPs, RegistroComandos);
 
 			string servidorIP = Comun.Global.Get_MiIP_Windows();
@@ -41,6 +43,8 @@ namespace PFG.Gestor
 		private void Principal_Closing(object sender, EventArgs e)
 		{
 			Servidor.Cerrar();
+
+			GestionUsuarios.Guardar();
 		}
 
 		private void CerrarYSalir_Click(object sender, EventArgs e)
