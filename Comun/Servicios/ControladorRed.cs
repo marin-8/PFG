@@ -10,7 +10,7 @@ namespace PFG.Comun
 	public class ControladorRed
 	{
 		public const ushort PUERTO = 1600;
-		private const ushort MAX_BUFFER_SIZE = 300;
+		private const ushort MAX_BUFFER_SIZE = 10000;
 
 		public bool Recibiendo { get; private set; } = false;
 
