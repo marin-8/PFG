@@ -8,17 +8,14 @@ namespace PFG.Comun
 {
 	public class Usuario
 	{
-		public string Nombre { get; set; }
-		public string NombreUsuario { get; set; }
-		public string Contrasena { get; set; }
+		[JsonProperty("1")] public string Nombre { get; set; }
+		[JsonProperty("2")] public string NombreUsuario { get; set; }
+		[JsonProperty("3")] public string Contrasena { get; set; }
 
-		public Roles Rol { get; set; }
+		[JsonProperty("4")] public Roles Rol { get; set; }
 
-		[JsonIgnore]
-		public string IP { get; set; }
-
-		[JsonIgnore]
-		public bool Conectado { get; set; }
+		[JsonIgnore] public string IP { get; set; }
+		[JsonIgnore] public bool Conectado { get; set; }
 
 		public Usuario(string Nombre, string NombreUsuario, string Contrasena, Roles Rol, string IP = "", bool Conectado = false)
 		{

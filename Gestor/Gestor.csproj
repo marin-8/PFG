@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <None Update="Archivos\Usuarios.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

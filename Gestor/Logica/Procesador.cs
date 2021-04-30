@@ -21,23 +21,24 @@ namespace PFG.Gestor
 			this.RegistroComandos = RegistroComandos;
 		}
 
-		public void Procesar(string IP, string ComandoString)
+		public void Procesar(string IP, string ComandoJson)
 		{
 			RegistroIPs.Invoke(new Action(() =>
 			{ 
 				RegistroIPs.Items.Add(IP);
-				RegistroComandos.Items.Add(ComandoString);
+				RegistroComandos.Items.Add(ComandoJson);
 			}));
 
-			var parametrosComando = ComandoString.Split(',');
-			var tipoComando = (TiposComando)Enum.Parse(typeof(TiposComando), parametrosComando[0]);
+			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
 			switch(tipoComando)
 			{
 				case TiposComando.IntentarIniciarSesion:
 				{
 					Procesar_IntentarIniciarSesion(
-						new Comando_IntentarIniciarSesion(ComandoString), IP);
+						Comando.DeJson
+							<Comando_IntentarIniciarSesion>
+								(ComandoJson), IP);
 
 					break;
 				}
@@ -45,7 +46,9 @@ namespace PFG.Gestor
 				case TiposComando.CerrarSesion:
 				{
 					Procesar_CerrarSesion(
-						new Comando_CerrarSesion(ComandoString));
+						Comando.DeJson
+							<Comando_CerrarSesion>
+								(ComandoJson));
 
 					break;
 				}

@@ -22,7 +22,7 @@ namespace PFG.Aplicacion
 {
 	public partial class Usuarios : ContentPage
 	{
-		public readonly ObservableCollection<Usuario> UsuariosLocal = new() { new("Administrador", "admin", "admin", Roles.Administrador) };
+		public readonly ObservableCollection<Usuario> UsuariosLocal = new();
 
 		public Usuarios()
 		{
@@ -41,6 +41,11 @@ namespace PFG.Aplicacion
 			}
 		}
 
+		private void Refrescar_Clicked(object sender, EventArgs e)
+		{
+			RefrescarUsuarios();
+		}
+
 		private void NuevoUsuario_Clicked(object sender, EventArgs e)
 		{
 			// TODO - NuevoUsuario
@@ -49,11 +54,6 @@ namespace PFG.Aplicacion
 		private void RefrescarUsuarios()
 		{
 			// TODO - RefrescarUsuarios
-		}
-
-		private void Refrescar_Clicked(object sender, EventArgs e)
-		{
-			RefrescarUsuarios();
 		}
 	}
 }

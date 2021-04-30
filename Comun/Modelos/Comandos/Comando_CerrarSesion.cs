@@ -1,17 +1,42 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace PFG.Comun
 {
+/*
+	COSAS QUE HACER AL CREAR UN NUEVO COMANDO:
+
+	- Renombrar Clase (CTRL+H)
+	- Cambiar TipoComandoInit
+	- Poner Propiedades
+	- Enumerar JsonProperty's
+	- Método InicializarPropiedades
+	- Constructor public
+	- Constructor private
+*/
+
 	public class Comando_CerrarSesion : Comando
 	{
-		public string Usuario { get; private set; }
+		private const TiposComando TipoComandoInit = TiposComando.CerrarSesion;
 
-		public Comando_CerrarSesion(string Usuario, bool DIF)
-			: base(TiposComando.CerrarSesion)
+		[JsonProperty("1")] public string Usuario { get; private set; }
+
+		private void InicializarPropiedades(string Usuario)
 		{
 			this.Usuario = Usuario;
 		}
 
-		public Comando_CerrarSesion(string ComandoString)
-			: base(ComandoString) { }
+		public Comando_CerrarSesion(string Usuario)
+			: base(TipoComandoInit)
+		{
+			InicializarPropiedades(Usuario);
+		}
+
+		[JsonConstructor]
+		private Comando_CerrarSesion(TiposComando TipoComandoJson)
+			: base(TipoComandoJson)
+		{
+			InicializarPropiedades(Usuario);
+		}
 	}
 }

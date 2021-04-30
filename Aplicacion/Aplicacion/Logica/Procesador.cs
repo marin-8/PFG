@@ -20,9 +20,9 @@ namespace PFG.Aplicacion
 
 		}
 
-		public void Procesar(string IP, string ComandoString)
+		public void Procesar(string IP, string ComandoJson)
 		{
-			var parametrosComando = ComandoString.Split(',');
+			var parametrosComando = ComandoJson.Split(',');
 			var tipoComando = (TiposComando)Enum.Parse(typeof(TiposComando), parametrosComando[0]);
 
 			switch(tipoComando)
@@ -30,7 +30,9 @@ namespace PFG.Aplicacion
 				case TiposComando.ResultadoDelIntentoDeIniciarSesion:
 				{
 					Procesar_ResultadoDelIntentoDeIniciarSesion(
-						new Comando_ResultadoIntentoIniciarSesion(ComandoString));
+						Comando.DeJson
+							<Comando_ResultadoIntentoIniciarSesion>
+								(ComandoJson));
 
 					break;
 				}

@@ -5,6 +5,8 @@ namespace PFG.Comun
 	{
 		IntentarIniciarSesion = 1,
 		ResultadoDelIntentoDeIniciarSesion = 2,
-		CerrarSesion = 3
+		CerrarSesion = 3,
+		PedirUsuarios = 4,
+		MandarUsuarios = 5
 	}
 }

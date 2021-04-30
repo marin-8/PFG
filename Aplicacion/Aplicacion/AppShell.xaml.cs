@@ -36,8 +36,7 @@ namespace PFG.Aplicacion
 				{
 					new Comando_CerrarSesion
 					(
-						Global.UsuarioActual,
-						false
+						Global.UsuarioActual
 					)
 					.Enviar(Global.IPGestor);
 
