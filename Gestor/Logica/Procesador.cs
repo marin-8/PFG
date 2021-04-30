@@ -53,10 +53,32 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.PedirUsuarios:
+				{
+					Procesar_PedirUsuarios(
+						Comando.DeJson
+							<Comando_PedirUsuarios>
+								(ComandoJson), IP);
+
+					break;
+				}
+
+				case TiposComando.IntentarCrearUsuario:
+				{
+					Procesar_IntentarCrearUsuario(
+						Comando.DeJson
+							<Comando_IntentarCrearUsuario>
+								(ComandoJson), IP);
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
-				//		new Comando_XXXXX(ComandoString));
+				//		Comando.DeJson
+				//			<Comando_XXXXX>
+				//				(ComandoJson));
 
 				//	break;
 				//}
@@ -128,6 +150,36 @@ namespace PFG.Gestor
 						 .First();
 
 			usuario.Conectado = false;
+		}
+
+		private static void Procesar_PedirUsuarios(Comando_PedirUsuarios Comando, string IP)
+		{
+			new Comando_MandarUsuarios
+			(
+				GestionUsuarios.Usuarios.ToArray()
+			)
+			.Enviar(IP);
+		}
+
+		private static void Procesar_IntentarCrearUsuario(Comando_IntentarCrearUsuario Comando, string IP)
+		{
+			ResultadosIntentoCrearUsuario resultado;
+
+			if(GestionUsuarios.Usuarios.Select(u => u.NombreUsuario).Contains(Comando.NuevoUsuario.NombreUsuario))
+			{
+				resultado = ResultadosIntentoCrearUsuario.UsuarioYaExiste;
+			}
+			else
+			{
+				GestionUsuarios.Usuarios.Add(Comando.NuevoUsuario);
+				resultado = ResultadosIntentoCrearUsuario.Correcto;
+			}
+
+			new Comando_ResultadoIntentoCrearUsuario
+			(
+				resultado
+			)
+			.Enviar(IP);
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

@@ -11,6 +11,7 @@ namespace PFG.Comun
 	public class Global
 	{
 		public const int MAX_CARACTERES_LOGIN = 20;
+		public const string CARACTERES_PERMITIDOS_LOGIN = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
 		{

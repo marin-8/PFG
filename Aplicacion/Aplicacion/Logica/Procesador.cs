@@ -22,12 +22,11 @@ namespace PFG.Aplicacion
 
 		public void Procesar(string IP, string ComandoJson)
 		{
-			var parametrosComando = ComandoJson.Split(',');
-			var tipoComando = (TiposComando)Enum.Parse(typeof(TiposComando), parametrosComando[0]);
+			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
 			switch(tipoComando)
 			{
-				case TiposComando.ResultadoDelIntentoDeIniciarSesion:
+				case TiposComando.ResultadoIntentoIniciarSesion:
 				{
 					Procesar_ResultadoDelIntentoDeIniciarSesion(
 						Comando.DeJson
@@ -37,12 +36,32 @@ namespace PFG.Aplicacion
 					break;
 				}
 
+				case TiposComando.MandarUsuarios:
+				{
+					Procesar_MandarUsuarios(
+						Comando.DeJson
+							<Comando_MandarUsuarios>
+								(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.ResultadoIntentoCrearUsuario:
+				{
+					Procesar_ResultadoIntentoCrearUsuario(
+						Comando.DeJson
+							<Comando_ResultadoIntentoCrearUsuario>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
-				//	var comando = new Comando_XXXXX(ComandoString);
-
-				//	Procesar_ResultadoDelIntentoDeIniciarSesion(
-				//		new Comando_XXXXX(ComandoString));
+				//	Procesar_XXXXX(
+				//		Comando.DeJson
+				//			<Comando_XXXXX>
+				//				(ComandoJson));
 
 				//	break;
 				//}
@@ -58,7 +77,7 @@ namespace PFG.Aplicacion
 
 		private async void Procesar_ResultadoDelIntentoDeIniciarSesion(Comando_ResultadoIntentoIniciarSesion Comando)
 		{
-			switch(Comando.ResultadIntentoIniciarSesion)
+			switch(Comando.ResultadoIntentoIniciarSesion)
 			{
 				case ResultadosIntentoIniciarSesion.Correcto:
 				{
@@ -95,6 +114,36 @@ namespace PFG.Aplicacion
 
 					break;
 				}
+			}
+		}
+
+		private void Procesar_MandarUsuarios(Comando_MandarUsuarios Comando)
+		{
+			Usuarios.UsuariosLocal.Clear();
+			
+			foreach(var usuario in Comando.Usuarios)
+				Usuarios.UsuariosLocal.Add(usuario);
+
+			UserDialogs.Instance.HideLoading();
+		}
+
+		private void Procesar_ResultadoIntentoCrearUsuario(Comando_ResultadoIntentoCrearUsuario Comando)
+		{
+			UserDialogs.Instance.HideLoading();
+
+			if(Comando.ResultadoIntentoCrearUsuario == ResultadosIntentoCrearUsuario.Correcto)
+			{
+				if(Usuarios.nuevoUsuario != null)
+				{
+					Usuarios.UsuariosLocal.Add(Usuarios.nuevoUsuario);
+					Usuarios.nuevoUsuario = null;
+				}
+
+				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
+			}
+			else
+			{
+				UserDialogs.Instance.Alert("Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo", "Error", "Aceptar");
 			}
 		}
 

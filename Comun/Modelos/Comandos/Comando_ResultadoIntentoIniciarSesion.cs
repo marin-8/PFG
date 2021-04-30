@@ -17,28 +17,28 @@ namespace PFG.Comun
 
 	public class Comando_ResultadoIntentoIniciarSesion : Comando
 	{
-		private const TiposComando TipoComandoInit = TiposComando.ResultadoDelIntentoDeIniciarSesion;
+		private const TiposComando TipoComandoInit = TiposComando.ResultadoIntentoIniciarSesion;
 
-		[JsonProperty("1")] public ResultadosIntentoIniciarSesion ResultadIntentoIniciarSesion { get; private set; }
+		[JsonProperty("1")] public ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion { get; private set; }
 		[JsonProperty("2")] public Roles Rol { get; private set; }
 
-		private void InicializarPropiedades(ResultadosIntentoIniciarSesion ResultadIntentoIniciarSesion, Roles Rol)
+		private void InicializarPropiedades(ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Roles Rol)
 		{
-			this.ResultadIntentoIniciarSesion = ResultadIntentoIniciarSesion;
+			this.ResultadoIntentoIniciarSesion = ResultadoIntentoIniciarSesion;
 			this.Rol = Rol;
 		}
 
-		public Comando_ResultadoIntentoIniciarSesion(ResultadosIntentoIniciarSesion ResultadIntentoIniciarSesion, Roles Rol)
+		public Comando_ResultadoIntentoIniciarSesion(ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Roles Rol)
 			: base(TipoComandoInit)
 		{
-			InicializarPropiedades(ResultadIntentoIniciarSesion, Rol);
+			InicializarPropiedades(ResultadoIntentoIniciarSesion, Rol);
 		}
 
 		[JsonConstructor]
-		private Comando_ResultadoIntentoIniciarSesion(TiposComando TipoComandoJson, ResultadosIntentoIniciarSesion ResultadIntentoIniciarSesion, Roles Rol)
+		private Comando_ResultadoIntentoIniciarSesion(TiposComando TipoComandoJson, ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Roles Rol)
 			: base(TipoComandoJson)
 		{
-			InicializarPropiedades(ResultadIntentoIniciarSesion, Rol);
+			InicializarPropiedades(ResultadoIntentoIniciarSesion, Rol);
 		}
 	}
 }

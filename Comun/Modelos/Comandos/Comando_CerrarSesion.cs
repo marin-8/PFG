@@ -33,7 +33,7 @@ namespace PFG.Comun
 		}
 
 		[JsonConstructor]
-		private Comando_CerrarSesion(TiposComando TipoComandoJson)
+		private Comando_CerrarSesion(TiposComando TipoComandoJson, string Usuario)
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(Usuario);

@@ -36,8 +36,8 @@ namespace PFG.Gestor
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.panel3 = new System.Windows.Forms.Panel();
 			this.RegistroComandos = new System.Windows.Forms.ListBox();
+			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -120,16 +120,6 @@ namespace PFG.Gestor
 			this.panel2.Size = new System.Drawing.Size(529, 500);
 			this.panel2.TabIndex = 5;
 			// 
-			// panel3
-			// 
-			this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.panel3.Controls.Add(this.CerrarYSalir);
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel3.Location = new System.Drawing.Point(0, 567);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(529, 74);
-			this.panel3.TabIndex = 6;
-			// 
 			// RegistroComandos
 			// 
 			this.RegistroComandos.Font = new System.Drawing.Font("Roboto Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -140,15 +130,27 @@ namespace PFG.Gestor
 			this.RegistroComandos.Size = new System.Drawing.Size(371, 436);
 			this.RegistroComandos.TabIndex = 4;
 			// 
+			// panel3
+			// 
+			this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel3.Controls.Add(this.CerrarYSalir);
+			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel3.Location = new System.Drawing.Point(0, 567);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(529, 74);
+			this.panel3.TabIndex = 6;
+			// 
 			// Principal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(529, 641);
-			this.ControlBox = false;
 			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "Principal";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Gestor";

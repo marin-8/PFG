@@ -51,7 +51,7 @@
 
             <Entry
                 x:Name="Usuario"
-                Text=""
+                Text="admin"
                 Placeholder="Usuario"
                 FontSize="Large"
                 TextColor="Black"
@@ -63,7 +63,7 @@
 
             <Entry
                 x:Name="Contrasena"
-                Text=""
+                Text="admin"
                 Placeholder="Contraseña"
                 FontSize="Large"
                 TextColor="Black"
