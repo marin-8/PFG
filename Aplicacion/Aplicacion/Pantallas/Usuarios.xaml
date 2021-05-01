@@ -13,9 +13,9 @@
         RowSpacing="0">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="90*"/>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -72,10 +72,21 @@
                             <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
                                 <Frame BackgroundColor="LightGray" Padding="10">
                                     <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
-                                        <Label FontSize="Medium" Text="{Binding Nombre}" TextColor="Black"></Label>
-                                        <Label FontSize="Medium" Text="{Binding NombreUsuario, StringFormat='Nombre de usuario: {0}'}"></Label>
-                                        <Label FontSize="Medium" Text="{Binding Rol, StringFormat='Rol: {0}'}"></Label>
+                                        <Label FontSize="Medium" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
+                                        <Label FontSize="Medium" Text="{Binding NombreUsuario, StringFormat='Nombre de usuario: {0}'}" TextColor="Black"></Label>
+                                        <Label FontSize="Medium" Text="{Binding Rol, StringFormat='Rol: {0}'}" TextColor="Black"></Label>
                                     </StackLayout>
+                                    <Frame.Triggers>
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Cocinero">
+                                            <Setter Property="BackgroundColor" Value="Violet" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Barista">
+                                            <Setter Property="BackgroundColor" Value="orange" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Camarero">
+                                            <Setter Property="BackgroundColor" Value="LightSkyBlue" />
+                                        </DataTrigger>
+                                    </Frame.Triggers>
                                 </Frame>
                             </Frame>
 

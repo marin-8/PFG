@@ -22,7 +22,6 @@ namespace PFG.Aplicacion
 {
 	public partial class Usuarios : ContentPage
 	{
-		public static Usuario dumUsuario;
 		public static ObservableCollection<Usuario> UsuariosLocal = new();
 
 		public Usuarios()
@@ -49,17 +48,17 @@ namespace PFG.Aplicacion
 
 		private async void NuevoUsuario_Clicked(object sender, EventArgs e)
 		{
-			dumUsuario = new("", "", "", Roles.Ninguno);
+			Usuario nuevoUsuario = new("", "", "", Roles.Ninguno);
 
 			string nombre = await PedirAlUsuarioStringCorrecto("Nombre", true);
 			if(nombre == null) return;
-			dumUsuario.Nombre = nombre;	
+			nuevoUsuario.Nombre = nombre;	
 			
 			while(true)
 			{
 				string nombreUsuario = await PedirAlUsuarioStringCorrecto("Nombre de Usuario", false);
 				if(nombreUsuario == null) return;
-				dumUsuario.NombreUsuario = nombreUsuario;
+				nuevoUsuario.NombreUsuario = nombreUsuario;
 
 				RefrescarUsuarios();
 
@@ -71,7 +70,7 @@ namespace PFG.Aplicacion
 
 			string contrasena = await PedirAlUsuarioStringCorrecto("Contraseña", false);
 			if(contrasena == null) return;
-			dumUsuario.Contrasena = contrasena;	
+			nuevoUsuario.Contrasena = contrasena;	
 
 			List<string> roles = new();
 			int i = 0;
@@ -81,13 +80,13 @@ namespace PFG.Aplicacion
 
 			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, roles.ToArray());
 			if(rolString.Equals("Cancelar")) return;
-			dumUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
+			nuevoUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
 
 			UserDialogs.Instance.ShowLoading("Creando usuario...");
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarCrearUsuario(dumUsuario).Enviar(Global.IPGestor);
+				new Comando_IntentarCrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
 			});
 		}
 
@@ -115,7 +114,7 @@ namespace PFG.Aplicacion
 			else
 				opcionesUsuario = OpcionesUsuario;
 
-			string opcion = await UserDialogs.Instance.ActionSheetAsync("Opciones", "Cancelar", null, null, opcionesUsuario);
+			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{usuarioPulsado.Nombre}", "Cancelar", null, null, opcionesUsuario);
 			if(opcion.Equals("Cancelar")) return;
 
 			RefrescarUsuarios();

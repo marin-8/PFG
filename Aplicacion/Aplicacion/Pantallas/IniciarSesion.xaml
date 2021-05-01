@@ -31,7 +31,7 @@
             <Label
                 x:Name="IniciarSesionLabel"
                 Text="Iniciar sesión"
-                FontSize="Title"
+                FontSize="46"
                 TextColor="White"
                 FontAttributes="Bold"
                 HorizontalTextAlignment="Center"/>

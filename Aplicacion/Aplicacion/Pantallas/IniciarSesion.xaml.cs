@@ -30,8 +30,6 @@ namespace PFG.Aplicacion
 			InitializeComponent();
 
 			Shell.Current.Navigated += OnNavigatedTo;
-
-			IniciarSesionLabel.FontSize = DeviceDisplay.MainDisplayInfo.Width / 8 / DeviceDisplay.MainDisplayInfo.Density;
 		}
 
 		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)

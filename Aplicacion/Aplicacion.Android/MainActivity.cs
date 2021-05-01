@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.OS;
 
 using AndroidX.AppCompat.App;
+using Android.Content.Res;
 
 using Acr.UserDialogs;
 
@@ -15,6 +16,18 @@ namespace Aplicacion.Droid
     [Activity(Label = "Aplicacion", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        public override Resources Resources
+        {
+            get
+            {
+                Resources res = base.Resources;
+                Configuration config = new Configuration();
+                config.SetToDefaults();
+                res.UpdateConfiguration(config, res.DisplayMetrics);
+                return res;
+            }
+        }
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -28,6 +41,7 @@ namespace Aplicacion.Droid
 
             LoadApplication(new App());
         }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

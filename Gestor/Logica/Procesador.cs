@@ -207,6 +207,8 @@ namespace PFG.Gestor
 			(
 				GestionUsuarios.Usuarios
 					.Where(u => u.Rol != Roles.Desarrollador)
+					.OrderByDescending(u => (byte)u.Rol)
+					.ThenBy(u => u.Nombre)
 					.ToArray()
 			)
 			.Enviar(IP);

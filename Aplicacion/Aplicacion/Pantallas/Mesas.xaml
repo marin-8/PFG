@@ -12,32 +12,98 @@
         RowSpacing="0">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="20"/>
             <RowDefinition/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <StackLayout
-            Spacing="0"
+        <Grid
             Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
+            Grid.Row="1"
+            ColumnSpacing="0"
+            RowSpacing="0">
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
 
-            <Label
-                Text="Mesas"
-                FontSize="Title"
-                TextColor="Black"
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Grid.Row="0"
+                x:Name="AnadirFila"
+                Text="+ Fila"
+                FontSize="18"
                 FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
+                TextColor="Black"
+                BackgroundColor="LimeGreen"
+                Clicked="AnadirFila_Clicked"
+                HorizontalOptions="FillAndExpand"/>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+            <Button
+                Grid.Column="0"
+                Grid.Row="2"
+                x:Name="EliminarFila"
+                Text="- Fila"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="Red"
+                Clicked="EliminarFila_Clicked"
+                HorizontalOptions="FillAndExpand"/>
 
-        </StackLayout>
+            <Button
+                Grid.Column="2"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                x:Name="AnadirColumna"
+                Text="+ Col"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="Black"
+                BackgroundColor="LimeGreen"
+                Clicked="AnadirColumna_Clicked"
+                HorizontalOptions="FillAndExpand"/>
+
+            <Button
+                Grid.Column="4"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                x:Name="EliminarColumna"
+                Text="-  Col"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="Red"
+                Clicked="EliminarColumna_Clicked"
+                HorizontalOptions="FillAndExpand"/>
+
+        </Grid>
+
+        <Grid
+            Grid.Column="1"
+            Grid.Row="3"
+            x:Name="MapaGrid"
+            ColumnSpacing="0"
+            RowSpacing="0"
+            VerticalOptions="FillAndExpand"/>
 
     </Grid>
 

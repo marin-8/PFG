@@ -143,11 +143,7 @@ namespace PFG.Aplicacion
 
 			if(Comando.ResultadoIntentoCrearUsuario == ResultadosIntentoCrearUsuario.Correcto)
 			{
-				if(Usuarios.dumUsuario != null)
-				{
-					Usuarios.UsuariosLocal.Add(Usuarios.dumUsuario);
-					Usuarios.dumUsuario = null;
-				}
+				Usuarios.RefrescarUsuarios();
 
 				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
 			}
@@ -161,7 +157,16 @@ namespace PFG.Aplicacion
 		{
 			UserDialogs.Instance.HideLoading();
 
-			Usuarios.RefrescarUsuarios();
+			if(Comando.ResultadoEliminarUsuario == ResultadosIntentoEliminarUsuario.Correcto)
+			{
+				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
+
+				Usuarios.RefrescarUsuarios();
+			}
+			else
+			{
+				UserDialogs.Instance.Alert("No se puede eliminar el usuario porque está conectado", "Error", "Aceptar");
+			}
 		}
 
 		//private void Procesar_XXXXX(Comando_XXXXX Comando)
