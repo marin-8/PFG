@@ -140,6 +140,9 @@ namespace PFG.Aplicacion
 					new Comando_ModificarUsuarioNombre(usuarioPulsado.NombreUsuario, nuevoNombre).Enviar(Global.IPGestor);
 				});
 
+				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
+					Global.UsuarioActual.Nombre = nuevoNombre;
+
 				UserDialogs.Instance.HideLoading();
 
 				RefrescarUsuarios();
@@ -167,6 +170,9 @@ namespace PFG.Aplicacion
 					new Comando_ModificarUsuarioNombreUsuario(usuarioPulsado.NombreUsuario, nuevoNombreUsuario).Enviar(Global.IPGestor);
 				});
 
+				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
+					Global.UsuarioActual.NombreUsuario = nuevoNombreUsuario;
+
 				UserDialogs.Instance.HideLoading();
 
 				RefrescarUsuarios();
@@ -193,6 +199,9 @@ namespace PFG.Aplicacion
 				{
 					new Comando_ModificarUsuarioContrasena(usuarioPulsado.NombreUsuario, nuevaContrasena).Enviar(Global.IPGestor);
 				});
+
+				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
+					Global.UsuarioActual.Contrasena = nuevaContrasena;
 
 				UserDialogs.Instance.HideLoading();
 
@@ -229,15 +238,31 @@ namespace PFG.Aplicacion
 					new Comando_ModificarUsuarioRol(usuarioPulsado.NombreUsuario, nuevoRol).Enviar(Global.IPGestor);
 				});
 
+				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
+					Global.UsuarioActual.Rol = nuevoRol;
+
 				UserDialogs.Instance.HideLoading();
 
 				RefrescarUsuarios();
 
 				return;
 			}
+
+			if(opcion == OpcionesUsuario[4]) // Eliminar
+			{
+				if(await UserDialogs.Instance.ConfirmAsync($"¿Eliminar el usuario '{usuarioPulsado.NombreUsuario}'?", "Confirmar eliminación", "Eliminar", "Cancelar"))
+				{
+					UserDialogs.Instance.ShowLoading("Eliminando usuario...");
+
+					await Task.Run(() =>
+					{
+						new Comando_IntentarEliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
+					});
+				}
+			}
 		}
 
-		private async void RefrescarUsuarios()
+		public async static void RefrescarUsuarios()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando lista de usuarios...");
 

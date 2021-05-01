@@ -13,6 +13,8 @@ namespace PFG.Comun
 		ModificarUsuarioNombre = 8,
 		ModificarUsuarioNombreUsuario = 9,
 		ModificarUsuarioContrasena = 10,
-		ModificarUsuarioRol = 11
+		ModificarUsuarioRol = 11,
+		IntentarEliminarUsuario = 12,
+		ResultadoIntentoEliminarUsuario = 13
 	}
 }

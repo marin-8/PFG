@@ -9,10 +9,8 @@ namespace PFG.Comun
 			  Barista = 2,
 			 Cocinero = 3,
 
-			  Gerente = 4,
+		Administrador = 4,
 
-		Administrador = 5,
-
-		Desarrollador = 6
+		Desarrollador = 5
 	}
 }

@@ -25,6 +25,19 @@ namespace PFG.Gestor
 			InitializeComponent();
 
 			FormClosing += new FormClosingEventHandler(Principal_Closing);
+
+			EventHandler SincronizarScrolling = (s,e) =>
+			{
+				if (s == RegistroIPs)
+					RegistroComandos.TopIndex = RegistroIPs.TopIndex;
+				if (s == RegistroComandos)
+					RegistroIPs.TopIndex = RegistroComandos.TopIndex;
+			};
+
+			RegistroIPs.MouseCaptureChanged += SincronizarScrolling;
+			RegistroComandos.MouseCaptureChanged += SincronizarScrolling;
+			RegistroIPs.SelectedIndexChanged += SincronizarScrolling;
+			RegistroComandos.SelectedIndexChanged += SincronizarScrolling;
 		}
 
 		private void Principal_Load(object sender, EventArgs e)

@@ -56,6 +56,16 @@ namespace PFG.Aplicacion
 					break;
 				}
 
+				case TiposComando.ResultadoIntentoEliminarUsuario:
+				{
+					Procesar_ResultadoIntentoEliminarUsuario(
+						Comando.DeJson
+							<Comando_ResultadoIntentoEliminarUsuario>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
@@ -145,6 +155,13 @@ namespace PFG.Aplicacion
 			{
 				UserDialogs.Instance.Alert("Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo", "Error", "Aceptar");
 			}
+		}
+
+		private void Procesar_ResultadoIntentoEliminarUsuario(Comando_ResultadoIntentoEliminarUsuario Comando)
+		{
+			UserDialogs.Instance.HideLoading();
+
+			Usuarios.RefrescarUsuarios();
 		}
 
 		//private void Procesar_XXXXX(Comando_XXXXX Comando)

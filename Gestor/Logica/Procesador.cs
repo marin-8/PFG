@@ -113,6 +113,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.IntentarEliminarUsuario:
+				{
+					Procesar_IntentarEliminarUsuario(
+						Comando.DeJson
+							<Comando_IntentarEliminarUsuario>
+								(ComandoJson), IP);
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
@@ -253,6 +263,32 @@ namespace PFG.Gestor
 				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
 				.First()
 					.Rol = Comando.NuevoRol;
+		}
+
+		private static void Procesar_IntentarEliminarUsuario(Comando_IntentarEliminarUsuario Comando, string IP)
+		{
+			var usuarioAEliminar = GestionUsuarios.Usuarios
+								       .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+									   .First();
+
+			if(usuarioAEliminar.Conectado)
+			{
+				new Comando_ResultadoIntentoEliminarUsuario
+				(
+					ResultadosIntentoEliminarUsuario.UsuarioConectado
+				)
+				.Enviar(IP);
+			}
+			else
+			{
+				GestionUsuarios.Usuarios.Remove(usuarioAEliminar);
+
+				new Comando_ResultadoIntentoEliminarUsuario
+				(
+					ResultadosIntentoEliminarUsuario.Correcto
+				)
+				.Enviar(IP);
+			}
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)
