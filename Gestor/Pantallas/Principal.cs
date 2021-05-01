@@ -51,5 +51,20 @@ namespace PFG.Gestor
 		{
 			Close();
 		}
+
+		private void CerrarSesionDesarrollador_Click(object sender, EventArgs e)
+		{
+			var usuarioDesarrollador = GestionUsuarios.Usuarios
+									  .Where(u => u.Rol == Roles.Desarrollador)
+									  .First();
+
+			if(usuarioDesarrollador.Conectado)
+			{
+				usuarioDesarrollador.Conectado = false;
+
+				RegistroIPs.Items.Add("Gestor");
+				RegistroComandos.Items.Add("Cerrada sesión de Desarrollador");
+			}
+		}
 	}
 }

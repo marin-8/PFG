@@ -20,25 +20,25 @@ namespace PFG.Comun
 		private const TiposComando TipoComandoInit = TiposComando.ResultadoIntentoIniciarSesion;
 
 		[JsonProperty("1")] public ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion { get; private set; }
-		[JsonProperty("2")] public Roles Rol { get; private set; }
+		[JsonProperty("2")] public Usuario UsuarioActual { get; private set; }
 
-		private void InicializarPropiedades(ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Roles Rol)
+		private void InicializarPropiedades(ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Usuario UsuarioActual)
 		{
 			this.ResultadoIntentoIniciarSesion = ResultadoIntentoIniciarSesion;
-			this.Rol = Rol;
+			this.UsuarioActual = UsuarioActual;
 		}
 
-		public Comando_ResultadoIntentoIniciarSesion(ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Roles Rol)
+		public Comando_ResultadoIntentoIniciarSesion(ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Usuario UsuarioActual)
 			: base(TipoComandoInit)
 		{
-			InicializarPropiedades(ResultadoIntentoIniciarSesion, Rol);
+			InicializarPropiedades(ResultadoIntentoIniciarSesion, UsuarioActual);
 		}
 
 		[JsonConstructor]
-		private Comando_ResultadoIntentoIniciarSesion(TiposComando TipoComandoJson, ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Roles Rol)
+		private Comando_ResultadoIntentoIniciarSesion(TiposComando TipoComandoJson, ResultadosIntentoIniciarSesion ResultadoIntentoIniciarSesion, Usuario UsuarioActual)
 			: base(TipoComandoJson)
 		{
-			InicializarPropiedades(ResultadoIntentoIniciarSesion, Rol);
+			InicializarPropiedades(ResultadoIntentoIniciarSesion, UsuarioActual);
 		}
 	}
 }

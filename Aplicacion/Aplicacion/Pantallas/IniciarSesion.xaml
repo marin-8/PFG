@@ -29,6 +29,7 @@
             VerticalOptions="CenterAndExpand">
 
             <Label
+                x:Name="IniciarSesionLabel"
                 Text="Iniciar sesión"
                 FontSize="Title"
                 TextColor="White"
@@ -51,7 +52,7 @@
 
             <Entry
                 x:Name="Usuario"
-                Text="admin"
+                Text="desarrollador"
                 Placeholder="Usuario"
                 FontSize="Large"
                 TextColor="Black"
@@ -63,7 +64,7 @@
 
             <Entry
                 x:Name="Contrasena"
-                Text="admin"
+                Text="qwertyuiop"
                 Placeholder="Contraseña"
                 FontSize="Large"
                 TextColor="Black"
@@ -82,17 +83,6 @@
                 TextColor="Black"
                 BackgroundColor="LimeGreen"
                 Clicked="IniciarSesion_Clicked"/>
-
-            <BoxView HeightRequest="10" Color="Transparent"/>
-
-            <Button
-                x:Name="EntrarOfflineDev"
-                Text="Entrar offline (dev)"
-                FontSize="Large"
-                FontAttributes="Bold"
-                TextColor="Black"
-                BackgroundColor="Tomato"
-                Clicked="EntrarOfflineDev_Clicked"/>
 
         </StackLayout>
 

@@ -11,10 +11,7 @@ namespace PFG.Aplicacion
 	{
 		public static string IPGestor = "";
 
-		public static string UsuarioActual = "";
-		public static string ContrasenaActual = "";
-		
-		public static Roles RolActual = Roles.Ninguno;
+		public static Usuario UsuarioActual;
 
 		public static ControladorRed Servidor;
 		public static Procesador ProcesadorMensajesRecibidos;

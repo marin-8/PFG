@@ -30,25 +30,16 @@ namespace PFG.Aplicacion
 
 			Current.FlyoutIsPresented = false;
 
-			if(Global.RolActual != Roles.Desarrollador)
+			await Task.Run(() =>
 			{
-				await Task.Run(async () =>
-				{
-					new Comando_CerrarSesion
-					(
-						Global.UsuarioActual
-					)
-					.Enviar(Global.IPGestor);
+				new Comando_CerrarSesion
+				(
+					Global.UsuarioActual.NombreUsuario
+				)
+				.Enviar(Global.IPGestor);
+			});
 
-					Global.ContrasenaActual = "";
-
-					await Device.InvokeOnMainThreadAsync(async () =>
-						await Current.GoToAsync("//IniciarSesion") );
-				});
-			}
-
-			Global.UsuarioActual = "";
-			Global.RolActual = Roles.Ninguno;
+			Global.UsuarioActual = null;
 
 			await Current.GoToAsync("//IniciarSesion");
 

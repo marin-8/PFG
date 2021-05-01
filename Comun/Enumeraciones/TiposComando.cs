@@ -9,6 +9,10 @@ namespace PFG.Comun
 		PedirUsuarios = 4,
 		MandarUsuarios = 5,
 		IntentarCrearUsuario = 6,
-		ResultadoIntentoCrearUsuario = 7
+		ResultadoIntentoCrearUsuario = 7,
+		ModificarUsuarioNombre = 8,
+		ModificarUsuarioNombreUsuario = 9,
+		ModificarUsuarioContrasena = 10,
+		ModificarUsuarioRol = 11
 	}
 }

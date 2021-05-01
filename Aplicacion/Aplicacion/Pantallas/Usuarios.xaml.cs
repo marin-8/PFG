@@ -22,7 +22,7 @@ namespace PFG.Aplicacion
 {
 	public partial class Usuarios : ContentPage
 	{
-		public static Usuario nuevoUsuario;
+		public static Usuario dumUsuario;
 		public static ObservableCollection<Usuario> UsuariosLocal = new();
 
 		public Usuarios()
@@ -49,17 +49,17 @@ namespace PFG.Aplicacion
 
 		private async void NuevoUsuario_Clicked(object sender, EventArgs e)
 		{
-			nuevoUsuario = new("", "", "", Roles.Ninguno);
+			dumUsuario = new("", "", "", Roles.Ninguno);
 
-			string nombre = await PedirAlUsuarioStringCorrecto("Nombre");
+			string nombre = await PedirAlUsuarioStringCorrecto("Nombre", true);
 			if(nombre == null) return;
-			nuevoUsuario.Nombre = nombre;	
+			dumUsuario.Nombre = nombre;	
 			
 			while(true)
 			{
-				string nombreUsuario = await PedirAlUsuarioStringCorrecto("Nombre de Usuario");
+				string nombreUsuario = await PedirAlUsuarioStringCorrecto("Nombre de Usuario", false);
 				if(nombreUsuario == null) return;
-				nuevoUsuario.NombreUsuario = nombreUsuario;
+				dumUsuario.NombreUsuario = nombreUsuario;
 
 				RefrescarUsuarios();
 
@@ -69,25 +69,172 @@ namespace PFG.Aplicacion
 					break;
 			}
 
-			string contrasena = await PedirAlUsuarioStringCorrecto("Contraseña");
+			string contrasena = await PedirAlUsuarioStringCorrecto("Contraseña", false);
 			if(contrasena == null) return;
-			nuevoUsuario.Contrasena = contrasena;	
+			dumUsuario.Contrasena = contrasena;	
 
 			List<string> roles = new();
 			int i = 0;
 			foreach(var rol in Enum.GetValues(typeof(Roles)).Cast<Roles>())
-				roles.Add($"{++i} - {rol}");
+				if((byte)rol < (byte)Roles.Administrador)
+					roles.Add($"{++i} - {rol}");
 
 			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, roles.ToArray());
 			if(rolString.Equals("Cancelar")) return;
-			nuevoUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
+			dumUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
 
 			UserDialogs.Instance.ShowLoading("Creando usuario...");
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarCrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
+				new Comando_IntentarCrearUsuario(dumUsuario).Enviar(Global.IPGestor);
 			});
+		}
+
+		private static readonly string[] OpcionesUsuario = new string[] { "Cambiar Nombre",
+																		  "Cambiar Nombre de Usuario",
+																		  "Cambiar Contraseña",
+																		  "Cambiar Rol",
+																		  "Eliminar" };
+
+		private async void ListaUsuarios_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
+			var usuarioPulsado = (Usuario)e.Item;
+
+			string[] opcionesUsuario;
+
+			// Si el pulsado es el mismo que el actual => todo menos eliminar
+			if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario) {
+				opcionesUsuario = new string[4];
+				Array.Copy(OpcionesUsuario, opcionesUsuario, 4); }
+
+			// Si el pulsado es el Admin => solo cambiar contraseña
+			else if(usuarioPulsado.Rol == Roles.Administrador)
+				opcionesUsuario = new string[] { OpcionesUsuario[2] };
+			
+			else
+				opcionesUsuario = OpcionesUsuario;
+
+			string opcion = await UserDialogs.Instance.ActionSheetAsync("Opciones", "Cancelar", null, null, opcionesUsuario);
+			if(opcion.Equals("Cancelar")) return;
+
+			RefrescarUsuarios();
+
+			if(opcion == OpcionesUsuario[0]) // Cambiar Nombre
+			{
+				string nuevoNombre;
+
+				while(true)
+				{
+					nuevoNombre = await PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {usuarioPulsado.Nombre})", true);
+					if(nuevoNombre == null) return;
+					if(nuevoNombre != usuarioPulsado.Nombre) break;
+
+					await DisplayAlert("Alerta", $"El nuevo Nombre no puede ser igual que el anterior", "Aceptar");
+				}
+
+				UserDialogs.Instance.ShowLoading("Modificando Nombre...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarUsuarioNombre(usuarioPulsado.NombreUsuario, nuevoNombre).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarUsuarios();
+
+				return;
+			}
+
+			if(opcion == OpcionesUsuario[1]) // Cambiar Nombre de Usuario
+			{
+				string nuevoNombreUsuario;
+
+				while(true)
+				{
+					nuevoNombreUsuario = await PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", true);
+					if(nuevoNombreUsuario == null) return;
+					if(nuevoNombreUsuario != usuarioPulsado.NombreUsuario) break;
+
+					await DisplayAlert("Alerta", $"El nuevo Nombre de Usuario no puede ser igual que el anterior", "Aceptar");
+				}
+
+				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarUsuarioNombreUsuario(usuarioPulsado.NombreUsuario, nuevoNombreUsuario).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarUsuarios();
+
+				return;
+			}
+
+			if(opcion == OpcionesUsuario[2]) // Cambiar Contraseña
+			{
+				string nuevaContrasena;
+
+				while(true)
+				{
+					nuevaContrasena = await PedirAlUsuarioStringCorrecto($"Nueva Contraseña\n(actual = {usuarioPulsado.Contrasena})", true);
+					if(nuevaContrasena == null) return;
+					if(nuevaContrasena != usuarioPulsado.Contrasena) break;
+
+					await DisplayAlert("Alerta", $"La nueva Contraseña no puede ser igual que la anterior", "Aceptar");
+				}
+
+				UserDialogs.Instance.ShowLoading("Modificando Contraseña...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarUsuarioContrasena(usuarioPulsado.NombreUsuario, nuevaContrasena).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarUsuarios();
+
+				return;
+			}
+		
+			if(opcion == OpcionesUsuario[3]) // Cambiar Rol
+			{
+				Roles nuevoRol;
+
+				List<string> roles = new();
+				int i = 0;
+				foreach(var rol in Enum.GetValues(typeof(Roles)).Cast<Roles>())
+					if((byte)rol < (byte)Roles.Administrador)
+						roles.Add($"{++i} - {rol}");
+
+				while(true)
+				{
+					string rolString = await UserDialogs.Instance.ActionSheetAsync($"Nuevo Rol (actual = {usuarioPulsado.Rol})", "Cancelar", null, null, roles.ToArray());
+					if(rolString.Equals("Cancelar")) return;
+					nuevoRol = (Roles)(byte.Parse(rolString[0].ToString())-1);
+
+					if(nuevoRol != usuarioPulsado.Rol) break;
+
+					await DisplayAlert("Alerta", $"El nuevo Rol no puede ser igual que el anterior", "Aceptar");
+				}
+
+				UserDialogs.Instance.ShowLoading("Modificando Rol...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarUsuarioRol(usuarioPulsado.NombreUsuario, nuevoRol).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarUsuarios();
+
+				return;
+			}
 		}
 
 		private async void RefrescarUsuarios()
@@ -100,7 +247,7 @@ namespace PFG.Aplicacion
 			});
 		}
 
-		private async Task<string> PedirAlUsuarioStringCorrecto(string Titulo)
+		private async Task<string> PedirAlUsuarioStringCorrecto(string Titulo, bool PermitirEspacios)
 		{
 			string stringCorrecto = null;
 
@@ -121,7 +268,9 @@ namespace PFG.Aplicacion
 				if(stringCorrecto.Equals("")) {
 					await DisplayAlert("Alerta", "No puede estar vacío", "Aceptar"); stringCorrecto = null; continue; }
 
-				if(!stringCorrecto.All(Comun.Global.CARACTERES_PERMITIDOS_LOGIN.Contains)) {
+				string cp = Comun.Global.CARACTERES_PERMITIDOS_LOGIN;
+
+				if(!stringCorrecto.All(PermitirEspacios ? (cp+" ").Contains : cp.Contains)) {
 					await DisplayAlert("Alerta", $"Solo se pueden usar letras y números", "Aceptar"); stringCorrecto = null; continue; }
 
 				return stringCorrecto;

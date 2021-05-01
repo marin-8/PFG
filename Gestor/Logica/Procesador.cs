@@ -73,6 +73,46 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.ModificarUsuarioNombre:
+				{
+					Procesar_ModificarUsuarioNombre(
+						Comando.DeJson
+							<Comando_ModificarUsuarioNombre>
+								(ComandoJson), IP);
+
+					break;
+				}
+
+				case TiposComando.ModificarUsuarioNombreUsuario:
+				{
+					Procesar_ModificarUsuarioNombreUsuario(
+						Comando.DeJson
+							<Comando_ModificarUsuarioNombreUsuario>
+								(ComandoJson), IP);
+
+					break;
+				}
+
+				case TiposComando.ModificarUsuarioContrasena:
+				{
+					Procesar_ModificarUsuarioContrasena(
+						Comando.DeJson
+							<Comando_ModificarUsuarioContrasena>
+								(ComandoJson), IP);
+
+					break;
+				}
+
+				case TiposComando.ModificarUsuarioRol:
+				{
+					Procesar_ModificarUsuarioRol(
+						Comando.DeJson
+							<Comando_ModificarUsuarioRol>
+								(ComandoJson), IP);
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
@@ -107,7 +147,7 @@ namespace PFG.Gestor
 						new Comando_ResultadoIntentoIniciarSesion
 						(
 							ResultadosIntentoIniciarSesion.Correcto,
-							usuario.Rol
+							usuario
 						)
 						.Enviar(IP);
 					}
@@ -116,7 +156,7 @@ namespace PFG.Gestor
 						new Comando_ResultadoIntentoIniciarSesion
 						(
 							ResultadosIntentoIniciarSesion.ContrasenaIncorrecta,
-							Roles.Ninguno
+							null
 						)
 						.Enviar(IP);
 					}
@@ -126,7 +166,7 @@ namespace PFG.Gestor
 					new Comando_ResultadoIntentoIniciarSesion
 					(
 						ResultadosIntentoIniciarSesion.UsuarioYaConectado,
-						Roles.Ninguno
+						null
 					)
 					.Enviar(IP);
 				}	
@@ -136,7 +176,7 @@ namespace PFG.Gestor
 				new Comando_ResultadoIntentoIniciarSesion
 				(
 					ResultadosIntentoIniciarSesion.UsuarioNoExiste,
-					Roles.Ninguno
+					null
 				)
 				.Enviar(IP);
 			}
@@ -145,9 +185,8 @@ namespace PFG.Gestor
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
 		{
 			var usuario = GestionUsuarios.Usuarios
-						 .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
-						 .Select(u => u)
-						 .First();
+							 .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+							 .First();
 
 			usuario.Conectado = false;
 		}
@@ -156,7 +195,9 @@ namespace PFG.Gestor
 		{
 			new Comando_MandarUsuarios
 			(
-				GestionUsuarios.Usuarios.ToArray()
+				GestionUsuarios.Usuarios
+					.Where(u => u.Rol != Roles.Desarrollador)
+					.ToArray()
 			)
 			.Enviar(IP);
 		}
@@ -180,6 +221,38 @@ namespace PFG.Gestor
 				resultado
 			)
 			.Enviar(IP);
+		}
+
+		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando, string IP)
+		{
+			GestionUsuarios.Usuarios
+				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.First()
+					.Nombre = Comando.NuevoNombre;
+		}
+
+		private static void Procesar_ModificarUsuarioNombreUsuario(Comando_ModificarUsuarioNombreUsuario Comando, string IP)
+		{
+			GestionUsuarios.Usuarios
+				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.First()
+					.NombreUsuario = Comando.NuevoNombreUsuario;
+		}
+
+		private static void Procesar_ModificarUsuarioContrasena(Comando_ModificarUsuarioContrasena Comando, string IP)
+		{
+			GestionUsuarios.Usuarios
+				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.First()
+					.Contrasena = Comando.NuevaContrasena;
+		}
+
+		private static void Procesar_ModificarUsuarioRol(Comando_ModificarUsuarioRol Comando, string IP)
+		{
+			GestionUsuarios.Usuarios
+				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.First()
+					.Rol = Comando.NuevoRol;
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

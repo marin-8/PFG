@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 using Acr.UserDialogs;
 
@@ -27,6 +28,19 @@ namespace PFG.Aplicacion
 		public IniciarSesion()
 		{
 			InitializeComponent();
+
+			Shell.Current.Navigated += OnNavigatedTo;
+
+			IniciarSesionLabel.FontSize = DeviceDisplay.MainDisplayInfo.Width / 8 / DeviceDisplay.MainDisplayInfo.Density;
+		}
+
+		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		{
+			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
+			{
+				if(Global.UsuarioActual != null)
+					await Shell.Current.GoToAsync("//Principal");
+			}
 		}
 
 		private async void IniciarSesion_Clicked(object sender, EventArgs e)
@@ -48,24 +62,14 @@ namespace PFG.Aplicacion
 			await Task.Run(() =>
 			{
 				Global.IPGestor = ipGestor;
-				Global.UsuarioActual = usuario;
-				Global.ContrasenaActual = contrasena;
 
 				new Comando_IntentarIniciarSesion
 				(
 					usuario,
 					contrasena
 				)
-				.Enviar(ipGestor);
+				.Enviar(Global.IPGestor);
 			});
-		}
-
-		private async void EntrarOfflineDev_Clicked(object sender, EventArgs e)
-		{
-			Global.UsuarioActual = "dev";
-			Global.RolActual = Roles.Desarrollador;
-
-			await Shell.Current.GoToAsync("//Principal");
 		}
 	}
 }

@@ -62,7 +62,8 @@
                 SelectionMode="None"
                 HasUnevenRows="True"
                 BackgroundColor="Transparent"
-                SeparatorVisibility="None">
+                SeparatorVisibility="None"
+                ItemTapped="ListaUsuarios_ItemTapped">
                 
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="pfgcomun:Usuario">

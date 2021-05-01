@@ -81,7 +81,7 @@ namespace PFG.Aplicacion
 			{
 				case ResultadosIntentoIniciarSesion.Correcto:
 				{
-					Global.RolActual = Comando.Rol;
+					Global.UsuarioActual = Comando.UsuarioActual;
 
 					await Device.InvokeOnMainThreadAsync(async () => 
 						await Shell.Current.GoToAsync("//Principal") );
@@ -133,10 +133,10 @@ namespace PFG.Aplicacion
 
 			if(Comando.ResultadoIntentoCrearUsuario == ResultadosIntentoCrearUsuario.Correcto)
 			{
-				if(Usuarios.nuevoUsuario != null)
+				if(Usuarios.dumUsuario != null)
 				{
-					Usuarios.UsuariosLocal.Add(Usuarios.nuevoUsuario);
-					Usuarios.nuevoUsuario = null;
+					Usuarios.UsuariosLocal.Add(Usuarios.dumUsuario);
+					Usuarios.dumUsuario = null;
 				}
 
 				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
