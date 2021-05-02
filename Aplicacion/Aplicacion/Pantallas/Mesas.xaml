@@ -32,6 +32,8 @@
             RowSpacing="0">
 
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="25*"/>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="10*"/>
@@ -48,6 +50,18 @@
             <Button
                 Grid.Column="0"
                 Grid.Row="0"
+                Grid.RowSpan="3"
+                x:Name="Refrescar"
+                Text="R"
+                FontSize="Large"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="Magenta"
+                Clicked="Refrescar_Clicked"/>
+
+            <Button
+                Grid.Column="2"
+                Grid.Row="0"
                 x:Name="AnadirFila"
                 Text="+ Fila"
                 FontSize="18"
@@ -58,7 +72,7 @@
                 HorizontalOptions="FillAndExpand"/>
 
             <Button
-                Grid.Column="0"
+                Grid.Column="2"
                 Grid.Row="2"
                 x:Name="EliminarFila"
                 Text="- Fila"
@@ -70,7 +84,7 @@
                 HorizontalOptions="FillAndExpand"/>
 
             <Button
-                Grid.Column="2"
+                Grid.Column="4"
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 x:Name="AnadirColumna"
@@ -83,7 +97,7 @@
                 HorizontalOptions="FillAndExpand"/>
 
             <Button
-                Grid.Column="4"
+                Grid.Column="6"
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 x:Name="EliminarColumna"
@@ -98,9 +112,9 @@
         </Grid>
 
         <Grid
+            x:Name="MapaGrid"
             Grid.Column="1"
             Grid.Row="3"
-            x:Name="MapaGrid"
             ColumnSpacing="0"
             RowSpacing="0"
             VerticalOptions="FillAndExpand"/>

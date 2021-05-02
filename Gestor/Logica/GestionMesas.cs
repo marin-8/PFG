@@ -21,16 +21,7 @@ namespace PFG.Gestor
 		public static byte AnchoGrid { get => _dimensionesGrid[0]; set => _dimensionesGrid[0] = value; }
 		public static byte AltoGrid { get => _dimensionesGrid[1]; set => _dimensionesGrid[1] = value; }
 
-		private static List<Mesa> _mesas;
-		public static List<Mesa> Mesas
-		{
-			get
-			{
-				if(_mesas == null) Cargar();
-				return _mesas;
-			}
-			private set { _mesas = value; }
-		}
+		public static List<Mesa> Mesas { get; private set; } = new();
 
 		public static void Cargar()
 		{

@@ -22,80 +22,116 @@ namespace PFG.Aplicacion
 {
 	public partial class Mesas : ContentPage
 	{
+		public static Mesas Instancia { get; private set; }
+
+		private const int ESPACIO_ENTRE_MESAS = 10;
+
+		private byte ColumnasMesas;
+		private byte FilasMesas;
+		private Mesa[] MesasExistentes;
+
 		public Mesas()
 		{
 			InitializeComponent();
 
-			InicializarMapaGrid();
+			Instancia = this;
+
+			Shell.Current.Navigated += OnNavigatedTo;
 		}
 
-		private void InicializarMapaGrid()
+		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
-			int columnas = 3;
-			int filas = 5;
-
-			MapaGrid.ColumnDefinitions.Clear();
-			MapaGrid.RowDefinitions.Clear();
-
-			for(int c = 0 ; c < columnas-1; c++)
+			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				MapaGrid.ColumnDefinitions.Add(new());
-				MapaGrid.ColumnDefinitions.Add(new(){Width=new(20)});
-			}
-
-			MapaGrid.ColumnDefinitions.Add(new());
-
-			for(int f = 0 ; f < filas-1 ; f++)
-			{
-				MapaGrid.RowDefinitions.Add(new());
-				MapaGrid.RowDefinitions.Add(new(){Height=new(20)});
-			}
-
-			MapaGrid.RowDefinitions.Add(new());
-
-			for(int c = 0 ; c < columnas; c++)
-			{
-				for(int f = 0 ; f < filas ; f++)
-				{
-					var button = new Button(){
-						FontAttributes=FontAttributes.Bold,
-						TextColor=Color.White, 
-						FontSize=16,
-						BackgroundColor=Color.Blue,
-						BindingContext=$"{c+1}.{f+1}"};
-					button.Clicked += Cell_Clicked;
-
-					MapaGrid.Children.Add(button, c*2, f*2);
-				}
+				PedirMesas();
 			}
 		}
 
-		private void Cell_Clicked(object sender, EventArgs e)
+		private async void PedirMesas()
+		{
+			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
+
+			await Task.Run(() =>
+			{
+				new Comando_PedirMesas().Enviar(Global.IPGestor);
+			});
+		}
+
+		public async void RefrescarMesas(byte ColumnasMesas, byte FilasMesas, Mesa[] MesasExistentes)
+		{
+			this.ColumnasMesas = ColumnasMesas;
+			this.FilasMesas = FilasMesas;
+			this.MesasExistentes = MesasExistentes;
+
+			await Device.InvokeOnMainThreadAsync(async () =>
+			{
+				MapaGrid.ColumnDefinitions.Clear();
+				MapaGrid.RowDefinitions.Clear();
+
+				for(int c = 0 ; c < ColumnasMesas-1; c++) {
+					MapaGrid.ColumnDefinitions.Add(new());
+					MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)}); }
+				MapaGrid.ColumnDefinitions.Add(new());
+
+				for(int f = 0 ; f < FilasMesas-1 ; f++) {
+					MapaGrid.RowDefinitions.Add(new());
+					MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)}); }
+				MapaGrid.RowDefinitions.Add(new());
+
+				MapaGrid.Children.Clear();
+
+				for(int c = 0 ; c < ColumnasMesas; c++)
+				{
+					for(int f = 0 ; f < FilasMesas ; f++)
+					{
+						MapaGrid.Children.Add(
+							GenerarBotonMesa((byte)(c+1), (byte)(f+1)),
+							c*2,
+							f*2);
+					}
+				}
+			});
+		}
+
+		private Button GenerarBotonMesa(byte GridX, byte GridY)
+		{
+			var buttonMesa = new Button()
+			{
+				FontAttributes=FontAttributes.Bold,
+				TextColor=Color.Silver, 
+				FontSize=16,
+				BackgroundColor=Color.FromRgb(224, 224, 224),
+				BindingContext=$"{GridX}.{GridY}"
+			};
+			buttonMesa.Clicked += MesaPulsada;
+
+			return buttonMesa;
+		}
+
+		private void Refrescar_Clicked(object sender, EventArgs e)
+		{
+			PedirMesas();
+		}
+
+		private void MesaPulsada(object sender, EventArgs e)
 		{
 			var mesa = (string)((Button)sender).BindingContext;
 		}
 
 		private void AnadirFila_Clicked(object sender, EventArgs e)
 		{
-			MapaGrid.RowDefinitions.Add(new(){Height=new(20)});
+			MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)});
 			MapaGrid.RowDefinitions.Add(new());
 
-			int columnas = MapaGrid.ColumnDefinitions.Count;
-			int filas = MapaGrid.RowDefinitions.Count;
+			int columnasGrid = MapaGrid.ColumnDefinitions.Count;
+			int filasGrid = MapaGrid.RowDefinitions.Count;
 
-			for (int c = 0; c < (columnas+1)/2; c++)
+			for (int c = 0; c < (columnasGrid+1)/2; c++)
 			{
-				var button = new Button()
-				{
-					FontAttributes = FontAttributes.Bold,
-					TextColor = Color.White,
-					FontSize = 16,
-					BackgroundColor = Color.Blue,
-					BindingContext=$"{c+1}.{(filas+1)/2}"
-				};
-				button.Clicked += Cell_Clicked;
-
-				MapaGrid.Children.Add(button, c*2, filas-1);
+				MapaGrid.Children.Add(
+					GenerarBotonMesa((byte)(c+1), (byte)((filasGrid+1)/2)),
+					c*2,
+					filasGrid-1);
 			}
 		}
 
@@ -106,7 +142,7 @@ namespace PFG.Aplicacion
 
 		private void AnadirColumna_Clicked(object sender, EventArgs e)
 		{
-			MapaGrid.ColumnDefinitions.Add(new(){Width=new(20)});
+			MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)});
 			MapaGrid.ColumnDefinitions.Add(new());
 
 			int columnas = MapaGrid.ColumnDefinitions.Count;
@@ -114,17 +150,10 @@ namespace PFG.Aplicacion
 
 			for (int f = 0 ; f < (filas+1)/2; f++)
 			{
-				var button = new Button()
-				{
-					FontAttributes = FontAttributes.Bold,
-					TextColor = Color.White,
-					FontSize = 16,
-					BackgroundColor = Color.Blue,
-					BindingContext=$"{columnas+1}.{(f+1)/2}"
-				};
-				button.Clicked += Cell_Clicked;
-
-				MapaGrid.Children.Add(button, columnas-1, f*2);
+				MapaGrid.Children.Add(
+					GenerarBotonMesa((byte)(columnas+1), (byte)((f+1)/2)),
+					columnas-1,
+					f*2);
 			}
 		}
 

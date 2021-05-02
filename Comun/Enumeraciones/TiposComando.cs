@@ -15,6 +15,8 @@ namespace PFG.Comun
 		ModificarUsuarioContrasena = 10,
 		ModificarUsuarioRol = 11,
 		IntentarEliminarUsuario = 12,
-		ResultadoIntentoEliminarUsuario = 13
+		ResultadoIntentoEliminarUsuario = 13,
+		PedirMesas = 14,
+		MandarMesas = 15
 	}
 }

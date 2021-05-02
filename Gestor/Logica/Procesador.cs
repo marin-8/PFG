@@ -123,6 +123,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.PedirMesas:
+				{
+					Procesar_PedirMesas(
+						Comando.DeJson
+							<Comando_PedirMesas>
+								(ComandoJson), IP);
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
@@ -291,6 +301,17 @@ namespace PFG.Gestor
 				)
 				.Enviar(IP);
 			}
+		}
+
+		private void Procesar_PedirMesas(Comando_PedirMesas Comando, string IP)
+		{
+			new Comando_MandarMesas
+			(
+				GestionMesas.AnchoGrid,
+				GestionMesas.AltoGrid,
+				GestionMesas.Mesas.ToArray()
+			)
+			.Enviar(IP);
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

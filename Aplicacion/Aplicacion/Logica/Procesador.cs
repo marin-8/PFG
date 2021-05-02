@@ -66,6 +66,16 @@ namespace PFG.Aplicacion
 					break;
 				}
 
+				case TiposComando.MandarMesas:
+				{
+					Procesar_MandarMesas(
+						Comando.DeJson
+							<Comando_MandarMesas>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
@@ -167,6 +177,16 @@ namespace PFG.Aplicacion
 			{
 				UserDialogs.Instance.Alert("No se puede eliminar el usuario porque está conectado", "Error", "Aceptar");
 			}
+		}
+
+		private void Procesar_MandarMesas(Comando_MandarMesas Comando)
+		{
+			Mesas.Instancia.RefrescarMesas(
+				Comando.AnchoGrid,
+				Comando.AltoGrid,
+				Comando.Mesas);
+
+			UserDialogs.Instance.HideLoading();
 		}
 
 		//private void Procesar_XXXXX(Comando_XXXXX Comando)
