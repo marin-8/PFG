@@ -36,6 +36,8 @@ namespace PFG.Pruebas
 			//var cmd2 = Comando2.DeJson<Comando_CerrarSesion2>(cmd1_str);
 
 			//var cmd2_str = cmd2.ToString();
+
+			//byte num = byte.Parse("07");
 		}
 	}
 }

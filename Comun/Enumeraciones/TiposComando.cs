@@ -17,6 +17,10 @@ namespace PFG.Comun
 		IntentarEliminarUsuario = 12,
 		ResultadoIntentoEliminarUsuario = 13,
 		PedirMesas = 14,
-		MandarMesas = 15
+		MandarMesas = 15,
+		IntentarEditarMapaMesas = 16,
+		ResultadoIntentoEditarMapaMesas = 17,
+		IntentarCrearMesa = 18,
+		ResultadoIntentoCrearMesa = 19,
 	}
 }

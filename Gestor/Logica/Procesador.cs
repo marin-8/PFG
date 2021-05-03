@@ -55,10 +55,7 @@ namespace PFG.Gestor
 
 				case TiposComando.PedirUsuarios:
 				{
-					Procesar_PedirUsuarios(
-						Comando.DeJson
-							<Comando_PedirUsuarios>
-								(ComandoJson), IP);
+					Procesar_PedirUsuarios(IP);
 
 					break;
 				}
@@ -78,7 +75,7 @@ namespace PFG.Gestor
 					Procesar_ModificarUsuarioNombre(
 						Comando.DeJson
 							<Comando_ModificarUsuarioNombre>
-								(ComandoJson), IP);
+								(ComandoJson));
 
 					break;
 				}
@@ -88,7 +85,7 @@ namespace PFG.Gestor
 					Procesar_ModificarUsuarioNombreUsuario(
 						Comando.DeJson
 							<Comando_ModificarUsuarioNombreUsuario>
-								(ComandoJson), IP);
+								(ComandoJson));
 
 					break;
 				}
@@ -98,7 +95,7 @@ namespace PFG.Gestor
 					Procesar_ModificarUsuarioContrasena(
 						Comando.DeJson
 							<Comando_ModificarUsuarioContrasena>
-								(ComandoJson), IP);
+								(ComandoJson));
 
 					break;
 				}
@@ -108,7 +105,7 @@ namespace PFG.Gestor
 					Procesar_ModificarUsuarioRol(
 						Comando.DeJson
 							<Comando_ModificarUsuarioRol>
-								(ComandoJson), IP);
+								(ComandoJson));
 
 					break;
 				}
@@ -125,9 +122,26 @@ namespace PFG.Gestor
 
 				case TiposComando.PedirMesas:
 				{
-					Procesar_PedirMesas(
+					Procesar_PedirMesas(IP);
+
+					break;
+				}
+
+				case TiposComando.IntentarEditarMapaMesas:
+				{
+					Procesar_IntentarEditarMapaMesas(
 						Comando.DeJson
-							<Comando_PedirMesas>
+							<Comando_IntentarEditarMapaMesas>
+								(ComandoJson), IP);
+
+					break;
+				}
+
+				case TiposComando.IntentarCrearMesa:
+				{
+					Procesar_IntentarCrearMesa(
+						Comando.DeJson
+							<Comando_IntentarCrearMesa>
 								(ComandoJson), IP);
 
 					break;
@@ -147,12 +161,15 @@ namespace PFG.Gestor
 
 		private static void Procesar_IntentarIniciarSesion(Comando_IntentarIniciarSesion Comando, string IP)
 		{
+			ResultadosIntentoIniciarSesion resultado;
+			Usuario usuario = null;
+
 			var nombresUsuarios = GestionUsuarios.Usuarios
 								  .Select(u => u.NombreUsuario);
 
 			if(nombresUsuarios.Contains(Comando.Usuario))
 			{
-				var usuario = GestionUsuarios.Usuarios
+				usuario = GestionUsuarios.Usuarios
 						   	  .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
 							  .Select(u => u)
 							  .First();
@@ -164,42 +181,29 @@ namespace PFG.Gestor
 						usuario.IP = IP;
 						usuario.Conectado = true;
 
-						new Comando_ResultadoIntentoIniciarSesion
-						(
-							ResultadosIntentoIniciarSesion.Correcto,
-							usuario
-						)
-						.Enviar(IP);
+						resultado = ResultadosIntentoIniciarSesion.Correcto;
 					}
 					else
 					{
-						new Comando_ResultadoIntentoIniciarSesion
-						(
-							ResultadosIntentoIniciarSesion.ContrasenaIncorrecta,
-							null
-						)
-						.Enviar(IP);
+						resultado = ResultadosIntentoIniciarSesion.ContrasenaIncorrecta;
 					}
 				}
 				else
 				{
-					new Comando_ResultadoIntentoIniciarSesion
-					(
-						ResultadosIntentoIniciarSesion.UsuarioYaConectado,
-						null
-					)
-					.Enviar(IP);
+					resultado = ResultadosIntentoIniciarSesion.UsuarioYaConectado;
 				}	
 			}
 			else
 			{
-				new Comando_ResultadoIntentoIniciarSesion
-				(
-					ResultadosIntentoIniciarSesion.UsuarioNoExiste,
-					null
-				)
-				.Enviar(IP);
+				resultado = ResultadosIntentoIniciarSesion.UsuarioNoExiste;
 			}
+
+			new Comando_ResultadoIntentoIniciarSesion
+			(
+				resultado,
+				usuario
+			)
+			.Enviar(IP);
 		}
 
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
@@ -211,7 +215,7 @@ namespace PFG.Gestor
 			usuario.Conectado = false;
 		}
 
-		private static void Procesar_PedirUsuarios(Comando_PedirUsuarios Comando, string IP)
+		private static void Procesar_PedirUsuarios(string IP)
 		{
 			new Comando_MandarUsuarios
 			(
@@ -245,7 +249,7 @@ namespace PFG.Gestor
 			.Enviar(IP);
 		}
 
-		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando, string IP)
+		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando)
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
@@ -253,7 +257,7 @@ namespace PFG.Gestor
 					.Nombre = Comando.NuevoNombre;
 		}
 
-		private static void Procesar_ModificarUsuarioNombreUsuario(Comando_ModificarUsuarioNombreUsuario Comando, string IP)
+		private static void Procesar_ModificarUsuarioNombreUsuario(Comando_ModificarUsuarioNombreUsuario Comando)
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
@@ -261,7 +265,7 @@ namespace PFG.Gestor
 					.NombreUsuario = Comando.NuevoNombreUsuario;
 		}
 
-		private static void Procesar_ModificarUsuarioContrasena(Comando_ModificarUsuarioContrasena Comando, string IP)
+		private static void Procesar_ModificarUsuarioContrasena(Comando_ModificarUsuarioContrasena Comando)
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
@@ -269,7 +273,7 @@ namespace PFG.Gestor
 					.Contrasena = Comando.NuevaContrasena;
 		}
 
-		private static void Procesar_ModificarUsuarioRol(Comando_ModificarUsuarioRol Comando, string IP)
+		private static void Procesar_ModificarUsuarioRol(Comando_ModificarUsuarioRol Comando)
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
@@ -279,31 +283,27 @@ namespace PFG.Gestor
 
 		private static void Procesar_IntentarEliminarUsuario(Comando_IntentarEliminarUsuario Comando, string IP)
 		{
-			var usuarioAEliminar = GestionUsuarios.Usuarios
-								       .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
-									   .First();
+			ResultadosIntentoEliminarUsuario resultado;
+
+			var usuarioAEliminar =
+				GestionUsuarios.Usuarios
+					.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+					.First();
 
 			if(usuarioAEliminar.Conectado)
 			{
-				new Comando_ResultadoIntentoEliminarUsuario
-				(
-					ResultadosIntentoEliminarUsuario.UsuarioConectado
-				)
-				.Enviar(IP);
+				resultado = ResultadosIntentoEliminarUsuario.UsuarioConectado;
 			}
 			else
 			{
 				GestionUsuarios.Usuarios.Remove(usuarioAEliminar);
-
-				new Comando_ResultadoIntentoEliminarUsuario
-				(
-					ResultadosIntentoEliminarUsuario.Correcto
-				)
-				.Enviar(IP);
+				resultado = ResultadosIntentoEliminarUsuario.Correcto;
 			}
+
+			new Comando_ResultadoIntentoEliminarUsuario(resultado).Enviar(IP);
 		}
 
-		private void Procesar_PedirMesas(Comando_PedirMesas Comando, string IP)
+		private static void Procesar_PedirMesas(string IP)
 		{
 			new Comando_MandarMesas
 			(
@@ -312,6 +312,76 @@ namespace PFG.Gestor
 				GestionMesas.Mesas.ToArray()
 			)
 			.Enviar(IP);
+		}
+
+		private static void Procesar_IntentarEditarMapaMesas(Comando_IntentarEditarMapaMesas Comando, string IP)
+		{
+			ResultadosIntentoEditarMapaMesas resultado = ResultadosIntentoEditarMapaMesas.Correcto;
+
+			switch(Comando.TipoEdicionMapaMesas)
+			{
+				case TiposEdicionMapaMesas.AnadirColumna:
+				{					
+					if(GestionMesas.AnchoGrid == Comun.Global.MAXIMO_COLUMNAS_MESAS)
+						resultado = ResultadosIntentoEditarMapaMesas.MaximoColumnas;
+
+					else GestionMesas.AnchoGrid++;
+
+					break;
+				}
+				case TiposEdicionMapaMesas.QuitarColumna:
+				{
+					if(GestionMesas.AnchoGrid == GestionMesas.MINIMO_COLUMNAS)
+						resultado = ResultadosIntentoEditarMapaMesas.MinimoColumnas;
+
+					else GestionMesas.AnchoGrid--;
+
+					break;
+				}
+				case TiposEdicionMapaMesas.AnadirFila:
+				{
+					if(GestionMesas.AltoGrid == Comun.Global.MAXIMO_FILAS_MESAS)
+						resultado = ResultadosIntentoEditarMapaMesas.MaximoFilas;
+
+					else GestionMesas.AltoGrid++;
+
+					break;
+				}
+				case TiposEdicionMapaMesas.QuitarFila:
+				{
+					if(GestionMesas.AltoGrid == GestionMesas.MINIMO_FILAS)
+						resultado = ResultadosIntentoEditarMapaMesas.MinimoFilas;
+
+					else GestionMesas.AltoGrid--;
+
+					break;
+				}
+			}
+
+			new Comando_ResultadoIntentoEditarMapaMesas(resultado).Enviar(IP);
+		}
+
+		private static void Procesar_IntentarCrearMesa(Comando_IntentarCrearMesa Comando, string IP)
+		{
+			ResultadosIntentoCrearMesa resultado;
+
+			var nuevaMesa = Comando.NuevaMesa;
+
+			if(GestionMesas.Mesas.Where(m => m.Numero == nuevaMesa.Numero).Any())
+			{
+				resultado = ResultadosIntentoCrearMesa.MesaYaExisteConMismoNumero;
+			}
+			else if(GestionMesas.Mesas.Where(m => m.GridX == nuevaMesa.GridX && m.GridY == nuevaMesa.GridY).Any())
+			{
+				resultado = ResultadosIntentoCrearMesa.MesaYaExisteConMismoSitio;
+			}
+			else
+			{
+				GestionMesas.Mesas.Add(nuevaMesa);
+				resultado = ResultadosIntentoCrearMesa.Correcto;
+			}
+
+			new Comando_ResultadoIntentoCrearMesa(resultado).Enviar(IP);
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

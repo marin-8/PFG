@@ -22,28 +22,37 @@ namespace PFG.Aplicacion
 {
 	public partial class Usuarios : ContentPage
 	{
-		public static ObservableCollection<Usuario> UsuariosLocal = new();
+		public static Usuarios Instancia { get; private set; }
+
+		public ObservableCollection<Usuario> UsuariosLocal = new();
 
 		public Usuarios()
 		{
 			InitializeComponent();
+
+			Instancia = this;
 
 			Shell.Current.Navigated += OnNavigatedTo;
 
 			ListaUsuarios.ItemsSource = UsuariosLocal;
 		}
 
-		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				RefrescarUsuarios();
+				await RefrescarUsuarios();
 			}
 		}
 
-		private void Refrescar_Clicked(object sender, EventArgs e)
+		public void DejarDeRefrescarLista()
 		{
-			RefrescarUsuarios();
+			ListaUsuarios.EndRefresh();
+		}
+
+		private async void ListaUsuarios_Refresh(object sender, EventArgs e)
+		{
+			await RefrescarUsuarios();
 		}
 
 		private async void NuevoUsuario_Clicked(object sender, EventArgs e)
@@ -60,7 +69,7 @@ namespace PFG.Aplicacion
 				if(nombreUsuario == null) return;
 				nuevoUsuario.NombreUsuario = nombreUsuario;
 
-				RefrescarUsuarios();
+				await RefrescarUsuarios();
 
 				if(UsuariosLocal.Select(u => u.NombreUsuario).Contains(nombreUsuario))
 					await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
@@ -90,11 +99,14 @@ namespace PFG.Aplicacion
 			});
 		}
 
-		private static readonly string[] OpcionesUsuario = new string[] { "Cambiar Nombre",
-																		  "Cambiar Nombre de Usuario",
-																		  "Cambiar Contraseña",
-																		  "Cambiar Rol",
-																		  "Eliminar" };
+		private static readonly string[] OpcionesUsuario = new string[]
+		{
+			"Cambiar Nombre",
+			"Cambiar Nombre de Usuario",
+			"Cambiar Contraseña",
+			"Cambiar Rol",
+			"Eliminar"
+		};
 
 		private async void ListaUsuarios_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
@@ -117,7 +129,7 @@ namespace PFG.Aplicacion
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{usuarioPulsado.Nombre}", "Cancelar", null, null, opcionesUsuario);
 			if(opcion.Equals("Cancelar")) return;
 
-			RefrescarUsuarios();
+			await RefrescarUsuarios();
 
 			if(opcion == OpcionesUsuario[0]) // Cambiar Nombre
 			{
@@ -144,7 +156,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarUsuarios();
+				await RefrescarUsuarios();
 
 				return;
 			}
@@ -174,7 +186,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarUsuarios();
+				await RefrescarUsuarios();
 
 				return;
 			}
@@ -204,7 +216,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarUsuarios();
+				await RefrescarUsuarios();
 
 				return;
 			}
@@ -242,7 +254,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarUsuarios();
+				await RefrescarUsuarios();
 
 				return;
 			}
@@ -261,7 +273,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		public async static void RefrescarUsuarios()
+		public async Task RefrescarUsuarios()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando lista de usuarios...");
 
@@ -277,11 +289,13 @@ namespace PFG.Aplicacion
 
 			while(stringCorrecto == null)
 			{
-				var configuracionPrompt = new PromptConfig();
-				configuracionPrompt.InputType = InputType.Name;
-				configuracionPrompt.IsCancellable = true;
-				configuracionPrompt.Message = Titulo;
-				configuracionPrompt.MaxLength = Comun.Global.MAX_CARACTERES_LOGIN;
+				var configuracionPrompt = new PromptConfig
+				{
+					InputType = InputType.Name,
+					IsCancellable = true,
+					Message = Titulo,
+					MaxLength = Comun.Global.MAX_CARACTERES_LOGIN
+				};
 
 				var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
 

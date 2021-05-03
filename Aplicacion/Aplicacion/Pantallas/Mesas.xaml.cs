@@ -22,6 +22,10 @@ namespace PFG.Aplicacion
 {
 	public partial class Mesas : ContentPage
 	{
+	// ============================================================================================== //
+
+		// Variables y constantes
+
 		public static Mesas Instancia { get; private set; }
 
 		private const int ESPACIO_ENTRE_MESAS = 10;
@@ -29,6 +33,10 @@ namespace PFG.Aplicacion
 		private byte ColumnasMesas;
 		private byte FilasMesas;
 		private Mesa[] MesasExistentes;
+
+	// ============================================================================================== //
+
+		// Inicialización
 
 		public Mesas()
 		{
@@ -39,15 +47,19 @@ namespace PFG.Aplicacion
 			Shell.Current.Navigated += OnNavigatedTo;
 		}
 
-		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				PedirMesas();
+				await PedirMesas();
 			}
 		}
 
-		private async void PedirMesas()
+	// ============================================================================================== //
+
+		// Métodos públicos
+
+		public async Task PedirMesas()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
 
@@ -57,13 +69,13 @@ namespace PFG.Aplicacion
 			});
 		}
 
-		public async void RefrescarMesas(byte ColumnasMesas, byte FilasMesas, Mesa[] MesasExistentes)
+		public async void ActualizarMesas(byte ColumnasMesas, byte FilasMesas, Mesa[] MesasExistentes)
 		{
 			this.ColumnasMesas = ColumnasMesas;
 			this.FilasMesas = FilasMesas;
 			this.MesasExistentes = MesasExistentes;
 
-			await Device.InvokeOnMainThreadAsync(async () =>
+			await Device.InvokeOnMainThreadAsync(() =>
 			{
 				MapaGrid.ColumnDefinitions.Clear();
 				MapaGrid.RowDefinitions.Clear();
@@ -90,17 +102,156 @@ namespace PFG.Aplicacion
 							f*2);
 					}
 				}
+
+				foreach(var mesa in MesasExistentes)
+				{
+					var mesaMapaGrid = (Button)
+							MapaGrid.Children
+								.Where(c =>
+									c.BindingContext
+									.Equals($"{mesa.GridX}.{mesa.GridY}"))
+								.First();
+
+					mesaMapaGrid.Text = mesa.Numero.ToString();
+
+					switch(mesa.EstadoMesa)
+					{
+						case EstadosMesa.Vacia:
+						{
+							mesaMapaGrid.BackgroundColor = Color.LimeGreen;
+							mesaMapaGrid.TextColor = Color.Black;
+							break;
+						}
+						case EstadosMesa.Esperando:
+						{
+							mesaMapaGrid.BackgroundColor = Color.Red;
+							mesaMapaGrid.TextColor = Color.White;
+							break;
+						}
+						case EstadosMesa.Ocupada:
+						{
+							mesaMapaGrid.BackgroundColor = Color.Black;
+							mesaMapaGrid.TextColor = Color.White;
+							break;
+						}
+						case EstadosMesa.Sucia:
+						{
+							mesaMapaGrid.BackgroundColor = Color.DarkGreen;
+							mesaMapaGrid.TextColor = Color.White;
+							break;
+						}
+					}
+				}
 			});
 		}
+
+	// ============================================================================================== //
+
+		// Eventos UI -> Barra navegación 
+
+		private static readonly string[] OpcionesEditarMapa = new string[]
+		{
+			"+ Añadir columna",
+			"	- Quitar columna",
+			"+ Añadir fila",
+			"	- Quitar fila",
+		};
+
+		private async void EditarMapa(object sender, EventArgs e)
+		{
+			string opcion = await UserDialogs.Instance.ActionSheetAsync("Editar Mapa", "Cancelar", null, null, OpcionesEditarMapa);
+			if(opcion.Equals("Cancelar")) return;
+
+			if(opcion == OpcionesEditarMapa[0]) { AnadirColumna(); return; }
+			if(opcion == OpcionesEditarMapa[1]) { QuitarColumna(); return; }
+			if(opcion == OpcionesEditarMapa[2]) { AnadirFila(); return; }
+			if(opcion == OpcionesEditarMapa[3]) { QuitarFila(); return; }
+		}
+
+		private async void RefrescarMesas(object sender, EventArgs e)
+		{
+			await PedirMesas();
+		}
+
+	// ============================================================================================== //
+
+		// Eventos UI -> Contenido
+
+		private async void MesaPulsada(object sender, EventArgs e)
+		{
+			await PedirMesas();
+
+			var mesaString = (string)((Button)sender).BindingContext;
+			int indiceDelPunto = mesaString.IndexOf('.');
+			byte mesaX = byte.Parse(mesaString.Substring(0, indiceDelPunto));
+			byte mesaY = byte.Parse(mesaString.Substring(indiceDelPunto+1, mesaString.Length-indiceDelPunto-1));
+
+			var consultaMesa = MesasExistentes.Where(m => m.GridX == mesaX && m.GridY == mesaY);
+
+			if(consultaMesa.Count() == 0)
+			{
+				byte mcm = Comun.Global.MAXIMO_COLUMNAS_MESAS;
+				byte mfm = Comun.Global.MAXIMO_FILAS_MESAS;
+				if(mcm*mfm > 255) throw new IndexOutOfRangeException("Hay más de 255 mesas :/");
+				byte totalMesas = (byte)(mcm*mfm);
+
+				byte numeroNuevaMesa;
+
+				var configuracionPrompt = new PromptConfig
+				{
+					InputType = InputType.Number,
+					IsCancellable = true,
+					Title = $"Número de mesa (1-{totalMesas})",
+					Message = "Nueva mesa",
+					OkText = "Crear",
+					CancelText = "Cancelar",
+					MaxLength = (int)Math.Floor(Math.Log10(totalMesas)+1)
+				};
+
+				while(true)
+				{
+					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
+					if(!resultado.Ok) return;
+					numeroNuevaMesa = byte.Parse(resultado.Text);
+
+					// TODO - ERROR - ESTO FALLA
+
+					await PedirMesas();
+
+					if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
+						await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
+					else
+						break;
+				}
+
+				Mesa nuevaMesa = new(numeroNuevaMesa, mesaX, mesaY);
+
+				UserDialogs.Instance.ShowLoading("Creando mesa...");
+
+				await Task.Run(() =>
+				{
+					new Comando_IntentarCrearMesa(nuevaMesa).Enviar(Global.IPGestor);
+				});
+			}
+			else
+			{
+				var mesa = consultaMesa.First();
+			}
+		}
+
+	// ============================================================================================== //
+
+		// Métodos privados
 
 		private Button GenerarBotonMesa(byte GridX, byte GridY)
 		{
 			var buttonMesa = new Button()
 			{
 				FontAttributes=FontAttributes.Bold,
-				TextColor=Color.Silver, 
-				FontSize=16,
-				BackgroundColor=Color.FromRgb(224, 224, 224),
+				FontSize=20,
+				Padding=new(0),
+				Margin=new(0),
+				BackgroundColor=Color.FromRgb(240, 240, 240),
 				BindingContext=$"{GridX}.{GridY}"
 			};
 			buttonMesa.Clicked += MesaPulsada;
@@ -108,58 +259,46 @@ namespace PFG.Aplicacion
 			return buttonMesa;
 		}
 
-		private void Refrescar_Clicked(object sender, EventArgs e)
+		private async void AnadirColumna()
 		{
-			PedirMesas();
-		}
+			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
 
-		private void MesaPulsada(object sender, EventArgs e)
-		{
-			var mesa = (string)((Button)sender).BindingContext;
-		}
-
-		private void AnadirFila_Clicked(object sender, EventArgs e)
-		{
-			MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)});
-			MapaGrid.RowDefinitions.Add(new());
-
-			int columnasGrid = MapaGrid.ColumnDefinitions.Count;
-			int filasGrid = MapaGrid.RowDefinitions.Count;
-
-			for (int c = 0; c < (columnasGrid+1)/2; c++)
+			await Task.Run(() =>
 			{
-				MapaGrid.Children.Add(
-					GenerarBotonMesa((byte)(c+1), (byte)((filasGrid+1)/2)),
-					c*2,
-					filasGrid-1);
-			}
+				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.AnadirColumna).Enviar(Global.IPGestor);
+			});
 		}
 
-		private void EliminarFila_Clicked(object sender, EventArgs e)
+		private async void QuitarColumna()
 		{
+			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
 
-		}
-
-		private void AnadirColumna_Clicked(object sender, EventArgs e)
-		{
-			MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)});
-			MapaGrid.ColumnDefinitions.Add(new());
-
-			int columnas = MapaGrid.ColumnDefinitions.Count;
-			int filas = MapaGrid.RowDefinitions.Count;
-
-			for (int f = 0 ; f < (filas+1)/2; f++)
+			await Task.Run(() =>
 			{
-				MapaGrid.Children.Add(
-					GenerarBotonMesa((byte)(columnas+1), (byte)((f+1)/2)),
-					columnas-1,
-					f*2);
-			}
+				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.QuitarColumna).Enviar(Global.IPGestor);
+			});
 		}
 
-		private void EliminarColumna_Clicked(object sender, EventArgs e)
+		private async void AnadirFila()
 		{
+			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
 
+			await Task.Run(() =>
+			{
+				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.AnadirFila).Enviar(Global.IPGestor);
+			});
 		}
+
+		private async void QuitarFila()
+		{
+			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
+
+			await Task.Run(() =>
+			{
+				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.QuitarFila).Enviar(Global.IPGestor);
+			});
+		}
+
+	// ============================================================================================== //
 	}
 }

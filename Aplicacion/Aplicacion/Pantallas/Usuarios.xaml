@@ -8,6 +8,19 @@
     
     Title="Usuarios">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Nuevo usuario    "
+            Order="Primary"
+            Priority="0"
+            Clicked="NuevoUsuario_Clicked"/>
+        <ToolbarItem
+            Text="Refrescar    "
+            Order="Primary"
+            Priority="1"
+            Clicked="ListaUsuarios_Refresh"/>
+    </ContentPage.ToolbarItems>
+
     <Grid
         ColumnSpacing="0"
         RowSpacing="0">
@@ -28,53 +41,27 @@
 
             <BoxView HeightRequest="20" Color="Transparent"/>
 
-            <StackLayout
-                Spacing="0"
-                Orientation="Horizontal">
-
-                <Button
-                    x:Name="NuevoUsuario"
-                    Text="+ Nuevo usuario"
-                    FontSize="Large"
-                    FontAttributes="Bold"
-                    TextColor="Black"
-                    BackgroundColor="LimeGreen"
-                    Clicked="NuevoUsuario_Clicked"
-                    HorizontalOptions="FillAndExpand"/>
-
-                <Button
-                    x:Name="Refrescar"
-                    Text="R"
-                    FontSize="Large"
-                    FontAttributes="Bold"
-                    TextColor="White"
-                    BackgroundColor="Magenta"
-                    Clicked="Refrescar_Clicked"
-                    WidthRequest="50"
-                    Margin="20,0,0,0"/>
-
-            </StackLayout>
-
-            <BoxView HeightRequest="20" Color="Transparent"/>
-
             <ListView
                 x:Name="ListaUsuarios"
                 SelectionMode="None"
                 HasUnevenRows="True"
                 BackgroundColor="Transparent"
                 SeparatorVisibility="None"
+                IsPullToRefreshEnabled="True"
+                RefreshControlColor="Blue"
+                Refreshing="ListaUsuarios_Refresh"
                 ItemTapped="ListaUsuarios_ItemTapped">
                 
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="pfgcomun:Usuario">
                         <ViewCell>
-                            
+
                             <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
                                 <Frame BackgroundColor="LightGray" Padding="10">
                                     <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
-                                        <Label FontSize="Medium" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
-                                        <Label FontSize="Medium" Text="{Binding NombreUsuario, StringFormat='Nombre de usuario: {0}'}" TextColor="Black"></Label>
-                                        <Label FontSize="Medium" Text="{Binding Rol, StringFormat='Rol: {0}'}" TextColor="Black"></Label>
+                                        <Label FontSize="20" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
+                                        <Label FontSize="18" Text="{Binding NombreUsuario, StringFormat='Nombre de usuario: {0}'}" TextColor="Black"></Label>
+                                        <Label FontSize="18" Text="{Binding Rol, StringFormat='Rol: {0}'}" TextColor="Black"></Label>
                                     </StackLayout>
                                     <Frame.Triggers>
                                         <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Cocinero">

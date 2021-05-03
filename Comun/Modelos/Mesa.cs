@@ -8,21 +8,21 @@ namespace PFG.Comun
 {
 	public class Mesa
 	{
-		[JsonProperty("1")] public string Nombre { get; set; }
+		[JsonProperty("1")] public byte Numero { get; set; }
 
 		[JsonProperty("2")] public byte GridX { get; set; }
 		[JsonProperty("3")] public byte GridY { get; set; }
 
-		[JsonIgnore] public EstadosMesa EstadoMesa { get; set; }
+		[JsonProperty("4")] public EstadosMesa EstadoMesa { get; set; }
 
-		public Mesa(string Nombre, byte GridX, byte GridY)
+		public Mesa(byte Numero, byte GridX, byte GridY, EstadosMesa EstadoMesa = EstadosMesa.Vacia)
 		{
-			this.Nombre = Nombre;
+			this.Numero = Numero;
 
 			this.GridX = GridX;
 			this.GridY = GridY;
 
-			EstadoMesa = EstadosMesa.Vacia;
+			this.EstadoMesa = EstadoMesa;
 		}
 	}
 }

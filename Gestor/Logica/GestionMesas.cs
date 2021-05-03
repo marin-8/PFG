@@ -14,6 +14,9 @@ namespace PFG.Gestor
 {
 	public static class GestionMesas
 	{
+		public const byte MINIMO_COLUMNAS = 1;
+		public const byte MINIMO_FILAS = 1;
+
 		const string RUTA_ARCHIVO_JSON_MESAS_GRID = @".\Archivos\MesasGrid.json";
 		const string RUTA_ARCHIVO_JSON_MESAS = @".\Archivos\Mesas.json";
 

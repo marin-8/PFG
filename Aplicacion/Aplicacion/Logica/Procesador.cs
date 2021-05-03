@@ -76,6 +76,26 @@ namespace PFG.Aplicacion
 					break;
 				}
 
+				case TiposComando.ResultadoIntentoEditarMapaMesas:
+				{
+					Procesar_ResultadoIntentoEditarMapaMesas(
+						Comando.DeJson
+							<Comando_ResultadoIntentoEditarMapaMesas>
+								(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.ResultadoIntentoCrearMesa:
+				{
+					Procesar_ResultadoIntentoCrearMesa(
+						Comando.DeJson
+							<Comando_ResultadoIntentoCrearMesa>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	Procesar_XXXXX(
@@ -139,21 +159,23 @@ namespace PFG.Aplicacion
 
 		private void Procesar_MandarUsuarios(Comando_MandarUsuarios Comando)
 		{
-			Usuarios.UsuariosLocal.Clear();
+			Usuarios.Instancia.UsuariosLocal.Clear();
 			
 			foreach(var usuario in Comando.Usuarios)
-				Usuarios.UsuariosLocal.Add(usuario);
+				Usuarios.Instancia.UsuariosLocal.Add(usuario);
+
+			Usuarios.Instancia.DejarDeRefrescarLista();
 
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private void Procesar_ResultadoIntentoCrearUsuario(Comando_ResultadoIntentoCrearUsuario Comando)
+		private async void Procesar_ResultadoIntentoCrearUsuario(Comando_ResultadoIntentoCrearUsuario Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
 			if(Comando.ResultadoIntentoCrearUsuario == ResultadosIntentoCrearUsuario.Correcto)
 			{
-				Usuarios.RefrescarUsuarios();
+				await Usuarios.Instancia.RefrescarUsuarios();
 
 				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
 			}
@@ -163,7 +185,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private void Procesar_ResultadoIntentoEliminarUsuario(Comando_ResultadoIntentoEliminarUsuario Comando)
+		private async void Procesar_ResultadoIntentoEliminarUsuario(Comando_ResultadoIntentoEliminarUsuario Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
@@ -171,7 +193,7 @@ namespace PFG.Aplicacion
 			{
 				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
 
-				Usuarios.RefrescarUsuarios();
+				await Usuarios.Instancia.RefrescarUsuarios();
 			}
 			else
 			{
@@ -181,12 +203,71 @@ namespace PFG.Aplicacion
 
 		private void Procesar_MandarMesas(Comando_MandarMesas Comando)
 		{
-			Mesas.Instancia.RefrescarMesas(
+			Mesas.Instancia.ActualizarMesas(
 				Comando.AnchoGrid,
 				Comando.AltoGrid,
 				Comando.Mesas);
 
 			UserDialogs.Instance.HideLoading();
+		}
+
+		private async void Procesar_ResultadoIntentoEditarMapaMesas(Comando_ResultadoIntentoEditarMapaMesas Comando)
+		{
+			UserDialogs.Instance.HideLoading();
+
+			switch(Comando.ResultadoIntentoEditarMapaMesas)
+			{
+				case ResultadosIntentoEditarMapaMesas.Correcto:
+				{
+					await Mesas.Instancia.PedirMesas();
+					break;
+				}
+				case ResultadosIntentoEditarMapaMesas.MaximoColumnas:
+				{
+					UserDialogs.Instance.Alert("Máximo de columnas alcanzado", "Error", "Aceptar");
+					break;
+				}
+				case ResultadosIntentoEditarMapaMesas.MinimoColumnas:
+				{
+					UserDialogs.Instance.Alert("Mínimo de columnas alcanzado", "Error", "Aceptar");
+					break;
+				}
+				case ResultadosIntentoEditarMapaMesas.MaximoFilas:
+				{
+					UserDialogs.Instance.Alert("Máximo de filas alcanzado", "Error", "Aceptar");
+					break;
+				}
+				case ResultadosIntentoEditarMapaMesas.MinimoFilas:
+				{
+					UserDialogs.Instance.Alert("Mínimo de filas alcanzado", "Error", "Aceptar");
+					break;
+				}
+			}
+		}
+
+		private async void Procesar_ResultadoIntentoCrearMesa(Comando_ResultadoIntentoCrearMesa Comando)
+		{
+			UserDialogs.Instance.HideLoading();
+
+			switch(Comando.ResultadoIntentoCrearMesa)
+			{
+				case ResultadosIntentoCrearMesa.Correcto:
+				{
+					await Mesas.Instancia.PedirMesas();
+					UserDialogs.Instance.Alert("Mesa creada correctamente", "Información", "Aceptar");
+					break;
+				}
+				case ResultadosIntentoCrearMesa.MesaYaExisteConMismoNumero:
+				{
+					UserDialogs.Instance.Alert("Alguien ha creado una mesa con el mismo Número antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya", "Error", "Aceptar");
+					break;
+				}
+				case ResultadosIntentoCrearMesa.MesaYaExisteConMismoSitio:
+				{
+					UserDialogs.Instance.Alert("Alguien ha creado una mesa en el mismo Sitio antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya", "Error", "Aceptar");
+					break;
+				}
+			}
 		}
 
 		//private void Procesar_XXXXX(Comando_XXXXX Comando)

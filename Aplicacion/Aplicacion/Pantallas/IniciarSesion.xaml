@@ -42,7 +42,7 @@
                 x:Name="IPGestor"
                 Text="192.168.1.130"
                 Placeholder="IP del Gestor (ej. 192.168.1.130)"
-                FontSize="Large"
+                FontSize="22"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
@@ -54,11 +54,11 @@
                 x:Name="Usuario"
                 Text="desarrollador"
                 Placeholder="Usuario"
-                FontSize="Large"
+                FontSize="22"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
-                MaxLength="16"/>
+                MaxLength="20"/>
 
             <BoxView HeightRequest="10" Color="Transparent"/>
 
@@ -66,19 +66,19 @@
                 x:Name="Contrasena"
                 Text="qwertyuiop"
                 Placeholder="Contraseña"
-                FontSize="Large"
+                FontSize="22"
                 TextColor="Black"
                 BackgroundColor="White"
                 ClearButtonVisibility="WhileEditing"
                 IsPassword="true"
-                MaxLength="24"/>
+                MaxLength="20"/>
 
             <BoxView HeightRequest="60" Color="Transparent"/>
 
             <Button
                 x:Name="IniciarSesionB"
                 Text="Iniciar sesión"
-                FontSize="Large"
+                FontSize="26"
                 FontAttributes="Bold"
                 TextColor="Black"
                 BackgroundColor="LimeGreen"
