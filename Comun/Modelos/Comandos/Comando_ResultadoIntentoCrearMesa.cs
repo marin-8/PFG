@@ -21,7 +21,7 @@ namespace PFG.Comun
 
 		[JsonProperty("1")] public ResultadosIntentoCrearMesa ResultadoIntentoCrearMesa { get; private set; }
 
-		private void InicializarPropiedades(ResultadosIntentoCrearMesa ResultadoIntentoCrearUsuario)
+		private void InicializarPropiedades(ResultadosIntentoCrearMesa ResultadoIntentoCrearMesa)
 		{
 			this.ResultadoIntentoCrearMesa = ResultadoIntentoCrearMesa;
 		}

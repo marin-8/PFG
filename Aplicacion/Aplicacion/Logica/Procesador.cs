@@ -169,13 +169,13 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private async void Procesar_ResultadoIntentoCrearUsuario(Comando_ResultadoIntentoCrearUsuario Comando)
+		private void Procesar_ResultadoIntentoCrearUsuario(Comando_ResultadoIntentoCrearUsuario Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
 			if(Comando.ResultadoIntentoCrearUsuario == ResultadosIntentoCrearUsuario.Correcto)
 			{
-				await Usuarios.Instancia.RefrescarUsuarios();
+				Usuarios.Instancia.RefrescarUsuarios();
 
 				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
 			}
@@ -185,7 +185,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private async void Procesar_ResultadoIntentoEliminarUsuario(Comando_ResultadoIntentoEliminarUsuario Comando)
+		private void Procesar_ResultadoIntentoEliminarUsuario(Comando_ResultadoIntentoEliminarUsuario Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
@@ -193,7 +193,7 @@ namespace PFG.Aplicacion
 			{
 				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
 
-				await Usuarios.Instancia.RefrescarUsuarios();
+				Usuarios.Instancia.RefrescarUsuarios();
 			}
 			else
 			{
@@ -211,7 +211,7 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private async void Procesar_ResultadoIntentoEditarMapaMesas(Comando_ResultadoIntentoEditarMapaMesas Comando)
+		private void Procesar_ResultadoIntentoEditarMapaMesas(Comando_ResultadoIntentoEditarMapaMesas Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
@@ -219,7 +219,7 @@ namespace PFG.Aplicacion
 			{
 				case ResultadosIntentoEditarMapaMesas.Correcto:
 				{
-					await Mesas.Instancia.PedirMesas();
+					Mesas.Instancia.PedirMesas();
 					break;
 				}
 				case ResultadosIntentoEditarMapaMesas.MaximoColumnas:
@@ -245,7 +245,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private async void Procesar_ResultadoIntentoCrearMesa(Comando_ResultadoIntentoCrearMesa Comando)
+		private void Procesar_ResultadoIntentoCrearMesa(Comando_ResultadoIntentoCrearMesa Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
@@ -253,7 +253,7 @@ namespace PFG.Aplicacion
 			{
 				case ResultadosIntentoCrearMesa.Correcto:
 				{
-					await Mesas.Instancia.PedirMesas();
+					Mesas.Instancia.PedirMesas();
 					UserDialogs.Instance.Alert("Mesa creada correctamente", "Información", "Aceptar");
 					break;
 				}

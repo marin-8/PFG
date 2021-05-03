@@ -37,11 +37,11 @@ namespace PFG.Aplicacion
 			ListaUsuarios.ItemsSource = UsuariosLocal;
 		}
 
-		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				await RefrescarUsuarios();
+				RefrescarUsuarios();
 			}
 		}
 
@@ -50,9 +50,9 @@ namespace PFG.Aplicacion
 			ListaUsuarios.EndRefresh();
 		}
 
-		private async void ListaUsuarios_Refresh(object sender, EventArgs e)
+		private void ListaUsuarios_Refresh(object sender, EventArgs e)
 		{
-			await RefrescarUsuarios();
+			RefrescarUsuarios();
 		}
 
 		private async void NuevoUsuario_Clicked(object sender, EventArgs e)
@@ -69,7 +69,7 @@ namespace PFG.Aplicacion
 				if(nombreUsuario == null) return;
 				nuevoUsuario.NombreUsuario = nombreUsuario;
 
-				await RefrescarUsuarios();
+				RefrescarUsuarios();
 
 				if(UsuariosLocal.Select(u => u.NombreUsuario).Contains(nombreUsuario))
 					await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
@@ -129,7 +129,7 @@ namespace PFG.Aplicacion
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{usuarioPulsado.Nombre}", "Cancelar", null, null, opcionesUsuario);
 			if(opcion.Equals("Cancelar")) return;
 
-			await RefrescarUsuarios();
+			RefrescarUsuarios();
 
 			if(opcion == OpcionesUsuario[0]) // Cambiar Nombre
 			{
@@ -156,7 +156,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				await RefrescarUsuarios();
+				RefrescarUsuarios();
 
 				return;
 			}
@@ -186,7 +186,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				await RefrescarUsuarios();
+				RefrescarUsuarios();
 
 				return;
 			}
@@ -216,7 +216,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				await RefrescarUsuarios();
+				RefrescarUsuarios();
 
 				return;
 			}
@@ -254,7 +254,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				await RefrescarUsuarios();
+				RefrescarUsuarios();
 
 				return;
 			}
@@ -273,7 +273,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		public async Task RefrescarUsuarios()
+		public async void RefrescarUsuarios()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando lista de usuarios...");
 

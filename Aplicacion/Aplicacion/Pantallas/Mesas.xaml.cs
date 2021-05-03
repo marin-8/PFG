@@ -22,6 +22,11 @@ namespace PFG.Aplicacion
 {
 	public partial class Mesas : ContentPage
 	{
+		// TODO - Al quitar columna/fila que no haya mesas
+		// TODO - Modificar número mesa
+		// TODO - Mover mesa
+		// TODO - Eliminar mesa
+
 	// ============================================================================================== //
 
 		// Variables y constantes
@@ -47,11 +52,11 @@ namespace PFG.Aplicacion
 			Shell.Current.Navigated += OnNavigatedTo;
 		}
 
-		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				await PedirMesas();
+				PedirMesas();
 			}
 		}
 
@@ -59,7 +64,7 @@ namespace PFG.Aplicacion
 
 		// Métodos públicos
 
-		public async Task PedirMesas()
+		public async void PedirMesas()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
 
@@ -168,9 +173,9 @@ namespace PFG.Aplicacion
 			if(opcion == OpcionesEditarMapa[3]) { QuitarFila(); return; }
 		}
 
-		private async void RefrescarMesas(object sender, EventArgs e)
+		private void RefrescarMesas(object sender, EventArgs e)
 		{
-			await PedirMesas();
+			PedirMesas();
 		}
 
 	// ============================================================================================== //
@@ -179,9 +184,7 @@ namespace PFG.Aplicacion
 
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
-			// TODO - MesaPulsada
-
-			await PedirMesas();
+			PedirMesas();
 
 			var mesaString = (string)((Button)sender).BindingContext;
 			int indiceDelPunto = mesaString.IndexOf('.');
@@ -199,24 +202,28 @@ namespace PFG.Aplicacion
 
 				byte numeroNuevaMesa;
 
-				var configuracionPrompt = new PromptConfig
-				{
-					InputType = InputType.Number,
-					IsCancellable = true,
-					Title = $"Número de mesa (1-{totalMesas})",
-					Message = "Nueva mesa",
-					OkText = "Crear",
-					CancelText = "Cancelar",
-					MaxLength = (int)Math.Floor(Math.Log10(totalMesas)+1)
-				};
-
 				while(true)
 				{
+					var configuracionPrompt = new PromptConfig
+					{
+						InputType = InputType.Number,
+						IsCancellable = true,
+						Title = "Nueva mesa",
+						Message = $"Número de mesa (1-{totalMesas})",
+						OkText = "Crear",
+						CancelText = "Cancelar",
+						MaxLength = (int)Math.Floor(Math.Log10(totalMesas)+1),
+					};
+
 					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
 					if(!resultado.Ok) return;
+
+					if(resultado.Text.Equals("") || resultado.Text.Equals("0") || resultado.Text.Equals("00")) {
+						await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
+
 					numeroNuevaMesa = byte.Parse(resultado.Text);
 
-					await PedirMesas();
+					PedirMesas();
 
 					if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
 						await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");

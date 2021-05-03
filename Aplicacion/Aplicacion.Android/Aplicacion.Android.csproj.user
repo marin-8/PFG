@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SelectedDevice>nexus_5_android_6_0</SelectedDevice>
-    <ActiveDebugProfile>nexus_5_android_6_0</ActiveDebugProfile>
+    <SelectedDevice>OnePlus KB2003</SelectedDevice>
+    <ActiveDebugProfile>OnePlus KB2003</ActiveDebugProfile>
     <DefaultDevice>nexus_5_android_6_0</DefaultDevice>
     <AndroidDesignerPreferredTheme>MainTheme</AndroidDesignerPreferredTheme>
   </PropertyGroup>
