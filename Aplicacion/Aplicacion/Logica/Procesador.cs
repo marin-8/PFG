@@ -201,9 +201,9 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private void Procesar_MandarMesas(Comando_MandarMesas Comando)
+		private async void Procesar_MandarMesas(Comando_MandarMesas Comando)
 		{
-			Mesas.Instancia.ActualizarMesas(
+			await Mesas.Instancia.ActualizarMesas(
 				Comando.AnchoGrid,
 				Comando.AltoGrid,
 				Comando.Mesas);

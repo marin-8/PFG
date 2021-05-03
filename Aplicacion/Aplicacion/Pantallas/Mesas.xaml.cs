@@ -69,7 +69,7 @@ namespace PFG.Aplicacion
 			});
 		}
 
-		public async void ActualizarMesas(byte ColumnasMesas, byte FilasMesas, Mesa[] MesasExistentes)
+		public async Task ActualizarMesas(byte ColumnasMesas, byte FilasMesas, Mesa[] MesasExistentes)
 		{
 			this.ColumnasMesas = ColumnasMesas;
 			this.FilasMesas = FilasMesas;
@@ -179,6 +179,8 @@ namespace PFG.Aplicacion
 
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
+			// TODO - MesaPulsada
+
 			await PedirMesas();
 
 			var mesaString = (string)((Button)sender).BindingContext;
@@ -213,8 +215,6 @@ namespace PFG.Aplicacion
 					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
 					if(!resultado.Ok) return;
 					numeroNuevaMesa = byte.Parse(resultado.Text);
-
-					// TODO - ERROR - ESTO FALLA
 
 					await PedirMesas();
 
