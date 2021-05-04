@@ -14,6 +14,6 @@ namespace PFG.Aplicacion
 		public static Usuario UsuarioActual;
 
 		public static ControladorRed Servidor;
-		public static Procesador ProcesadorMensajesRecibidos;
+		public static ProcesadorAplicacion ProcesadorMensajesRecibidos;
 	}
 }

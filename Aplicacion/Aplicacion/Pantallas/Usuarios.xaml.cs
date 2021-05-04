@@ -91,12 +91,12 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.ShowLoading("Creando usuario...");
 
-			await Task.Run(() =>
+			var comandoRespuesta = await Task.Run(() =>
 			{
 				string respuestaGestor = new Comando_CrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
-				var comandoRespuesta = Comando.DeJson<Comando_ResultadoCrearUsuario>(respuestaGestor);
-				Procesar_ResultadoCrearUsuario(comandoRespuesta); 
+				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
+			Procesar_ResultadoCrearUsuario(comandoRespuesta); 
 
 			UserDialogs.Instance.HideLoading();
 		}
@@ -162,10 +162,10 @@ namespace PFG.Aplicacion
 					new Comando_ModificarUsuarioNombre(usuarioPulsado.NombreUsuario, nuevoNombre).Enviar(Global.IPGestor);
 				});
 
+				UserDialogs.Instance.HideLoading();
+
 				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
 					Global.UsuarioActual.Nombre = nuevoNombre;
-
-				UserDialogs.Instance.HideLoading();
 
 				RefrescarUsuarios();
 
@@ -293,7 +293,7 @@ namespace PFG.Aplicacion
 					await Task.Run(() =>
 					{
 						string respuestaGestor = new Comando_EliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
-						var comandoRespuesta = Comando.DeJson<Comando_ResultadoEliminarUsuario>(respuestaGestor);
+						var comandoRespuesta = Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 						Procesar_ResultadoEliminarUsuario(comandoRespuesta); 
 					});
 
@@ -368,31 +368,27 @@ namespace PFG.Aplicacion
 			ListaUsuarios.EndRefresh();
 		}
 
-		private void Procesar_ResultadoCrearUsuario(Comando_ResultadoCrearUsuario Comando)
+		private void Procesar_ResultadoCrearUsuario(Comando_ResultadoGenerico Comando)
 		{
-			if(Comando.ResultadoCrearUsuario == ResultadosCrearUsuario.Correcto)
+			if(Comando.Correcto)
 			{
 				RefrescarUsuarios();
-
-				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
 			}
 			else
 			{
-				UserDialogs.Instance.Alert("Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo", "Error", "Aceptar");
+				UserDialogs.Instance.Alert(Comando.Mensaje);
 			}
 		}
 
-		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoEliminarUsuario Comando)
+		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoGenerico Comando)
 		{
-			if(Comando.ResultadoEliminarUsuario == ResultadosEliminarUsuario.Correcto)
+			if(Comando.Correcto)
 			{
-				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
-
 				RefrescarUsuarios();
 			}
 			else
 			{
-				UserDialogs.Instance.Alert("No se puede eliminar el usuario porque está conectado", "Error", "Aceptar");
+				UserDialogs.Instance.Alert(Comando.Mensaje);
 			}
 		}
 

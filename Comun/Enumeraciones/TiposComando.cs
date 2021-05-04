@@ -3,38 +3,27 @@ namespace PFG.Comun
 {
 	public enum TiposComando : byte
 	{
+		ResultadoGenerico = 0,
+
 		IniciarSesion = 1,
 		ResultadoIniciarSesion = 2,
-
 		CerrarSesion = 3,
 
 		PedirUsuarios = 4,
 		MandarUsuarios = 5,
-
 		CrearUsuario = 6,
-		ResultadoCrearUsuario = 7,
+		ModificarUsuarioNombre = 7,
+		ModificarUsuarioNombreUsuario = 8,
+		ModificarUsuarioContrasena = 9,
+		ModificarUsuarioRol = 10,
+		EliminarUsuario = 11,
 
-		ModificarUsuarioNombre = 8,
-		ModificarUsuarioNombreUsuario = 9,
-		ModificarUsuarioContrasena = 10,
-		ModificarUsuarioRol = 11,
-
-		EliminarUsuario = 12,
-		ResultadoEliminarUsuario = 13,
-
-		PedirMesas = 14,
-		MandarMesas = 15,
-
-		EditarMapaMesas = 16,
-		ResultadoEditarMapaMesas = 17,
-
-		CrearMesa = 18,
-		ResultadoCrearMesa = 19,
-
-		ModificarMesaNumero = 20,
-		ModificarMesaSitio = 21,
-
-		EliminarMesa = 22,
-		ResultadoEliminarMesa = 23,
+		PedirMesas = 12,
+		MandarMesas = 13,
+		EditarMapaMesas = 14,
+		CrearMesa = 15,
+		ModificarMesaNumero = 16,
+		ModificarMesaSitio = 17,
+		EliminarMesa = 18,
 	}
 }

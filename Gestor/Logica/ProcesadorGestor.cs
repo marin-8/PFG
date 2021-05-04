@@ -10,12 +10,12 @@ using PFG.Comun;
 
 namespace PFG.Gestor
 {
-	public class Procesador
+	public class ProcesadorGestor
 	{
 		private readonly ListBox RegistroIPs;
 		private readonly ListBox RegistroComandos;
 
-		public Procesador(ListBox RegistroIPs, ListBox RegistroComandos)
+		public ProcesadorGestor(ListBox RegistroIPs, ListBox RegistroComandos)
 		{
 			this.RegistroIPs = RegistroIPs;
 			this.RegistroComandos = RegistroComandos;
@@ -31,7 +31,7 @@ namespace PFG.Gestor
 
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
-			string comandoRespuesta = "";
+			string comandoRespuesta = "OK";
 
 			switch(tipoComando)
 			{
@@ -117,50 +117,67 @@ namespace PFG.Gestor
 
 				case TiposComando.EliminarUsuario:
 				{
-					Procesar_EliminarUsuario(
-						Comando.DeJson
-							<Comando_EliminarUsuario>
-								(ComandoJson), IP);
+					comandoRespuesta =
+						Procesar_EliminarUsuario(
+							Comando.DeJson
+								<Comando_EliminarUsuario>
+									(ComandoJson), IP);
 
 					break;
 				}
 
 				case TiposComando.PedirMesas:
 				{
-					Procesar_PedirMesas(IP);
+					comandoRespuesta =
+						Procesar_PedirMesas(IP);
 
 					break;
 				}
 
 				case TiposComando.EditarMapaMesas:
 				{
-					Procesar_EditarMapaMesas(
-						Comando.DeJson
-							<Comando_EditarMapaMesas>
-								(ComandoJson), IP);
+					comandoRespuesta =
+						Procesar_EditarMapaMesas(
+							Comando.DeJson
+								<Comando_EditarMapaMesas>
+									(ComandoJson), IP);
 
 					break;
 				}
 
 				case TiposComando.CrearMesa:
 				{
-					Procesar_CrearMesa(
-						Comando.DeJson
-							<Comando_CrearMesa>
-								(ComandoJson), IP);
+					comandoRespuesta =
+						Procesar_CrearMesa(
+							Comando.DeJson
+								<Comando_CrearMesa>
+									(ComandoJson), IP);
 
 					break;
 				}
 
 				//case TiposComando.XXXXX:
 				//{
-				//	Procesar_XXXXX(
-				//		Comando.DeJson
-				//			<Comando_XXXXX>
-				//				(ComandoJson));
+				//	comandoRespuesta =
+				//		Procesar_XXXXX(
+				//			Comando.DeJson
+				//				<Comando_XXXXX>
+				//					(ComandoJson));
 
 				//	break;
 				//}
+
+				default:
+				{
+					MessageBox.Show
+					(
+						"Se ha recibido un comando que no se puede procesar. Contacta con el desarollador para que solucione el problema",
+						"Alerta",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+					break;
+				}
 			}
 
 			return comandoRespuesta;
@@ -237,19 +254,20 @@ namespace PFG.Gestor
 
 		private static string Procesar_CrearUsuario(Comando_CrearUsuario Comando)
 		{
-			ResultadosCrearUsuario resultado;
+			bool correcto = true;
+			string mensaje = "";
 
 			if(GestionUsuarios.Usuarios.Select(u => u.NombreUsuario).Contains(Comando.NuevoUsuario.NombreUsuario))
 			{
-				resultado = ResultadosCrearUsuario.UsuarioYaExiste;
+				correcto = false;
+				mensaje = "Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo";
 			}
 			else
 			{
 				GestionUsuarios.Usuarios.Add(Comando.NuevoUsuario);
-				resultado = ResultadosCrearUsuario.Correcto;
 			}
 
-			return new Comando_ResultadoCrearUsuario(resultado).ToString();
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
 		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando)
@@ -286,7 +304,8 @@ namespace PFG.Gestor
 
 		private static string Procesar_EliminarUsuario(Comando_EliminarUsuario Comando, string IP)
 		{
-			ResultadosEliminarUsuario resultado;
+			bool correcto = true;
+			string mensaje = "";
 
 			var usuarioAEliminar =
 				GestionUsuarios.Usuarios
@@ -295,15 +314,15 @@ namespace PFG.Gestor
 
 			if(usuarioAEliminar.Conectado)
 			{
-				resultado = ResultadosEliminarUsuario.UsuarioConectado;
+				correcto = false;
+				mensaje = "No se puede eliminar el usuario porque está conectado";
 			}
 			else
 			{
 				GestionUsuarios.Usuarios.Remove(usuarioAEliminar);
-				resultado = ResultadosEliminarUsuario.Correcto;
 			}
 
-			return new Comando_ResultadoEliminarUsuario(resultado).ToString();
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
 		private static string Procesar_PedirMesas(string IP)
@@ -319,15 +338,18 @@ namespace PFG.Gestor
 
 		private static string Procesar_EditarMapaMesas(Comando_EditarMapaMesas Comando, string IP)
 		{
-			ResultadosEditarMapaMesas resultado = ResultadosEditarMapaMesas.Correcto;
+			bool correcto = true;
+			string mensaje = "";
 
 			switch(Comando.TipoEdicionMapaMesas)
 			{
 				case TiposEdicionMapaMesas.AnadirColumna:
 				{					
 					if(GestionMesas.AnchoGrid == Comun.Global.MAXIMO_COLUMNAS_MESAS)
-						resultado = ResultadosEditarMapaMesas.MaximoColumnas;
-
+					{
+						correcto = false;
+						mensaje = "Máximo de columnas alcanzado";
+					}
 					else GestionMesas.AnchoGrid++;
 
 					break;
@@ -335,11 +357,15 @@ namespace PFG.Gestor
 				case TiposEdicionMapaMesas.QuitarColumna:
 				{
 					if(GestionMesas.AnchoGrid == GestionMesas.MINIMO_COLUMNAS)
-						resultado = ResultadosEditarMapaMesas.MinimoColumnas;
-
+					{
+						correcto = false;
+						mensaje = "Mínimo de columnas alcanzado";
+					}
 					else if(GestionMesas.Mesas.Any(m => m.SitioX == GestionMesas.AnchoGrid))
-						resultado = ResultadosEditarMapaMesas.MesaBloquea;
-
+					{
+						correcto = false;
+						mensaje = "Hay mesas en la columna a eliminar";
+					}
 					else GestionMesas.AnchoGrid--;
 
 					break;
@@ -347,8 +373,10 @@ namespace PFG.Gestor
 				case TiposEdicionMapaMesas.AnadirFila:
 				{
 					if(GestionMesas.AltoGrid == Comun.Global.MAXIMO_FILAS_MESAS)
-						resultado = ResultadosEditarMapaMesas.MaximoFilas;
-
+					{
+						correcto = false;
+						mensaje = "Máximo de filas alcanzado";
+					}
 					else GestionMesas.AltoGrid++;
 
 					break;
@@ -356,41 +384,47 @@ namespace PFG.Gestor
 				case TiposEdicionMapaMesas.QuitarFila:
 				{
 					if(GestionMesas.AltoGrid == GestionMesas.MINIMO_FILAS)
-						resultado = ResultadosEditarMapaMesas.MinimoFilas;
-
+					{
+						correcto = false;
+						mensaje = "Mínimo de filas alcanzado";
+					}
 					else if(GestionMesas.Mesas.Any(m => m.SitioY == GestionMesas.AltoGrid))
-						resultado = ResultadosEditarMapaMesas.MesaBloquea;
-
+					{
+						correcto = false;
+						mensaje = "Hay mesas en la fila a eliminar";
+					}
 					else GestionMesas.AltoGrid--;
 
 					break;
 				}
 			}
 
-			return new Comando_ResultadoEditarMapaMesas(resultado).ToString();
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
 		private static string Procesar_CrearMesa(Comando_CrearMesa Comando, string IP)
 		{
-			ResultadosCrearMesa resultado;
+			bool correcto = true;
+			string mensaje = "";
 
 			var nuevaMesa = Comando.NuevaMesa;
 
 			if(GestionMesas.Mesas.Where(m => m.Numero == nuevaMesa.Numero).Any())
 			{
-				resultado = ResultadosCrearMesa.MesaYaExisteConMismoNumero;
+				correcto = false;
+				mensaje = "Alguien ha creado una mesa con el mismo Número antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya";
 			}
 			else if(GestionMesas.Mesas.Where(m => m.SitioX == nuevaMesa.SitioX && m.SitioY == nuevaMesa.SitioY).Any())
 			{
-				resultado = ResultadosCrearMesa.MesaYaExisteConMismoSitio;
+				correcto = false;
+				mensaje = "Alguien ha creado una mesa en el mismo Sitio antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya";
 			}
 			else
 			{
 				GestionMesas.Mesas.Add(nuevaMesa);
-				resultado = ResultadosCrearMesa.Correcto;
 			}
 
-			return new Comando_ResultadoCrearMesa(resultado).ToString();
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

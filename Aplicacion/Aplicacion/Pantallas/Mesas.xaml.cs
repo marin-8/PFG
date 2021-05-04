@@ -177,44 +177,38 @@ namespace PFG.Aplicacion
 			return buttonMesa;
 		}
 
-		private async void AnadirColumna()
+		private void AnadirColumna()
 		{
-			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
-
-			await Task.Run(() =>
-			{
-				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.AnadirColumna).Enviar(Global.IPGestor);
-			});
+			EditarMapaMesas("Añadiendo columna...", TiposEdicionMapaMesas.AnadirColumna);
 		}
 
-		private async void QuitarColumna()
+		private void QuitarColumna()
 		{
-			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
-
-			await Task.Run(() =>
-			{
-				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.QuitarColumna).Enviar(Global.IPGestor);
-			});
+			EditarMapaMesas("Quitando columna...", TiposEdicionMapaMesas.QuitarColumna);
 		}
 
-		private async void AnadirFila()
+		private void AnadirFila()
 		{
-			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
-
-			await Task.Run(() =>
-			{
-				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.AnadirFila).Enviar(Global.IPGestor);
-			});
+			EditarMapaMesas("Añadiendo fila...", TiposEdicionMapaMesas.AnadirFila);
 		}
 
-		private async void QuitarFila()
+		private void QuitarFila()
 		{
-			UserDialogs.Instance.ShowLoading("Añadiendo columna...");
+			EditarMapaMesas("Quitando fila...", TiposEdicionMapaMesas.QuitarFila);
+		}
+
+		private async void EditarMapaMesas(string TituloLoading, TiposEdicionMapaMesas TipoEdicionMapaMesas)
+		{
+			UserDialogs.Instance.ShowLoading(TituloLoading);
 
 			await Task.Run(() =>
 			{
-				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.QuitarFila).Enviar(Global.IPGestor);
+				string respuestaGestor = new Comando_EditarMapaMesas(TipoEdicionMapaMesas).Enviar(Global.IPGestor);
+				var comandoRespuesta = Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+				Procesar_ResultadoEditarMapaMesas(comandoRespuesta); 
 			});
+
+			UserDialogs.Instance.HideLoading();
 		}
 
 		private async void CrearMesa(byte sitioX, byte sitioY)
@@ -261,8 +255,12 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_CrearMesa(nuevaMesa).Enviar(Global.IPGestor);
+				string respuestaGestor = new Comando_CrearMesa(nuevaMesa).Enviar(Global.IPGestor);
+				var comandoRespuesta = Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+				Procesar_ResultadoCrearMesa(comandoRespuesta); 
 			});
+
+			UserDialogs.Instance.HideLoading();
 		}
 		
 	// ============================================================================================== //
@@ -343,6 +341,30 @@ namespace PFG.Aplicacion
 					}
 				}
 			});
+		}
+
+		private void Procesar_ResultadoEditarMapaMesas(Comando_ResultadoGenerico Comando)
+		{
+			if(Comando.Correcto)
+			{
+				PedirMesas();
+			}
+			else
+			{
+				UserDialogs.Instance.Alert(Comando.Mensaje);
+			}
+		}
+
+		private void Procesar_ResultadoCrearMesa(Comando_ResultadoGenerico Comando)
+		{
+			if(Comando.Correcto)
+			{
+				PedirMesas();
+			}
+			else
+			{
+				UserDialogs.Instance.Alert(Comando.Mensaje);
+			}
 		}
 
 	// ============================================================================================== //

@@ -18,7 +18,7 @@ namespace PFG.Gestor
 		private const int MAX_CARACTERES_REGISTRO = 62;
 
 		private ControladorRed Servidor;
-		private Procesador ProcesadorMensajesRecibidos;
+		private ProcesadorGestor ProcesadorMensajesRecibidos;
 
 		public Principal()
 		{
