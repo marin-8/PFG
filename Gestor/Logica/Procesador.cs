@@ -33,11 +33,11 @@ namespace PFG.Gestor
 
 			switch(tipoComando)
 			{
-				case TiposComando.IntentarIniciarSesion:
+				case TiposComando.IniciarSesion:
 				{
-					Procesar_IntentarIniciarSesion(
+					Procesar_IniciarSesion(
 						Comando.DeJson
-							<Comando_IntentarIniciarSesion>
+							<Comando_IniciarSesion>
 								(ComandoJson), IP);
 
 					break;
@@ -60,11 +60,11 @@ namespace PFG.Gestor
 					break;
 				}
 
-				case TiposComando.IntentarCrearUsuario:
+				case TiposComando.CrearUsuario:
 				{
-					Procesar_IntentarCrearUsuario(
+					Procesar_CrearUsuario(
 						Comando.DeJson
-							<Comando_IntentarCrearUsuario>
+							<Comando_CrearUsuario>
 								(ComandoJson), IP);
 
 					break;
@@ -110,11 +110,11 @@ namespace PFG.Gestor
 					break;
 				}
 
-				case TiposComando.IntentarEliminarUsuario:
+				case TiposComando.EliminarUsuario:
 				{
-					Procesar_IntentarEliminarUsuario(
+					Procesar_EliminarUsuario(
 						Comando.DeJson
-							<Comando_IntentarEliminarUsuario>
+							<Comando_EliminarUsuario>
 								(ComandoJson), IP);
 
 					break;
@@ -127,21 +127,21 @@ namespace PFG.Gestor
 					break;
 				}
 
-				case TiposComando.IntentarEditarMapaMesas:
+				case TiposComando.EditarMapaMesas:
 				{
-					Procesar_IntentarEditarMapaMesas(
+					Procesar_EditarMapaMesas(
 						Comando.DeJson
-							<Comando_IntentarEditarMapaMesas>
+							<Comando_EditarMapaMesas>
 								(ComandoJson), IP);
 
 					break;
 				}
 
-				case TiposComando.IntentarCrearMesa:
+				case TiposComando.CrearMesa:
 				{
-					Procesar_IntentarCrearMesa(
+					Procesar_CrearMesa(
 						Comando.DeJson
-							<Comando_IntentarCrearMesa>
+							<Comando_CrearMesa>
 								(ComandoJson), IP);
 
 					break;
@@ -159,9 +159,9 @@ namespace PFG.Gestor
 			}
 		}
 
-		private static void Procesar_IntentarIniciarSesion(Comando_IntentarIniciarSesion Comando, string IP)
+		private static void Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
 		{
-			ResultadosIntentoIniciarSesion resultado;
+			ResultadosIniciarSesion resultado;
 			Usuario usuario = null;
 
 			var nombresUsuarios = GestionUsuarios.Usuarios
@@ -181,24 +181,24 @@ namespace PFG.Gestor
 						usuario.IP = IP;
 						usuario.Conectado = true;
 
-						resultado = ResultadosIntentoIniciarSesion.Correcto;
+						resultado = ResultadosIniciarSesion.Correcto;
 					}
 					else
 					{
-						resultado = ResultadosIntentoIniciarSesion.ContrasenaIncorrecta;
+						resultado = ResultadosIniciarSesion.ContrasenaIncorrecta;
 					}
 				}
 				else
 				{
-					resultado = ResultadosIntentoIniciarSesion.UsuarioYaConectado;
+					resultado = ResultadosIniciarSesion.UsuarioYaConectado;
 				}	
 			}
 			else
 			{
-				resultado = ResultadosIntentoIniciarSesion.UsuarioNoExiste;
+				resultado = ResultadosIniciarSesion.UsuarioNoExiste;
 			}
 
-			new Comando_ResultadoIntentoIniciarSesion
+			new Comando_ResultadoIniciarSesion
 			(
 				resultado,
 				usuario
@@ -228,21 +228,21 @@ namespace PFG.Gestor
 			.Enviar(IP);
 		}
 
-		private static void Procesar_IntentarCrearUsuario(Comando_IntentarCrearUsuario Comando, string IP)
+		private static void Procesar_CrearUsuario(Comando_CrearUsuario Comando, string IP)
 		{
-			ResultadosIntentoCrearUsuario resultado;
+			ResultadosCrearUsuario resultado;
 
 			if(GestionUsuarios.Usuarios.Select(u => u.NombreUsuario).Contains(Comando.NuevoUsuario.NombreUsuario))
 			{
-				resultado = ResultadosIntentoCrearUsuario.UsuarioYaExiste;
+				resultado = ResultadosCrearUsuario.UsuarioYaExiste;
 			}
 			else
 			{
 				GestionUsuarios.Usuarios.Add(Comando.NuevoUsuario);
-				resultado = ResultadosIntentoCrearUsuario.Correcto;
+				resultado = ResultadosCrearUsuario.Correcto;
 			}
 
-			new Comando_ResultadoIntentoCrearUsuario
+			new Comando_ResultadoCrearUsuario
 			(
 				resultado
 			)
@@ -281,9 +281,9 @@ namespace PFG.Gestor
 					.Rol = Comando.NuevoRol;
 		}
 
-		private static void Procesar_IntentarEliminarUsuario(Comando_IntentarEliminarUsuario Comando, string IP)
+		private static void Procesar_EliminarUsuario(Comando_EliminarUsuario Comando, string IP)
 		{
-			ResultadosIntentoEliminarUsuario resultado;
+			ResultadosEliminarUsuario resultado;
 
 			var usuarioAEliminar =
 				GestionUsuarios.Usuarios
@@ -292,15 +292,15 @@ namespace PFG.Gestor
 
 			if(usuarioAEliminar.Conectado)
 			{
-				resultado = ResultadosIntentoEliminarUsuario.UsuarioConectado;
+				resultado = ResultadosEliminarUsuario.UsuarioConectado;
 			}
 			else
 			{
 				GestionUsuarios.Usuarios.Remove(usuarioAEliminar);
-				resultado = ResultadosIntentoEliminarUsuario.Correcto;
+				resultado = ResultadosEliminarUsuario.Correcto;
 			}
 
-			new Comando_ResultadoIntentoEliminarUsuario(resultado).Enviar(IP);
+			new Comando_ResultadoEliminarUsuario(resultado).Enviar(IP);
 		}
 
 		private static void Procesar_PedirMesas(string IP)
@@ -314,16 +314,16 @@ namespace PFG.Gestor
 			.Enviar(IP);
 		}
 
-		private static void Procesar_IntentarEditarMapaMesas(Comando_IntentarEditarMapaMesas Comando, string IP)
+		private static void Procesar_EditarMapaMesas(Comando_EditarMapaMesas Comando, string IP)
 		{
-			ResultadosIntentoEditarMapaMesas resultado = ResultadosIntentoEditarMapaMesas.Correcto;
+			ResultadosEditarMapaMesas resultado = ResultadosEditarMapaMesas.Correcto;
 
 			switch(Comando.TipoEdicionMapaMesas)
 			{
 				case TiposEdicionMapaMesas.AnadirColumna:
 				{					
 					if(GestionMesas.AnchoGrid == Comun.Global.MAXIMO_COLUMNAS_MESAS)
-						resultado = ResultadosIntentoEditarMapaMesas.MaximoColumnas;
+						resultado = ResultadosEditarMapaMesas.MaximoColumnas;
 
 					else GestionMesas.AnchoGrid++;
 
@@ -332,7 +332,10 @@ namespace PFG.Gestor
 				case TiposEdicionMapaMesas.QuitarColumna:
 				{
 					if(GestionMesas.AnchoGrid == GestionMesas.MINIMO_COLUMNAS)
-						resultado = ResultadosIntentoEditarMapaMesas.MinimoColumnas;
+						resultado = ResultadosEditarMapaMesas.MinimoColumnas;
+
+					else if(GestionMesas.Mesas.Any(m => m.SitioX == GestionMesas.AnchoGrid))
+						resultado = ResultadosEditarMapaMesas.MesaBloquea;
 
 					else GestionMesas.AnchoGrid--;
 
@@ -341,7 +344,7 @@ namespace PFG.Gestor
 				case TiposEdicionMapaMesas.AnadirFila:
 				{
 					if(GestionMesas.AltoGrid == Comun.Global.MAXIMO_FILAS_MESAS)
-						resultado = ResultadosIntentoEditarMapaMesas.MaximoFilas;
+						resultado = ResultadosEditarMapaMesas.MaximoFilas;
 
 					else GestionMesas.AltoGrid++;
 
@@ -350,7 +353,10 @@ namespace PFG.Gestor
 				case TiposEdicionMapaMesas.QuitarFila:
 				{
 					if(GestionMesas.AltoGrid == GestionMesas.MINIMO_FILAS)
-						resultado = ResultadosIntentoEditarMapaMesas.MinimoFilas;
+						resultado = ResultadosEditarMapaMesas.MinimoFilas;
+
+					else if(GestionMesas.Mesas.Any(m => m.SitioY == GestionMesas.AltoGrid))
+						resultado = ResultadosEditarMapaMesas.MesaBloquea;
 
 					else GestionMesas.AltoGrid--;
 
@@ -358,30 +364,30 @@ namespace PFG.Gestor
 				}
 			}
 
-			new Comando_ResultadoIntentoEditarMapaMesas(resultado).Enviar(IP);
+			new Comando_ResultadoEditarMapaMesas(resultado).Enviar(IP);
 		}
 
-		private static void Procesar_IntentarCrearMesa(Comando_IntentarCrearMesa Comando, string IP)
+		private static void Procesar_CrearMesa(Comando_CrearMesa Comando, string IP)
 		{
-			ResultadosIntentoCrearMesa resultado;
+			ResultadosCrearMesa resultado;
 
 			var nuevaMesa = Comando.NuevaMesa;
 
 			if(GestionMesas.Mesas.Where(m => m.Numero == nuevaMesa.Numero).Any())
 			{
-				resultado = ResultadosIntentoCrearMesa.MesaYaExisteConMismoNumero;
+				resultado = ResultadosCrearMesa.MesaYaExisteConMismoNumero;
 			}
-			else if(GestionMesas.Mesas.Where(m => m.GridX == nuevaMesa.GridX && m.GridY == nuevaMesa.GridY).Any())
+			else if(GestionMesas.Mesas.Where(m => m.SitioX == nuevaMesa.SitioX && m.SitioY == nuevaMesa.SitioY).Any())
 			{
-				resultado = ResultadosIntentoCrearMesa.MesaYaExisteConMismoSitio;
+				resultado = ResultadosCrearMesa.MesaYaExisteConMismoSitio;
 			}
 			else
 			{
 				GestionMesas.Mesas.Add(nuevaMesa);
-				resultado = ResultadosIntentoCrearMesa.Correcto;
+				resultado = ResultadosCrearMesa.Correcto;
 			}
 
-			new Comando_ResultadoIntentoCrearMesa(resultado).Enviar(IP);
+			new Comando_ResultadoCrearMesa(resultado).Enviar(IP);
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

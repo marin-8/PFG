@@ -61,7 +61,7 @@ namespace PFG.Aplicacion
 			{
 				Global.IPGestor = ipGestor;
 
-				new Comando_IntentarIniciarSesion
+				new Comando_IniciarSesion
 				(
 					usuario,
 					contrasena

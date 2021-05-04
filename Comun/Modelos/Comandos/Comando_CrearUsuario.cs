@@ -15,9 +15,9 @@ namespace PFG.Comun
 	- Constructor private
 */
 
-	public class Comando_IntentarCrearUsuario : Comando
+	public class Comando_CrearUsuario : Comando
 	{
-		private const TiposComando TipoComandoInit = TiposComando.IntentarCrearUsuario;
+		private const TiposComando TipoComandoInit = TiposComando.CrearUsuario;
 
 		[JsonProperty("1")] public Usuario NuevoUsuario { get; private set; }
 
@@ -26,14 +26,14 @@ namespace PFG.Comun
 			this.NuevoUsuario = NuevoUsuario;
 		}
 
-		public Comando_IntentarCrearUsuario(Usuario NuevoUsuario)
+		public Comando_CrearUsuario(Usuario NuevoUsuario)
 			: base(TipoComandoInit)
 		{
 			InicializarPropiedades(NuevoUsuario);
 		}
 
 		[JsonConstructor]
-		private Comando_IntentarCrearUsuario(TiposComando TipoComandoJson,  Usuario NuevoUsuario)
+		private Comando_CrearUsuario(TiposComando TipoComandoJson,  Usuario NuevoUsuario)
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(NuevoUsuario);

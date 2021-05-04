@@ -22,7 +22,7 @@ namespace PFG.Comun
 		{
 			Socket socketDestino = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-			/*int intentosDeConexion =*/ Enviar_ConectarConDestino(socketDestino, IP);
+			/*int sDeConexion =*/ Enviar_ConectarConDestino(socketDestino, IP);
 			Enviar_EnviarMensaje(socketDestino, Mensaje);
 			string respuestaDelServidor = Enviar_RecibirRespuesta(socketDestino);
 			Enviar_CerrarSockets(socketDestino);
@@ -60,11 +60,11 @@ namespace PFG.Comun
 
 		private static /*int*/ void Enviar_ConectarConDestino(Socket Destino, string IP)
 		{
-			// int intentosDeConexion = 0;
+			// int sDeConexion = 0;
 
 			while(!Destino.Connected)
 			{
-				// intentosDeConexion++;
+				// sDeConexion++;
 
 				try
 				{
@@ -73,7 +73,7 @@ namespace PFG.Comun
 				catch(SocketException) { }
 			}
 
-			// return intentosDeConexion;
+			// return sDeConexion;
 		}
 
 		private static void Enviar_EnviarMensaje(Socket Destino, string Mensaje)

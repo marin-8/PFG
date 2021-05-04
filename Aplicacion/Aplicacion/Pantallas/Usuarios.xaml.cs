@@ -95,7 +95,7 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarCrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
+				new Comando_CrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
 			});
 		}
 
@@ -267,7 +267,7 @@ namespace PFG.Aplicacion
 
 					await Task.Run(() =>
 					{
-						new Comando_IntentarEliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
+						new Comando_EliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
 					});
 				}
 			}

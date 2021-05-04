@@ -15,9 +15,9 @@ namespace PFG.Comun
 	- Constructor private
 */
 
-	public class Comando_IntentarCrearMesa : Comando
+	public class Comando_CrearMesa : Comando
 	{
-		private const TiposComando TipoComandoInit = TiposComando.IntentarCrearMesa;
+		private const TiposComando TipoComandoInit = TiposComando.CrearMesa;
 
 		[JsonProperty("1")] public Mesa NuevaMesa { get; private set; }
 
@@ -26,14 +26,14 @@ namespace PFG.Comun
 			this.NuevaMesa = NuevaMesa;
 		}
 
-		public Comando_IntentarCrearMesa(Mesa NuevaMesa)
+		public Comando_CrearMesa(Mesa NuevaMesa)
 			: base(TipoComandoInit)
 		{
 			InicializarPropiedades(NuevaMesa);
 		}
 
 		[JsonConstructor]
-		private Comando_IntentarCrearMesa(TiposComando TipoComandoJson,  Mesa NuevaMesa)
+		private Comando_CrearMesa(TiposComando TipoComandoJson,  Mesa NuevaMesa)
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(NuevaMesa);

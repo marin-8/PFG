@@ -15,9 +15,9 @@ namespace PFG.Comun
 	- Constructor private
 */
 
-	public class Comando_IntentarEditarMapaMesas : Comando
+	public class Comando_EditarMapaMesas : Comando
 	{
-		private const TiposComando TipoComandoInit = TiposComando.IntentarEditarMapaMesas;
+		private const TiposComando TipoComandoInit = TiposComando.EditarMapaMesas;
 
 		[JsonProperty("1")] public TiposEdicionMapaMesas TipoEdicionMapaMesas { get; private set; }
 
@@ -26,14 +26,14 @@ namespace PFG.Comun
 			this.TipoEdicionMapaMesas = TipoEdicionMapaMesas;
 		}
 
-		public Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas TipoEdicionMapaMesas)
+		public Comando_EditarMapaMesas(TiposEdicionMapaMesas TipoEdicionMapaMesas)
 			: base(TipoComandoInit)
 		{
 			InicializarPropiedades(TipoEdicionMapaMesas);
 		}
 
 		[JsonConstructor]
-		private Comando_IntentarEditarMapaMesas(TiposComando TipoComandoJson, TiposEdicionMapaMesas TipoEdicionMapaMesas)
+		private Comando_EditarMapaMesas(TiposComando TipoComandoJson, TiposEdicionMapaMesas TipoEdicionMapaMesas)
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(TipoEdicionMapaMesas);

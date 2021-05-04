@@ -15,9 +15,9 @@ namespace PFG.Comun
 	- Constructor private
 */
 
-	public class Comando_IntentarEliminarUsuario : Comando
+	public class Comando_EliminarUsuario : Comando
 	{
-		private const TiposComando TipoComandoInit = TiposComando.IntentarEliminarUsuario;
+		private const TiposComando TipoComandoInit = TiposComando.EliminarUsuario;
 
 		[JsonProperty("1")] public string Usuario { get; private set; }
 
@@ -26,14 +26,14 @@ namespace PFG.Comun
 			this.Usuario = Usuario;
 		}
 
-		public Comando_IntentarEliminarUsuario(string Usuario)
+		public Comando_EliminarUsuario(string Usuario)
 			: base(TipoComandoInit)
 		{
 			InicializarPropiedades(Usuario);
 		}
 
 		[JsonConstructor]
-		private Comando_IntentarEliminarUsuario(TiposComando TipoComandoJson, string Usuario)
+		private Comando_EliminarUsuario(TiposComando TipoComandoJson, string Usuario)
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(Usuario);

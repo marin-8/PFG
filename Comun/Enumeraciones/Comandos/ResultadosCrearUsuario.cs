@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PFG.Comun
 {
-	public enum ResultadosIntentoCrearUsuario : byte
+	public enum ResultadosCrearUsuario : byte
 	{
 		Correcto = 1,
 		UsuarioYaExiste = 2,

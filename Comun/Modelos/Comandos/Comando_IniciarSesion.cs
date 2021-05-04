@@ -15,9 +15,9 @@ namespace PFG.Comun
 	- Constructor private
 */
 
-	public class Comando_IntentarIniciarSesion : Comando
+	public class Comando_IniciarSesion : Comando
 	{
-		private const TiposComando TipoComandoInit = TiposComando.IntentarIniciarSesion;
+		private const TiposComando TipoComandoInit = TiposComando.IniciarSesion;
 
 		[JsonProperty("1")] public string Usuario { get; private set; }
 		[JsonProperty("2")] public string Contrasena { get; private set; }
@@ -28,14 +28,14 @@ namespace PFG.Comun
 			this.Contrasena = Contrasena;
 		}
 
-		public Comando_IntentarIniciarSesion(string Usuario, string Contrasena)
+		public Comando_IniciarSesion(string Usuario, string Contrasena)
 			: base(TipoComandoInit)
 		{
 			InicializarPropiedades(Usuario, Contrasena);
 		}
 
 		[JsonConstructor]
-		private Comando_IntentarIniciarSesion(TiposComando TipoComandoJson, string Usuario, string Contrasena)
+		private Comando_IniciarSesion(TiposComando TipoComandoJson, string Usuario, string Contrasena)
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(Usuario, Contrasena);

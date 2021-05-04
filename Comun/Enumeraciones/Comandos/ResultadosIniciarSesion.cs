@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PFG.Comun
 {
-	public enum ResultadosIntentoIniciarSesion : byte
+	public enum ResultadosIniciarSesion : byte
 	{
 		Correcto = 1,
 		UsuarioNoExiste = 2,

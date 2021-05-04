@@ -1,7 +1,7 @@
 ﻿
 namespace PFG.Comun
 {
-	public enum ResultadosIntentoCrearMesa : byte
+	public enum ResultadosCrearMesa : byte
 	{
 		Correcto = 1,
 		MesaYaExisteConMismoNumero = 2,

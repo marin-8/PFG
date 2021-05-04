@@ -22,7 +22,6 @@ namespace PFG.Aplicacion
 {
 	public partial class Mesas : ContentPage
 	{
-		// TODO - Al quitar columna/fila que no haya mesas
 		// TODO - Modificar número mesa
 		// TODO - Mover mesa
 		// TODO - Eliminar mesa
@@ -114,7 +113,7 @@ namespace PFG.Aplicacion
 							MapaGrid.Children
 								.Where(c =>
 									c.BindingContext
-									.Equals($"{mesa.GridX}.{mesa.GridY}"))
+									.Equals($"{mesa.SitioX}.{mesa.SitioY}"))
 								.First();
 
 					mesaMapaGrid.Text = mesa.Numero.ToString();
@@ -182,67 +181,55 @@ namespace PFG.Aplicacion
 
 		// Eventos UI -> Contenido
 
+		private static readonly string[] OpcionesMesaExistente = new string[]
+		{
+			"Cambiar número",
+			"Mover",
+			"Eliminar",
+		};
+
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
 			PedirMesas();
 
-			var mesaString = (string)((Button)sender).BindingContext;
-			int indiceDelPunto = mesaString.IndexOf('.');
-			byte mesaX = byte.Parse(mesaString.Substring(0, indiceDelPunto));
-			byte mesaY = byte.Parse(mesaString.Substring(indiceDelPunto+1, mesaString.Length-indiceDelPunto-1));
+			var sitioPulsadoString = (string)((Button)sender).BindingContext;
+			int indiceDelPunto = sitioPulsadoString.IndexOf('.');
+			byte sitioPulsadoX = byte.Parse(sitioPulsadoString.Substring(0, indiceDelPunto));
+			byte sitioPulsadoY = byte.Parse(sitioPulsadoString.Substring(indiceDelPunto+1, sitioPulsadoString.Length-indiceDelPunto-1));
 
-			var consultaMesa = MesasExistentes.Where(m => m.GridX == mesaX && m.GridY == mesaY);
+			bool condicionMesaSeleccionada(Mesa m) => m.SitioX == sitioPulsadoX && m.SitioY == sitioPulsadoY;
 
-			if(consultaMesa.Count() == 0)
+			if (!MesasExistentes.Any(condicionMesaSeleccionada)) // Crear mesa
 			{
-				byte mcm = Comun.Global.MAXIMO_COLUMNAS_MESAS;
-				byte mfm = Comun.Global.MAXIMO_FILAS_MESAS;
-				if(mcm*mfm > 255) throw new IndexOutOfRangeException("Hay más de 255 mesas :/");
-				byte totalMesas = (byte)(mcm*mfm);
-
-				byte numeroNuevaMesa;
-
-				while(true)
-				{
-					var configuracionPrompt = new PromptConfig
-					{
-						InputType = InputType.Number,
-						IsCancellable = true,
-						Title = "Nueva mesa",
-						Message = $"Número de mesa (1-{totalMesas})",
-						OkText = "Crear",
-						CancelText = "Cancelar",
-						MaxLength = (int)Math.Floor(Math.Log10(totalMesas)+1),
-					};
-
-					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
-					if(!resultado.Ok) return;
-
-					if(resultado.Text.Equals("") || resultado.Text.Equals("0") || resultado.Text.Equals("00")) {
-						await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
-
-					numeroNuevaMesa = byte.Parse(resultado.Text);
-
-					PedirMesas();
-
-					if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
-						await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
-					else
-						break;
-				}
-
-				Mesa nuevaMesa = new(numeroNuevaMesa, mesaX, mesaY);
-
-				UserDialogs.Instance.ShowLoading("Creando mesa...");
-
-				await Task.Run(() =>
-				{
-					new Comando_IntentarCrearMesa(nuevaMesa).Enviar(Global.IPGestor);
-				});
+				CrearMesa(sitioPulsadoX, sitioPulsadoY);
 			}
 			else
 			{
-				var mesa = consultaMesa.First();
+				var mesaSeleccionada = MesasExistentes.Where(condicionMesaSeleccionada).First();
+
+				string opcion = await UserDialogs.Instance.ActionSheetAsync($"Mesa {mesaSeleccionada.Numero}", "Cancelar", null, null, OpcionesMesaExistente);
+				if(opcion.Equals("Cancelar")) return;
+
+				if(opcion == OpcionesMesaExistente[0]) // Cambiar número
+				{
+					//
+
+					return;
+				}
+
+				if(opcion == OpcionesMesaExistente[1]) // Mover
+				{
+					//
+
+					return;
+				}
+
+				if(opcion == OpcionesMesaExistente[2]) // Eliminar
+				{
+					//
+
+					return;
+				}
 			}
 		}
 
@@ -272,7 +259,7 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.AnadirColumna).Enviar(Global.IPGestor);
+				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.AnadirColumna).Enviar(Global.IPGestor);
 			});
 		}
 
@@ -282,7 +269,7 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.QuitarColumna).Enviar(Global.IPGestor);
+				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.QuitarColumna).Enviar(Global.IPGestor);
 			});
 		}
 
@@ -292,7 +279,7 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.AnadirFila).Enviar(Global.IPGestor);
+				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.AnadirFila).Enviar(Global.IPGestor);
 			});
 		}
 
@@ -302,7 +289,55 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_IntentarEditarMapaMesas(TiposEdicionMapaMesas.QuitarFila).Enviar(Global.IPGestor);
+				new Comando_EditarMapaMesas(TiposEdicionMapaMesas.QuitarFila).Enviar(Global.IPGestor);
+			});
+		}
+
+		private async void CrearMesa(byte sitioX, byte sitioY)
+		{
+			byte mcm = Comun.Global.MAXIMO_COLUMNAS_MESAS;
+			byte mfm = Comun.Global.MAXIMO_FILAS_MESAS;
+			if(mcm*mfm > 255) throw new IndexOutOfRangeException("Hay más de 255 mesas :/");
+			byte totalMesas = (byte)(mcm*mfm);
+
+			byte numeroNuevaMesa;
+
+			while(true)
+			{
+				var configuracionPrompt = new PromptConfig
+				{
+					InputType = InputType.Number,
+					IsCancellable = true,
+					Title = "Nueva mesa",
+					Message = $"Número de mesa (1-{totalMesas})",
+					OkText = "Crear",
+					CancelText = "Cancelar",
+					MaxLength = (int)Math.Floor(Math.Log10(totalMesas)+1),
+				};
+
+				var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
+				if(!resultado.Ok) return;
+
+				if(resultado.Text.Equals("") || resultado.Text.Equals("0") || resultado.Text.Equals("00")) {
+					await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
+
+				numeroNuevaMesa = byte.Parse(resultado.Text);
+
+				PedirMesas();
+
+				if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
+					await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
+				else
+					break;
+			}
+
+			Mesa nuevaMesa = new(numeroNuevaMesa, sitioX, sitioY);
+
+			UserDialogs.Instance.ShowLoading("Creando mesa...");
+
+			await Task.Run(() =>
+			{
+				new Comando_CrearMesa(nuevaMesa).Enviar(Global.IPGestor);
 			});
 		}
 

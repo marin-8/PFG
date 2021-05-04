@@ -26,11 +26,11 @@ namespace PFG.Aplicacion
 
 			switch(tipoComando)
 			{
-				case TiposComando.ResultadoIntentoIniciarSesion:
+				case TiposComando.ResultadoIniciarSesion:
 				{
-					Procesar_ResultadoDelIntentoDeIniciarSesion(
+					Procesar_ResultadoIniciarSesion(
 						Comando.DeJson
-							<Comando_ResultadoIntentoIniciarSesion>
+							<Comando_ResultadoIniciarSesion>
 								(ComandoJson));
 
 					break;
@@ -46,21 +46,21 @@ namespace PFG.Aplicacion
 					break;
 				}
 
-				case TiposComando.ResultadoIntentoCrearUsuario:
+				case TiposComando.ResultadoCrearUsuario:
 				{
-					Procesar_ResultadoIntentoCrearUsuario(
+					Procesar_ResultadoCrearUsuario(
 						Comando.DeJson
-							<Comando_ResultadoIntentoCrearUsuario>
+							<Comando_ResultadoCrearUsuario>
 								(ComandoJson));
 
 					break;
 				}
 
-				case TiposComando.ResultadoIntentoEliminarUsuario:
+				case TiposComando.ResultadoEliminarUsuario:
 				{
-					Procesar_ResultadoIntentoEliminarUsuario(
+					Procesar_ResultadoEliminarUsuario(
 						Comando.DeJson
-							<Comando_ResultadoIntentoEliminarUsuario>
+							<Comando_ResultadoEliminarUsuario>
 								(ComandoJson));
 
 					break;
@@ -76,21 +76,21 @@ namespace PFG.Aplicacion
 					break;
 				}
 
-				case TiposComando.ResultadoIntentoEditarMapaMesas:
+				case TiposComando.ResultadoEditarMapaMesas:
 				{
-					Procesar_ResultadoIntentoEditarMapaMesas(
+					Procesar_ResultadoEditarMapaMesas(
 						Comando.DeJson
-							<Comando_ResultadoIntentoEditarMapaMesas>
+							<Comando_ResultadoEditarMapaMesas>
 								(ComandoJson));
 
 					break;
 				}
 
-				case TiposComando.ResultadoIntentoCrearMesa:
+				case TiposComando.ResultadoCrearMesa:
 				{
-					Procesar_ResultadoIntentoCrearMesa(
+					Procesar_ResultadoCrearMesa(
 						Comando.DeJson
-							<Comando_ResultadoIntentoCrearMesa>
+							<Comando_ResultadoCrearMesa>
 								(ComandoJson));
 
 					break;
@@ -115,11 +115,11 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private async void Procesar_ResultadoDelIntentoDeIniciarSesion(Comando_ResultadoIntentoIniciarSesion Comando)
+		private async void Procesar_ResultadoIniciarSesion(Comando_ResultadoIniciarSesion Comando)
 		{
-			switch(Comando.ResultadoIntentoIniciarSesion)
+			switch(Comando.ResultadoIniciarSesion)
 			{
-				case ResultadosIntentoIniciarSesion.Correcto:
+				case ResultadosIniciarSesion.Correcto:
 				{
 					Global.UsuarioActual = Comando.UsuarioActual;
 
@@ -130,7 +130,7 @@ namespace PFG.Aplicacion
 
 					break;
 				}
-				case ResultadosIntentoIniciarSesion.UsuarioNoExiste:
+				case ResultadosIniciarSesion.UsuarioNoExiste:
 				{
 					UserDialogs.Instance.HideLoading();
 
@@ -138,7 +138,7 @@ namespace PFG.Aplicacion
 
 					break;
 				}
-				case ResultadosIntentoIniciarSesion.ContrasenaIncorrecta:
+				case ResultadosIniciarSesion.ContrasenaIncorrecta:
 				{
 					UserDialogs.Instance.HideLoading();
 
@@ -146,7 +146,7 @@ namespace PFG.Aplicacion
 
 					break;
 				}
-				case ResultadosIntentoIniciarSesion.UsuarioYaConectado:
+				case ResultadosIniciarSesion.UsuarioYaConectado:
 				{
 					UserDialogs.Instance.HideLoading();
 
@@ -169,11 +169,11 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private void Procesar_ResultadoIntentoCrearUsuario(Comando_ResultadoIntentoCrearUsuario Comando)
+		private void Procesar_ResultadoCrearUsuario(Comando_ResultadoCrearUsuario Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
-			if(Comando.ResultadoIntentoCrearUsuario == ResultadosIntentoCrearUsuario.Correcto)
+			if(Comando.ResultadoCrearUsuario == ResultadosCrearUsuario.Correcto)
 			{
 				Usuarios.Instancia.RefrescarUsuarios();
 
@@ -185,11 +185,11 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private void Procesar_ResultadoIntentoEliminarUsuario(Comando_ResultadoIntentoEliminarUsuario Comando)
+		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoEliminarUsuario Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
-			if(Comando.ResultadoEliminarUsuario == ResultadosIntentoEliminarUsuario.Correcto)
+			if(Comando.ResultadoEliminarUsuario == ResultadosEliminarUsuario.Correcto)
 			{
 				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
 
@@ -211,58 +211,63 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private void Procesar_ResultadoIntentoEditarMapaMesas(Comando_ResultadoIntentoEditarMapaMesas Comando)
+		private void Procesar_ResultadoEditarMapaMesas(Comando_ResultadoEditarMapaMesas Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
-			switch(Comando.ResultadoIntentoEditarMapaMesas)
+			switch(Comando.ResultadoEditarMapaMesas)
 			{
-				case ResultadosIntentoEditarMapaMesas.Correcto:
+				case ResultadosEditarMapaMesas.Correcto:
 				{
 					Mesas.Instancia.PedirMesas();
 					break;
 				}
-				case ResultadosIntentoEditarMapaMesas.MaximoColumnas:
+				case ResultadosEditarMapaMesas.MaximoColumnas:
 				{
 					UserDialogs.Instance.Alert("Máximo de columnas alcanzado", "Error", "Aceptar");
 					break;
 				}
-				case ResultadosIntentoEditarMapaMesas.MinimoColumnas:
+				case ResultadosEditarMapaMesas.MinimoColumnas:
 				{
 					UserDialogs.Instance.Alert("Mínimo de columnas alcanzado", "Error", "Aceptar");
 					break;
 				}
-				case ResultadosIntentoEditarMapaMesas.MaximoFilas:
+				case ResultadosEditarMapaMesas.MaximoFilas:
 				{
 					UserDialogs.Instance.Alert("Máximo de filas alcanzado", "Error", "Aceptar");
 					break;
 				}
-				case ResultadosIntentoEditarMapaMesas.MinimoFilas:
+				case ResultadosEditarMapaMesas.MinimoFilas:
 				{
 					UserDialogs.Instance.Alert("Mínimo de filas alcanzado", "Error", "Aceptar");
+					break;
+				}
+				case ResultadosEditarMapaMesas.MesaBloquea:
+				{
+					UserDialogs.Instance.Alert("Hay mesas que bloquean las celdas a eliminar", "Error", "Aceptar");
 					break;
 				}
 			}
 		}
 
-		private void Procesar_ResultadoIntentoCrearMesa(Comando_ResultadoIntentoCrearMesa Comando)
+		private void Procesar_ResultadoCrearMesa(Comando_ResultadoCrearMesa Comando)
 		{
 			UserDialogs.Instance.HideLoading();
 
-			switch(Comando.ResultadoIntentoCrearMesa)
+			switch(Comando.ResultadoCrearMesa)
 			{
-				case ResultadosIntentoCrearMesa.Correcto:
+				case ResultadosCrearMesa.Correcto:
 				{
 					Mesas.Instancia.PedirMesas();
 					UserDialogs.Instance.Alert("Mesa creada correctamente", "Información", "Aceptar");
 					break;
 				}
-				case ResultadosIntentoCrearMesa.MesaYaExisteConMismoNumero:
+				case ResultadosCrearMesa.MesaYaExisteConMismoNumero:
 				{
 					UserDialogs.Instance.Alert("Alguien ha creado una mesa con el mismo Número antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya", "Error", "Aceptar");
 					break;
 				}
-				case ResultadosIntentoCrearMesa.MesaYaExisteConMismoSitio:
+				case ResultadosCrearMesa.MesaYaExisteConMismoSitio:
 				{
 					UserDialogs.Instance.Alert("Alguien ha creado una mesa en el mismo Sitio antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya", "Error", "Aceptar");
 					break;
