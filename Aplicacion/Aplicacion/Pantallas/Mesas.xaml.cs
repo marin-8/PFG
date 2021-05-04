@@ -61,96 +61,6 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos públicos
-
-		public async void PedirMesas()
-		{
-			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
-
-			await Task.Run(() =>
-			{
-				new Comando_PedirMesas().Enviar(Global.IPGestor);
-			});
-		}
-
-		public async Task ActualizarMesas(byte ColumnasMesas, byte FilasMesas, Mesa[] MesasExistentes)
-		{
-			this.ColumnasMesas = ColumnasMesas;
-			this.FilasMesas = FilasMesas;
-			this.MesasExistentes = MesasExistentes;
-
-			await Device.InvokeOnMainThreadAsync(() =>
-			{
-				MapaGrid.ColumnDefinitions.Clear();
-				MapaGrid.RowDefinitions.Clear();
-
-				for(int c = 0 ; c < ColumnasMesas-1; c++) {
-					MapaGrid.ColumnDefinitions.Add(new());
-					MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)}); }
-				MapaGrid.ColumnDefinitions.Add(new());
-
-				for(int f = 0 ; f < FilasMesas-1 ; f++) {
-					MapaGrid.RowDefinitions.Add(new());
-					MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)}); }
-				MapaGrid.RowDefinitions.Add(new());
-
-				MapaGrid.Children.Clear();
-
-				for(int c = 0 ; c < ColumnasMesas; c++)
-				{
-					for(int f = 0 ; f < FilasMesas ; f++)
-					{
-						MapaGrid.Children.Add(
-							GenerarBotonMesa((byte)(c+1), (byte)(f+1)),
-							c*2,
-							f*2);
-					}
-				}
-
-				foreach(var mesa in MesasExistentes)
-				{
-					var mesaMapaGrid = (Button)
-							MapaGrid.Children
-								.Where(c =>
-									c.BindingContext
-									.Equals($"{mesa.SitioX}.{mesa.SitioY}"))
-								.First();
-
-					mesaMapaGrid.Text = mesa.Numero.ToString();
-
-					switch(mesa.EstadoMesa)
-					{
-						case EstadosMesa.Vacia:
-						{
-							mesaMapaGrid.BackgroundColor = Color.LimeGreen;
-							mesaMapaGrid.TextColor = Color.Black;
-							break;
-						}
-						case EstadosMesa.Esperando:
-						{
-							mesaMapaGrid.BackgroundColor = Color.Red;
-							mesaMapaGrid.TextColor = Color.White;
-							break;
-						}
-						case EstadosMesa.Ocupada:
-						{
-							mesaMapaGrid.BackgroundColor = Color.Black;
-							mesaMapaGrid.TextColor = Color.White;
-							break;
-						}
-						case EstadosMesa.Sucia:
-						{
-							mesaMapaGrid.BackgroundColor = Color.DarkGreen;
-							mesaMapaGrid.TextColor = Color.White;
-							break;
-						}
-					}
-				}
-			});
-		}
-
-	// ============================================================================================== //
-
 		// Eventos UI -> Barra navegación 
 
 		private static readonly string[] OpcionesEditarMapa = new string[]
@@ -236,6 +146,20 @@ namespace PFG.Aplicacion
 	// ============================================================================================== //
 
 		// Métodos privados
+
+		private async void PedirMesas()
+		{
+			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
+
+			await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_PedirMesas().Enviar(Global.IPGestor);
+				var comandoRespuesta = Comando.DeJson<Comando_MandarMesas>(respuestaGestor);
+				Procesar_RecibirMesas(comandoRespuesta); 
+			});
+
+			UserDialogs.Instance.HideLoading();
+		}
 
 		private Button GenerarBotonMesa(byte GridX, byte GridY)
 		{
@@ -345,7 +269,81 @@ namespace PFG.Aplicacion
 
 		// Métodos Procesar
 
+		private async void Procesar_RecibirMesas(Comando_MandarMesas Comando)
+		{
+			ColumnasMesas = Comando.AnchoGrid;
+			FilasMesas = Comando.AltoGrid;
+			MesasExistentes = Comando.Mesas;
 
+			await Device.InvokeOnMainThreadAsync(() =>
+			{
+				MapaGrid.ColumnDefinitions.Clear();
+				MapaGrid.RowDefinitions.Clear();
+
+				for(int c = 0 ; c < ColumnasMesas-1; c++) {
+					MapaGrid.ColumnDefinitions.Add(new());
+					MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)}); }
+				MapaGrid.ColumnDefinitions.Add(new());
+
+				for(int f = 0 ; f < FilasMesas-1 ; f++) {
+					MapaGrid.RowDefinitions.Add(new());
+					MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)}); }
+				MapaGrid.RowDefinitions.Add(new());
+
+				MapaGrid.Children.Clear();
+
+				for(int c = 0 ; c < ColumnasMesas; c++)
+				{
+					for(int f = 0 ; f < FilasMesas ; f++)
+					{
+						MapaGrid.Children.Add(
+							GenerarBotonMesa((byte)(c+1), (byte)(f+1)),
+							c*2,
+							f*2);
+					}
+				}
+
+				foreach(var mesa in MesasExistentes)
+				{
+					var mesaMapaGrid = (Button)
+							MapaGrid.Children
+								.Where(c =>
+									c.BindingContext
+									.Equals($"{mesa.SitioX}.{mesa.SitioY}"))
+								.First();
+
+					mesaMapaGrid.Text = mesa.Numero.ToString();
+
+					switch(mesa.EstadoMesa)
+					{
+						case EstadosMesa.Vacia:
+						{
+							mesaMapaGrid.BackgroundColor = Color.LimeGreen;
+							mesaMapaGrid.TextColor = Color.Black;
+							break;
+						}
+						case EstadosMesa.Esperando:
+						{
+							mesaMapaGrid.BackgroundColor = Color.Red;
+							mesaMapaGrid.TextColor = Color.White;
+							break;
+						}
+						case EstadosMesa.Ocupada:
+						{
+							mesaMapaGrid.BackgroundColor = Color.Black;
+							mesaMapaGrid.TextColor = Color.White;
+							break;
+						}
+						case EstadosMesa.Sucia:
+						{
+							mesaMapaGrid.BackgroundColor = Color.DarkGreen;
+							mesaMapaGrid.TextColor = Color.White;
+							break;
+						}
+					}
+				}
+			});
+		}
 
 	// ============================================================================================== //
 	}

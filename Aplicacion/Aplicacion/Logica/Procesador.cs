@@ -26,26 +26,6 @@ namespace PFG.Aplicacion
 
 			switch(tipoComando)
 			{
-				case TiposComando.ResultadoEliminarUsuario:
-				{
-					Procesar_ResultadoEliminarUsuario(
-						Comando.DeJson
-							<Comando_ResultadoEliminarUsuario>
-								(ComandoJson));
-
-					break;
-				}
-
-				case TiposComando.MandarMesas:
-				{
-					Procesar_MandarMesas(
-						Comando.DeJson
-							<Comando_MandarMesas>
-								(ComandoJson));
-
-					break;
-				}
-
 				case TiposComando.ResultadoEditarMapaMesas:
 				{
 					Procesar_ResultadoEditarMapaMesas(
@@ -85,32 +65,6 @@ namespace PFG.Aplicacion
 			}
 
 			return "";
-		}
-
-		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoEliminarUsuario Comando)
-		{
-			UserDialogs.Instance.HideLoading();
-
-			if(Comando.ResultadoEliminarUsuario == ResultadosEliminarUsuario.Correcto)
-			{
-				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
-
-				Usuarios.Instancia.RefrescarUsuarios();
-			}
-			else
-			{
-				UserDialogs.Instance.Alert("No se puede eliminar el usuario porque está conectado", "Error", "Aceptar");
-			}
-		}
-
-		private async void Procesar_MandarMesas(Comando_MandarMesas Comando)
-		{
-			await Mesas.Instancia.ActualizarMesas(
-				Comando.AnchoGrid,
-				Comando.AltoGrid,
-				Comando.Mesas);
-
-			UserDialogs.Instance.HideLoading();
 		}
 
 		private void Procesar_ResultadoEditarMapaMesas(Comando_ResultadoEditarMapaMesas Comando)

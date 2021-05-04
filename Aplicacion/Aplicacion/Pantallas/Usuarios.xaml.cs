@@ -286,6 +286,18 @@ namespace PFG.Aplicacion
 					{
 						new Comando_EliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
 					});
+
+
+					UserDialogs.Instance.ShowLoading("Eliminando usuario...");
+
+					await Task.Run(() =>
+					{
+						string respuestaGestor = new Comando_EliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
+						var comandoRespuesta = Comando.DeJson<Comando_ResultadoEliminarUsuario>(respuestaGestor);
+						Procesar_ResultadoEliminarUsuario(comandoRespuesta); 
+					});
+
+					UserDialogs.Instance.HideLoading();
 				}
 			}
 		}
@@ -367,6 +379,20 @@ namespace PFG.Aplicacion
 			else
 			{
 				UserDialogs.Instance.Alert("Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo", "Error", "Aceptar");
+			}
+		}
+
+		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoEliminarUsuario Comando)
+		{
+			if(Comando.ResultadoEliminarUsuario == ResultadosEliminarUsuario.Correcto)
+			{
+				UserDialogs.Instance.Alert("Usuario eliminado correctamente", "Información", "Aceptar");
+
+				RefrescarUsuarios();
+			}
+			else
+			{
+				UserDialogs.Instance.Alert("No se puede eliminar el usuario porque está conectado", "Error", "Aceptar");
 			}
 		}
 
