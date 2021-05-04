@@ -22,15 +22,19 @@ namespace PFG.Aplicacion
 {
 	public partial class Usuarios : ContentPage
 	{
-		public static Usuarios Instancia { get; private set; }
+	// ============================================================================================== //
+
+		// Variables y constantes
 
 		public ObservableCollection<Usuario> UsuariosLocal = new();
+
+	// ============================================================================================== //
+
+		// Inicialización
 
 		public Usuarios()
 		{
 			InitializeComponent();
-
-			Instancia = this;
 
 			Shell.Current.Navigated += OnNavigatedTo;
 
@@ -45,15 +49,9 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		public void DejarDeRefrescarLista()
-		{
-			ListaUsuarios.EndRefresh();
-		}
+	// ============================================================================================== //
 
-		private void ListaUsuarios_Refresh(object sender, EventArgs e)
-		{
-			RefrescarUsuarios();
-		}
+		// Eventos UI -> Barra navegación 
 
 		private async void NuevoUsuario_Clicked(object sender, EventArgs e)
 		{
@@ -71,7 +69,7 @@ namespace PFG.Aplicacion
 
 				RefrescarUsuarios();
 
-				if(UsuariosLocal.Select(u => u.NombreUsuario).Contains(nombreUsuario))
+				if(UsuariosLocal.Any(u => u.NombreUsuario.Equals(nombreUsuario)))
 					await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
 				else
 					break;
@@ -95,8 +93,21 @@ namespace PFG.Aplicacion
 
 			await Task.Run(() =>
 			{
-				new Comando_CrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
+				string respuestaGestor = new Comando_CrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
+				var comandoRespuesta = Comando.DeJson<Comando_ResultadoCrearUsuario>(respuestaGestor);
+				Procesar_ResultadoCrearUsuario(comandoRespuesta); 
 			});
+
+			UserDialogs.Instance.HideLoading();
+		}
+
+	// ============================================================================================== //
+
+		// Eventos UI -> Contenido
+
+		private void ListaUsuarios_Refresh(object sender, EventArgs e)
+		{
+			RefrescarUsuarios();
 		}
 
 		private static readonly string[] OpcionesUsuario = new string[]
@@ -171,7 +182,13 @@ namespace PFG.Aplicacion
 					if(nuevoNombreUsuario == null) return;
 					if(nuevoNombreUsuario != usuarioPulsado.NombreUsuario) break;
 
-					await DisplayAlert("Alerta", $"El nuevo Nombre de Usuario no puede ser igual que el anterior", "Aceptar");
+					RefrescarUsuarios();
+
+					if(UsuariosLocal.Any(u => u.NombreUsuario.Equals(nuevoNombreUsuario)))
+						await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
+
+					if(nuevoNombreUsuario.Equals(usuarioPulsado.NombreUsuario))
+						await DisplayAlert("Alerta", $"El nuevo Nombre de Usuario no puede ser igual que el anterior", "Aceptar");
 				}
 
 				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
@@ -273,14 +290,22 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		public async void RefrescarUsuarios()
+	// ============================================================================================== //
+
+		// Métodos privados
+
+		private async void RefrescarUsuarios()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando lista de usuarios...");
 
 			await Task.Run(() =>
 			{
-				new Comando_PedirUsuarios().Enviar(Global.IPGestor);
+				string respuestaGestor = new Comando_PedirUsuarios().Enviar(Global.IPGestor);
+				var comandoRespuesta = Comando.DeJson<Comando_MandarUsuarios>(respuestaGestor);
+				Procesar_RecibirUsuarios(comandoRespuesta); 
 			});
+
+			UserDialogs.Instance.HideLoading();
 		}
 
 		private async Task<string> PedirAlUsuarioStringCorrecto(string Titulo, bool PermitirEspacios)
@@ -316,5 +341,35 @@ namespace PFG.Aplicacion
 
 			return null;
 		}
+
+	// ============================================================================================== //
+
+		// Métodos Procesar
+
+		private void Procesar_RecibirUsuarios(Comando_MandarUsuarios Comando)
+		{
+			UsuariosLocal.Clear();
+			
+			foreach(var usuario in Comando.Usuarios)
+				UsuariosLocal.Add(usuario);
+
+			ListaUsuarios.EndRefresh();
+		}
+
+		private void Procesar_ResultadoCrearUsuario(Comando_ResultadoCrearUsuario Comando)
+		{
+			if(Comando.ResultadoCrearUsuario == ResultadosCrearUsuario.Correcto)
+			{
+				RefrescarUsuarios();
+
+				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
+			}
+			else
+			{
+				UserDialogs.Instance.Alert("Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo", "Error", "Aceptar");
+			}
+		}
+
+	// ============================================================================================== //
 	}
 }

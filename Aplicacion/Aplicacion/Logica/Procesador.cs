@@ -20,42 +20,12 @@ namespace PFG.Aplicacion
 
 		}
 
-		public void Procesar(string IP, string ComandoJson)
+		public string Procesar(string IP, string ComandoJson)
 		{
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
 			switch(tipoComando)
 			{
-				case TiposComando.ResultadoIniciarSesion:
-				{
-					Procesar_ResultadoIniciarSesion(
-						Comando.DeJson
-							<Comando_ResultadoIniciarSesion>
-								(ComandoJson));
-
-					break;
-				}
-
-				case TiposComando.MandarUsuarios:
-				{
-					Procesar_MandarUsuarios(
-						Comando.DeJson
-							<Comando_MandarUsuarios>
-								(ComandoJson));
-
-					break;
-				}
-
-				case TiposComando.ResultadoCrearUsuario:
-				{
-					Procesar_ResultadoCrearUsuario(
-						Comando.DeJson
-							<Comando_ResultadoCrearUsuario>
-								(ComandoJson));
-
-					break;
-				}
-
 				case TiposComando.ResultadoEliminarUsuario:
 				{
 					Procesar_ResultadoEliminarUsuario(
@@ -113,76 +83,8 @@ namespace PFG.Aplicacion
 					break;
 				}
 			}
-		}
 
-		private async void Procesar_ResultadoIniciarSesion(Comando_ResultadoIniciarSesion Comando)
-		{
-			switch(Comando.ResultadoIniciarSesion)
-			{
-				case ResultadosIniciarSesion.Correcto:
-				{
-					Global.UsuarioActual = Comando.UsuarioActual;
-
-					await Device.InvokeOnMainThreadAsync(async () => 
-						await Shell.Current.GoToAsync("//Principal") );
-
-					UserDialogs.Instance.HideLoading();
-
-					break;
-				}
-				case ResultadosIniciarSesion.UsuarioNoExiste:
-				{
-					UserDialogs.Instance.HideLoading();
-
-					UserDialogs.Instance.Alert("El usuario no existe", "Alerta", "Aceptar");
-
-					break;
-				}
-				case ResultadosIniciarSesion.ContrasenaIncorrecta:
-				{
-					UserDialogs.Instance.HideLoading();
-
-					UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
-
-					break;
-				}
-				case ResultadosIniciarSesion.UsuarioYaConectado:
-				{
-					UserDialogs.Instance.HideLoading();
-
-					UserDialogs.Instance.Alert("Usuario ya conectado", "Alerta", "Aceptar");
-
-					break;
-				}
-			}
-		}
-
-		private void Procesar_MandarUsuarios(Comando_MandarUsuarios Comando)
-		{
-			Usuarios.Instancia.UsuariosLocal.Clear();
-			
-			foreach(var usuario in Comando.Usuarios)
-				Usuarios.Instancia.UsuariosLocal.Add(usuario);
-
-			Usuarios.Instancia.DejarDeRefrescarLista();
-
-			UserDialogs.Instance.HideLoading();
-		}
-
-		private void Procesar_ResultadoCrearUsuario(Comando_ResultadoCrearUsuario Comando)
-		{
-			UserDialogs.Instance.HideLoading();
-
-			if(Comando.ResultadoCrearUsuario == ResultadosCrearUsuario.Correcto)
-			{
-				Usuarios.Instancia.RefrescarUsuarios();
-
-				UserDialogs.Instance.Alert("Usuario creado correctamente", "Información", "Aceptar");
-			}
-			else
-			{
-				UserDialogs.Instance.Alert("Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo", "Error", "Aceptar");
-			}
+			return "";
 		}
 
 		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoEliminarUsuario Comando)

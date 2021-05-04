@@ -21,7 +21,7 @@ namespace PFG.Gestor
 			this.RegistroComandos = RegistroComandos;
 		}
 
-		public void Procesar(string IP, string ComandoJson)
+		public string Procesar(string IP, string ComandoJson)
 		{
 			RegistroIPs.Invoke(new Action(() =>
 			{ 
@@ -31,14 +31,17 @@ namespace PFG.Gestor
 
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
+			string comandoRespuesta = "";
+
 			switch(tipoComando)
 			{
 				case TiposComando.IniciarSesion:
 				{
-					Procesar_IniciarSesion(
-						Comando.DeJson
-							<Comando_IniciarSesion>
-								(ComandoJson), IP);
+					comandoRespuesta =
+						Procesar_IniciarSesion(
+							Comando.DeJson
+								<Comando_IniciarSesion>
+									(ComandoJson), IP);
 
 					break;
 				}
@@ -55,17 +58,19 @@ namespace PFG.Gestor
 
 				case TiposComando.PedirUsuarios:
 				{
-					Procesar_PedirUsuarios(IP);
+					comandoRespuesta =
+						Procesar_PedirUsuarios();
 
 					break;
 				}
 
 				case TiposComando.CrearUsuario:
 				{
-					Procesar_CrearUsuario(
-						Comando.DeJson
-							<Comando_CrearUsuario>
-								(ComandoJson), IP);
+					comandoRespuesta =
+						Procesar_CrearUsuario(
+							Comando.DeJson
+								<Comando_CrearUsuario>
+									(ComandoJson));
 
 					break;
 				}
@@ -157,9 +162,11 @@ namespace PFG.Gestor
 				//	break;
 				//}
 			}
+
+			return comandoRespuesta;
 		}
 
-		private static void Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
+		private static string Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
 		{
 			ResultadosIniciarSesion resultado;
 			Usuario usuario = null;
@@ -198,12 +205,12 @@ namespace PFG.Gestor
 				resultado = ResultadosIniciarSesion.UsuarioNoExiste;
 			}
 
-			new Comando_ResultadoIniciarSesion
+			return new Comando_ResultadoIniciarSesion
 			(
 				resultado,
 				usuario
 			)
-			.Enviar(IP);
+			.ToString();
 		}
 
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
@@ -215,9 +222,9 @@ namespace PFG.Gestor
 			usuario.Conectado = false;
 		}
 
-		private static void Procesar_PedirUsuarios(string IP)
+		private static string Procesar_PedirUsuarios()
 		{
-			new Comando_MandarUsuarios
+			return new Comando_MandarUsuarios
 			(
 				GestionUsuarios.Usuarios
 					.Where(u => u.Rol != Roles.Desarrollador)
@@ -225,10 +232,10 @@ namespace PFG.Gestor
 					.ThenBy(u => u.Nombre)
 					.ToArray()
 			)
-			.Enviar(IP);
+			.ToString();
 		}
 
-		private static void Procesar_CrearUsuario(Comando_CrearUsuario Comando, string IP)
+		private static string Procesar_CrearUsuario(Comando_CrearUsuario Comando)
 		{
 			ResultadosCrearUsuario resultado;
 
@@ -242,11 +249,7 @@ namespace PFG.Gestor
 				resultado = ResultadosCrearUsuario.Correcto;
 			}
 
-			new Comando_ResultadoCrearUsuario
-			(
-				resultado
-			)
-			.Enviar(IP);
+			return new Comando_ResultadoCrearUsuario(resultado).ToString();
 		}
 
 		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando)
@@ -281,7 +284,7 @@ namespace PFG.Gestor
 					.Rol = Comando.NuevoRol;
 		}
 
-		private static void Procesar_EliminarUsuario(Comando_EliminarUsuario Comando, string IP)
+		private static string Procesar_EliminarUsuario(Comando_EliminarUsuario Comando, string IP)
 		{
 			ResultadosEliminarUsuario resultado;
 
@@ -300,21 +303,21 @@ namespace PFG.Gestor
 				resultado = ResultadosEliminarUsuario.Correcto;
 			}
 
-			new Comando_ResultadoEliminarUsuario(resultado).Enviar(IP);
+			return new Comando_ResultadoEliminarUsuario(resultado).ToString();
 		}
 
-		private static void Procesar_PedirMesas(string IP)
+		private static string Procesar_PedirMesas(string IP)
 		{
-			new Comando_MandarMesas
+			return new Comando_MandarMesas
 			(
 				GestionMesas.AnchoGrid,
 				GestionMesas.AltoGrid,
 				GestionMesas.Mesas.ToArray()
 			)
-			.Enviar(IP);
+			.ToString();
 		}
 
-		private static void Procesar_EditarMapaMesas(Comando_EditarMapaMesas Comando, string IP)
+		private static string Procesar_EditarMapaMesas(Comando_EditarMapaMesas Comando, string IP)
 		{
 			ResultadosEditarMapaMesas resultado = ResultadosEditarMapaMesas.Correcto;
 
@@ -364,10 +367,10 @@ namespace PFG.Gestor
 				}
 			}
 
-			new Comando_ResultadoEditarMapaMesas(resultado).Enviar(IP);
+			return new Comando_ResultadoEditarMapaMesas(resultado).ToString();
 		}
 
-		private static void Procesar_CrearMesa(Comando_CrearMesa Comando, string IP)
+		private static string Procesar_CrearMesa(Comando_CrearMesa Comando, string IP)
 		{
 			ResultadosCrearMesa resultado;
 
@@ -387,7 +390,7 @@ namespace PFG.Gestor
 				resultado = ResultadosCrearMesa.Correcto;
 			}
 
-			new Comando_ResultadoCrearMesa(resultado).Enviar(IP);
+			return new Comando_ResultadoCrearMesa(resultado).ToString();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

@@ -15,7 +15,7 @@ namespace PFG.Comun
 		public bool Recibiendo { get; private set; } = false;
 
 		private readonly Socket Servidor;
-		private readonly Action<string,string> FuncionAlRecibir;
+		private readonly Func<string, string,string> FuncionAlRecibir;
 		private readonly byte[] Buffer = new byte[MAX_BUFFER_SIZE];
 
 		public static string Enviar(string IP, string Mensaje)
@@ -30,7 +30,7 @@ namespace PFG.Comun
 			return respuestaDelServidor;
 		}
 
-		public ControladorRed(string IP, Action<string,string> FuncionAlRecibir, bool EmpezarRecibir, ushort Puerto=PUERTO)
+		public ControladorRed(string IP, Func<string, string,string> FuncionAlRecibir, bool EmpezarRecibir, ushort Puerto=PUERTO)
 		{
 			Servidor = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			Servidor.Bind(new IPEndPoint(IPAddress.Parse(IP), Puerto));
@@ -133,12 +133,12 @@ namespace PFG.Comun
 
             string mensajeRecibido = Encoding.ASCII.GetString(bufferRecibido);
 
-			byte[] data = Encoding.ASCII.GetBytes("OK");
-            cliente.Send(data);
-
 			IPEndPoint clienteInfo = (IPEndPoint)cliente.RemoteEndPoint;
 			string ipCliente = clienteInfo.Address.ToString();
-			FuncionAlRecibir(ipCliente, mensajeRecibido);
+			string resupuesta = FuncionAlRecibir(ipCliente, mensajeRecibido);
+
+			byte[] respuestaData = Encoding.ASCII.GetBytes(resupuesta);
+			cliente.Send(respuestaData);
         }
 
 		#endregion

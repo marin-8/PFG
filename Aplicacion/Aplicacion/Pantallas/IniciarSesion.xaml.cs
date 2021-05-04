@@ -61,13 +61,46 @@ namespace PFG.Aplicacion
 			{
 				Global.IPGestor = ipGestor;
 
-				new Comando_IniciarSesion
-				(
-					usuario,
-					contrasena
-				)
-				.Enviar(Global.IPGestor);
+				string respuestaGestor = new Comando_IniciarSesion(usuario,contrasena).Enviar(Global.IPGestor);
+				var comandoRespuesta = Comando.DeJson<Comando_ResultadoIniciarSesion>(respuestaGestor);
+				Procesar_ResultadoIniciarSesion(comandoRespuesta); 
 			});
+
+			UserDialogs.Instance.HideLoading();
+		}
+
+		private async void Procesar_ResultadoIniciarSesion(Comando_ResultadoIniciarSesion Comando)
+		{
+			switch(Comando.ResultadoIniciarSesion)
+			{
+				case ResultadosIniciarSesion.Correcto:
+				{
+					Global.UsuarioActual = Comando.UsuarioActual;
+
+					await Device.InvokeOnMainThreadAsync(async () => 
+						await Shell.Current.GoToAsync("//Principal") );
+
+					break;
+				}
+				case ResultadosIniciarSesion.UsuarioNoExiste:
+				{
+					UserDialogs.Instance.Alert("El usuario no existe", "Alerta", "Aceptar");
+
+					break;
+				}
+				case ResultadosIniciarSesion.ContrasenaIncorrecta:
+				{
+					UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
+
+					break;
+				}
+				case ResultadosIniciarSesion.UsuarioYaConectado:
+				{
+					UserDialogs.Instance.Alert("Usuario ya conectado", "Alerta", "Aceptar");
+
+					break;
+				}
+			}
 		}
 	}
 }
