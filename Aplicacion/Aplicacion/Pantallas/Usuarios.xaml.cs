@@ -84,6 +84,7 @@ namespace PFG.Aplicacion
 			foreach(var rol in Enum.GetValues(typeof(Roles)).Cast<Roles>())
 				if((byte)rol < (byte)Roles.Administrador)
 					roles.Add($"{++i} - {rol}");
+			roles.Reverse();
 
 			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, roles.ToArray());
 			if(rolString.Equals("Cancelar")) return;
@@ -96,7 +97,7 @@ namespace PFG.Aplicacion
 				string respuestaGestor = new Comando_CrearUsuario(nuevoUsuario).Enviar(Global.IPGestor);
 				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
-			Procesar_ResultadoCrearUsuario(comandoRespuesta); 
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarUsuarios);
 
 			UserDialogs.Instance.HideLoading();
 		}
@@ -180,15 +181,17 @@ namespace PFG.Aplicacion
 				{
 					nuevoNombreUsuario = await PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", true);
 					if(nuevoNombreUsuario == null) return;
-					if(nuevoNombreUsuario != usuarioPulsado.NombreUsuario) break;
 
 					RefrescarUsuarios();
 
 					if(UsuariosLocal.Any(u => u.NombreUsuario.Equals(nuevoNombreUsuario)))
 						await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
 
-					if(nuevoNombreUsuario.Equals(usuarioPulsado.NombreUsuario))
+					else if(nuevoNombreUsuario.Equals(usuarioPulsado.NombreUsuario))
 						await DisplayAlert("Alerta", $"El nuevo Nombre de Usuario no puede ser igual que el anterior", "Aceptar");
+				
+					else
+						break;
 				}
 
 				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
@@ -247,6 +250,7 @@ namespace PFG.Aplicacion
 				foreach(var rol in Enum.GetValues(typeof(Roles)).Cast<Roles>())
 					if((byte)rol < (byte)Roles.Administrador)
 						roles.Add($"{++i} - {rol}");
+				roles.Reverse();
 
 				while(true)
 				{
@@ -282,20 +286,12 @@ namespace PFG.Aplicacion
 				{
 					UserDialogs.Instance.ShowLoading("Eliminando usuario...");
 
-					await Task.Run(() =>
-					{
-						new Comando_EliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
-					});
-
-
-					UserDialogs.Instance.ShowLoading("Eliminando usuario...");
-
-					await Task.Run(() =>
+					var comandoRespuesta = await Task.Run(() =>
 					{
 						string respuestaGestor = new Comando_EliminarUsuario(usuarioPulsado.NombreUsuario).Enviar(Global.IPGestor);
-						var comandoRespuesta = Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
-						Procesar_ResultadoEliminarUsuario(comandoRespuesta); 
+						return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 					});
+					Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarUsuarios);
 
 					UserDialogs.Instance.HideLoading();
 				}
@@ -310,12 +306,12 @@ namespace PFG.Aplicacion
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando lista de usuarios...");
 
-			await Task.Run(() =>
+			var comandoRespuesta = await Task.Run(() =>
 			{
 				string respuestaGestor = new Comando_PedirUsuarios().Enviar(Global.IPGestor);
-				var comandoRespuesta = Comando.DeJson<Comando_MandarUsuarios>(respuestaGestor);
-				Procesar_RecibirUsuarios(comandoRespuesta); 
+				return Comando.DeJson<Comando_MandarUsuarios>(respuestaGestor);
 			});
+			Procesar_RecibirUsuarios(comandoRespuesta); 
 
 			UserDialogs.Instance.HideLoading();
 		}
@@ -366,30 +362,6 @@ namespace PFG.Aplicacion
 				UsuariosLocal.Add(usuario);
 
 			ListaUsuarios.EndRefresh();
-		}
-
-		private void Procesar_ResultadoCrearUsuario(Comando_ResultadoGenerico Comando)
-		{
-			if(Comando.Correcto)
-			{
-				RefrescarUsuarios();
-			}
-			else
-			{
-				UserDialogs.Instance.Alert(Comando.Mensaje);
-			}
-		}
-
-		private void Procesar_ResultadoEliminarUsuario(Comando_ResultadoGenerico Comando)
-		{
-			if(Comando.Correcto)
-			{
-				RefrescarUsuarios();
-			}
-			else
-			{
-				UserDialogs.Instance.Alert(Comando.Mensaje);
-			}
 		}
 
 	// ============================================================================================== //

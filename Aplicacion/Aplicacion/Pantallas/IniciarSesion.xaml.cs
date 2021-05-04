@@ -57,14 +57,14 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.ShowLoading("Intentando iniciar sesión...");
 
-			await Task.Run(() =>
+			var comandoRespuesta = await Task.Run(() =>
 			{
 				Global.IPGestor = ipGestor;
 
 				string respuestaGestor = new Comando_IniciarSesion(usuario,contrasena).Enviar(Global.IPGestor);
-				var comandoRespuesta = Comando.DeJson<Comando_ResultadoIniciarSesion>(respuestaGestor);
-				Procesar_ResultadoIniciarSesion(comandoRespuesta); 
+				return Comando.DeJson<Comando_ResultadoIniciarSesion>(respuestaGestor);
 			});
+			Procesar_ResultadoIniciarSesion(comandoRespuesta); 
 
 			UserDialogs.Instance.HideLoading();
 		}

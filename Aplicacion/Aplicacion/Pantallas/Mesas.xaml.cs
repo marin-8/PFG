@@ -66,9 +66,9 @@ namespace PFG.Aplicacion
 		private static readonly string[] OpcionesEditarMapa = new string[]
 		{
 			"+ Añadir columna",
-			"	- Quitar columna",
+			"- Quitar columna",
 			"+ Añadir fila",
-			"	- Quitar fila",
+			"- Quitar fila",
 		};
 
 		private async void EditarMapa(object sender, EventArgs e)
@@ -151,14 +151,15 @@ namespace PFG.Aplicacion
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
 
-			await Task.Run(() =>
+			var comandoRespuesta = await Task.Run(() =>
 			{
 				string respuestaGestor = new Comando_PedirMesas().Enviar(Global.IPGestor);
-				var comandoRespuesta = Comando.DeJson<Comando_MandarMesas>(respuestaGestor);
-				Procesar_RecibirMesas(comandoRespuesta); 
+				return Comando.DeJson<Comando_MandarMesas>(respuestaGestor);
 			});
 
 			UserDialogs.Instance.HideLoading();
+
+			Procesar_RecibirMesas(comandoRespuesta); 
 		}
 
 		private Button GenerarBotonMesa(byte GridX, byte GridY)
@@ -201,14 +202,15 @@ namespace PFG.Aplicacion
 		{
 			UserDialogs.Instance.ShowLoading(TituloLoading);
 
-			await Task.Run(() =>
+			var comandoRespuesta = await Task.Run(() =>
 			{
 				string respuestaGestor = new Comando_EditarMapaMesas(TipoEdicionMapaMesas).Enviar(Global.IPGestor);
-				var comandoRespuesta = Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
-				Procesar_ResultadoEditarMapaMesas(comandoRespuesta); 
+				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
 
 			UserDialogs.Instance.HideLoading();
+
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
 		}
 
 		private async void CrearMesa(byte sitioX, byte sitioY)
@@ -253,14 +255,15 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.ShowLoading("Creando mesa...");
 
-			await Task.Run(() =>
+			var comandoRespuesta = await Task.Run(() =>
 			{
 				string respuestaGestor = new Comando_CrearMesa(nuevaMesa).Enviar(Global.IPGestor);
-				var comandoRespuesta = Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
-				Procesar_ResultadoCrearMesa(comandoRespuesta); 
+				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
 
 			UserDialogs.Instance.HideLoading();
+
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
 		}
 		
 	// ============================================================================================== //
@@ -272,6 +275,8 @@ namespace PFG.Aplicacion
 			ColumnasMesas = Comando.AnchoGrid;
 			FilasMesas = Comando.AltoGrid;
 			MesasExistentes = Comando.Mesas;
+
+			UserDialogs.Instance.ShowLoading("Actualizando mapa mesas...");
 
 			await Device.InvokeOnMainThreadAsync(() =>
 			{
@@ -341,30 +346,8 @@ namespace PFG.Aplicacion
 					}
 				}
 			});
-		}
 
-		private void Procesar_ResultadoEditarMapaMesas(Comando_ResultadoGenerico Comando)
-		{
-			if(Comando.Correcto)
-			{
-				PedirMesas();
-			}
-			else
-			{
-				UserDialogs.Instance.Alert(Comando.Mensaje);
-			}
-		}
-
-		private void Procesar_ResultadoCrearMesa(Comando_ResultadoGenerico Comando)
-		{
-			if(Comando.Correcto)
-			{
-				PedirMesas();
-			}
-			else
-			{
-				UserDialogs.Instance.Alert(Comando.Mensaje);
-			}
+			UserDialogs.Instance.HideLoading();
 		}
 
 	// ============================================================================================== //
