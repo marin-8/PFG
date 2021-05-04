@@ -79,14 +79,7 @@ namespace PFG.Aplicacion
 			if(contrasena == null) return;
 			nuevoUsuario.Contrasena = contrasena;	
 
-			List<string> roles = new();
-			int i = 0;
-			foreach(var rol in Enum.GetValues(typeof(Roles)).Cast<Roles>())
-				if((byte)rol < (byte)Roles.Administrador)
-					roles.Add($"{++i} - {rol}");
-			roles.Reverse();
-
-			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, roles.ToArray());
+			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, RolesBaseToStringArray());
 			if(rolString.Equals("Cancelar")) return;
 			nuevoUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
 
@@ -245,16 +238,9 @@ namespace PFG.Aplicacion
 			{
 				Roles nuevoRol;
 
-				List<string> roles = new();
-				int i = 0;
-				foreach(var rol in Enum.GetValues(typeof(Roles)).Cast<Roles>())
-					if((byte)rol < (byte)Roles.Administrador)
-						roles.Add($"{++i} - {rol}");
-				roles.Reverse();
-
 				while(true)
 				{
-					string rolString = await UserDialogs.Instance.ActionSheetAsync($"Nuevo Rol (actual = {usuarioPulsado.Rol})", "Cancelar", null, null, roles.ToArray());
+					string rolString = await UserDialogs.Instance.ActionSheetAsync($"Nuevo Rol (actual = {usuarioPulsado.Rol})", "Cancelar", null, null, RolesBaseToStringArray());
 					if(rolString.Equals("Cancelar")) return;
 					nuevoRol = (Roles)(byte.Parse(rolString[0].ToString())-1);
 
@@ -348,6 +334,18 @@ namespace PFG.Aplicacion
 			}
 
 			return null;
+		}
+
+		private static string[] RolesBaseToStringArray()
+		{
+			int i = 0;
+			var roles =
+				Enum.GetValues(typeof(Roles)).Cast<Roles>()
+					.Where(r => (byte)r < (byte)Roles.Administrador)
+					.Select(r => $"{++i} - {r}")
+					.Reverse();
+
+			return roles.ToArray();
 		}
 
 	// ============================================================================================== //

@@ -122,7 +122,53 @@ namespace PFG.Aplicacion
 
 				if(opcion == OpcionesMesaExistente[0]) // Cambiar número
 				{
-					//
+					byte mcm = Comun.Global.MAXIMO_COLUMNAS_MESAS;
+					byte mfm = Comun.Global.MAXIMO_FILAS_MESAS;
+					if(mcm*mfm > 255) throw new IndexOutOfRangeException("Hay más de 255 mesas :/");
+					byte totalMesas = (byte)(mcm*mfm);
+
+					byte numeroNuevaMesa;
+
+					while(true)
+					{
+						var configuracionPrompt = new PromptConfig
+						{
+							InputType = InputType.Number,
+							IsCancellable = true,
+							Title = "Cambiar número",
+							Message = $"Número de mesa (1-{totalMesas})\n(Actual = {mesaSeleccionada.Numero})",
+							OkText = "Cambiar",
+							CancelText = "Cancelar",
+							MaxLength = (int)Math.Floor(Math.Log10(totalMesas)+1),
+						};
+
+						var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
+						if(!resultado.Ok) return;
+
+						if(resultado.Text.Equals("") || resultado.Text.Equals("0") || resultado.Text.Equals("00")) {
+							await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
+
+						numeroNuevaMesa = byte.Parse(resultado.Text);
+
+						PedirMesas();
+
+						if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
+							await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
+						else
+							break;
+					}
+
+					UserDialogs.Instance.ShowLoading("Cambiando número de mesa...");
+
+					var comandoRespuesta = await Task.Run(() =>
+					{
+						string respuestaGestor = new Comando_ModificarMesaNumero(mesaSeleccionada.Numero, numeroNuevaMesa).Enviar(Global.IPGestor);
+						return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+					});
+
+					UserDialogs.Instance.HideLoading();
+
+					Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
 
 					return;
 				}

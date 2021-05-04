@@ -121,7 +121,7 @@ namespace PFG.Gestor
 						Procesar_EliminarUsuario(
 							Comando.DeJson
 								<Comando_EliminarUsuario>
-									(ComandoJson), IP);
+									(ComandoJson));
 
 					break;
 				}
@@ -140,7 +140,7 @@ namespace PFG.Gestor
 						Procesar_EditarMapaMesas(
 							Comando.DeJson
 								<Comando_EditarMapaMesas>
-									(ComandoJson), IP);
+									(ComandoJson));
 
 					break;
 				}
@@ -151,7 +151,18 @@ namespace PFG.Gestor
 						Procesar_CrearMesa(
 							Comando.DeJson
 								<Comando_CrearMesa>
-									(ComandoJson), IP);
+									(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.ModificarMesaNumero:
+				{
+					comandoRespuesta =
+						Procesar_ModificarMesaNumero(
+							Comando.DeJson
+								<Comando_ModificarMesaNumero>
+									(ComandoJson));
 
 					break;
 				}
@@ -302,7 +313,7 @@ namespace PFG.Gestor
 					.Rol = Comando.NuevoRol;
 		}
 
-		private static string Procesar_EliminarUsuario(Comando_EliminarUsuario Comando, string IP)
+		private static string Procesar_EliminarUsuario(Comando_EliminarUsuario Comando)
 		{
 			bool correcto = true;
 			string mensaje = "";
@@ -336,7 +347,7 @@ namespace PFG.Gestor
 			.ToString();
 		}
 
-		private static string Procesar_EditarMapaMesas(Comando_EditarMapaMesas Comando, string IP)
+		private static string Procesar_EditarMapaMesas(Comando_EditarMapaMesas Comando)
 		{
 			bool correcto = true;
 			string mensaje = "";
@@ -402,7 +413,7 @@ namespace PFG.Gestor
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
-		private static string Procesar_CrearMesa(Comando_CrearMesa Comando, string IP)
+		private static string Procesar_CrearMesa(Comando_CrearMesa Comando)
 		{
 			bool correcto = true;
 			string mensaje = "";
@@ -422,6 +433,27 @@ namespace PFG.Gestor
 			else
 			{
 				GestionMesas.Mesas.Add(nuevaMesa);
+			}
+
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+		}
+
+		private static string Procesar_ModificarMesaNumero(Comando_ModificarMesaNumero Comando)
+		{
+			bool correcto = true;
+			string mensaje = "";
+
+			if(GestionMesas.Mesas.Where(m => m.Numero == Comando.NuevoNumeroMesa).Any())
+			{
+				correcto = false;
+				mensaje = "Alguien ha creado una mesa con el mismo Número antes de que se haya cambiado el número de la tuya, por lo que no se ha modificado";
+			}
+			else
+			{
+				GestionMesas.Mesas
+					.Where(m => m.Numero == Comando.NumeroMesa)
+					.First()
+						.Numero = Comando.NuevoNumeroMesa;
 			}
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
