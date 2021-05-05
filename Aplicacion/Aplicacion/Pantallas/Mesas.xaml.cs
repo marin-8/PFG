@@ -15,6 +15,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using Acr.UserDialogs;
+using Rg.Plugins.Popup.Extensions;
 
 using PFG.Comun;
 
@@ -175,7 +176,7 @@ namespace PFG.Aplicacion
 
 				if(opcion == OpcionesMesaExistente[1]) // Mover
 				{
-					//
+					await Navigation.PushPopupAsync(new MoverMesa());
 
 					return;
 				}

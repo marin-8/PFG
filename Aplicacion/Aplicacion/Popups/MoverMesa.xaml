@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<rg:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.MoverMesa"
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+
+    <StackLayout
+        VerticalOptions="Center"
+        HorizontalOptions="FillAndExpand"
+        Padding="20,0">
+
+        <Frame
+            Padding="0"
+            BackgroundColor="Blue">
+
+            <Label
+                Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                Padding="10"/>
+
+        </Frame>
+
+    </StackLayout>
+
+</rg:PopupPage>
