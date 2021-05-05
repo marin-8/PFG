@@ -35,6 +35,12 @@ namespace PFG.Gestor
 
 			switch(tipoComando)
 			{
+				case TiposComando.Error:
+				{
+					Procesar_Error(IP);
+					break;
+				}
+
 				case TiposComando.IniciarSesion:
 				{
 					comandoRespuesta =
@@ -178,6 +184,17 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.EliminarMesa:
+				{
+					comandoRespuesta =
+						Procesar_EliminarMesa(
+							Comando.DeJson
+								<Comando_EliminarMesa>
+									(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -203,6 +220,16 @@ namespace PFG.Gestor
 			}
 
 			return comandoRespuesta;
+		}
+
+		private static async void Procesar_Error(string IP)
+		{
+			string mensaje = "Ha ocurrido un error procesando el comando en el servidor.\nSi esto vuelve a ocurrir, por favor contacta con el desarrollador.\nGracias";
+
+			await Task.Run(() =>
+			{
+				new Comando_Error(mensaje).Enviar(IP);
+			});
 		}
 
 		private static string Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
@@ -489,6 +516,26 @@ namespace PFG.Gestor
 
 			mesaOrigen.SitioX = Comando.NuevoSitioX;
 			mesaOrigen.SitioY = Comando.NuevoSitioY;
+
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+		}
+
+		private static string Procesar_EliminarMesa(Comando_EliminarMesa Comando)
+		{
+			bool correcto = true;
+			string mensaje = "";
+
+			var mesaAEliminar = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).First();
+
+			if(mesaAEliminar.EstadoMesa == EstadosMesa.Vacia)
+			{
+				GestionMesas.Mesas.Remove(mesaAEliminar);
+			}
+			else
+			{
+				correcto = false;
+				mensaje = "Solo se puede eliminar una mesa si está vacía y limpia";
+			}			
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}

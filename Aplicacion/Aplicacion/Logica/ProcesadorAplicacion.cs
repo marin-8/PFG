@@ -28,6 +28,13 @@ namespace PFG.Aplicacion
 
 			switch(tipoComando)
 			{
+				case TiposComando.Error:
+				{
+					Procesar_Error(ComandoJson);
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -48,6 +55,19 @@ namespace PFG.Aplicacion
 			}
 
 			return comandoRespuesta;
+		}
+
+		private static void Procesar_Error(string ComandoJson)
+		{
+			try
+			{
+				var comando = Comando.DeJson<Comando_Error>(ComandoJson);
+				UserDialogs.Instance.Alert(comando.Mensaje, "Error en el Gestor", "Aceptar");
+			}
+			catch
+			{
+				UserDialogs.Instance.Alert("Ha ocurrido un error recibiendo un comando del Gestor.\nSi esto vuelve a ocurrir, por favor contacta con el desarrollador.\nGracias",  "Error en la Aplicación", "Aceptar");
+			}
 		}
 
 		//private string Procesar_XXXXX(Comando_XXXXX Comando)

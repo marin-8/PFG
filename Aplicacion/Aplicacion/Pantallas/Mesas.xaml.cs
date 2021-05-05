@@ -23,10 +23,6 @@ namespace PFG.Aplicacion
 {
 	public partial class Mesas : ContentPage
 	{
-		// TODO - Modificar número mesa
-		// TODO - Mover mesa
-		// TODO - Eliminar mesa
-
 	// ============================================================================================== //
 
 		// Variables y constantes
@@ -182,9 +178,22 @@ namespace PFG.Aplicacion
 
 				if(opcion == OpcionesMesaExistente[2]) // Eliminar
 				{
-					//
+					if(await UserDialogs.Instance.ConfirmAsync($"¿Eliminar la Mesa '{mesaSeleccionada.Numero}'?", "Confirmar eliminación", "Eliminar", "Cancelar"))
+					{
+						UserDialogs.Instance.ShowLoading("Eliminando mesa...");
 
-					return;
+						var comandoRespuesta = await Task.Run(() =>
+						{
+							string respuestaGestor = new Comando_EliminarMesa(mesaSeleccionada.Numero).Enviar(Global.IPGestor);
+							return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+						});
+
+						UserDialogs.Instance.HideLoading();
+
+						Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+
+						return;
+					}
 				}
 			}
 		}
