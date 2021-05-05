@@ -21,30 +21,10 @@
     </ContentPage.ToolbarItems>
 
     <Grid
+        x:Name="MapaGrid"
         ColumnSpacing="0"
-        RowSpacing="0">
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="20"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
-
-        <Grid
-            x:Name="MapaGrid"
-            Grid.Column="1"
-            Grid.Row="1"
-            ColumnSpacing="0"
-            RowSpacing="0"
-            Margin="0"
-            Padding="0"/>
-
-    </Grid>
+        RowSpacing="0"
+        Margin="0"
+        Padding="20"/>
 
 </ContentPage>

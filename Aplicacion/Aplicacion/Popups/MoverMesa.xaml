@@ -6,23 +6,32 @@
     x:Class="PFG.Aplicacion.MoverMesa"
     xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
 
-    <StackLayout
-        VerticalOptions="Center"
-        HorizontalOptions="FillAndExpand"
-        Padding="20,0">
+    <Frame 
+        BackgroundColor="White"
+        Margin="20">
 
-        <Frame
-            Padding="0"
-            BackgroundColor="Blue">
+        <StackLayout
+            Spacing="0">
 
             <Label
-                Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-                Padding="10"/>
+                Text="Selecciona sitio destino"
+                FontSize="20"
+                TextColor="Black"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"/>
 
-        </Frame>
+            <BoxView HeightRequest="20" Color="Transparent"/>
 
-    </StackLayout>
+            <Grid
+                x:Name="MapaGrid"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                ColumnSpacing="0"
+                RowSpacing="0"
+                Margin="0"/>
+
+        </StackLayout>
+
+    </Frame>
 
 </rg:PopupPage>

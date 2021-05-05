@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-    
+
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -9,26 +9,12 @@
     
     BackgroundColor="#2196F3">
 
-    <Grid
-        ColumnSpacing="0"
-        RowSpacing="0">
+    <StackLayout
+        Spacing="0"
+        Padding="40"
+        VerticalOptions="CenterAndExpand">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <StackLayout
-            Spacing="0"
-            Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
-
-            <Label
+        <Label
                 x:Name="IniciarSesionLabel"
                 Text="Iniciar sesión"
                 FontSize="46"
@@ -36,9 +22,9 @@
                 FontAttributes="Bold"
                 HorizontalTextAlignment="Center"/>
 
-            <BoxView HeightRequest="60" Color="Transparent"/>
+        <BoxView HeightRequest="60" Color="Transparent"/>
 
-            <Entry
+        <Entry
                 x:Name="IPGestor"
                 Text="192.168.1.130"
                 Placeholder="IP del Gestor (ej. 192.168.1.130)"
@@ -48,9 +34,9 @@
                 ClearButtonVisibility="WhileEditing"
                 MaxLength="15"/>
 
-            <BoxView HeightRequest="10" Color="Transparent"/>
+        <BoxView HeightRequest="10" Color="Transparent"/>
 
-            <Entry
+        <Entry
                 x:Name="Usuario"
                 Text="desarrollador"
                 Placeholder="Usuario"
@@ -60,9 +46,9 @@
                 ClearButtonVisibility="WhileEditing"
                 MaxLength="20"/>
 
-            <BoxView HeightRequest="10" Color="Transparent"/>
+        <BoxView HeightRequest="10" Color="Transparent"/>
 
-            <Entry
+        <Entry
                 x:Name="Contrasena"
                 Text="qwertyuiop"
                 Placeholder="Contraseña"
@@ -73,9 +59,9 @@
                 IsPassword="true"
                 MaxLength="20"/>
 
-            <BoxView HeightRequest="60" Color="Transparent"/>
+        <BoxView HeightRequest="60" Color="Transparent"/>
 
-            <Button
+        <Button
                 x:Name="IniciarSesionB"
                 Text="Iniciar sesión"
                 FontSize="26"
@@ -84,8 +70,6 @@
                 BackgroundColor="LimeGreen"
                 Clicked="IniciarSesion_Clicked"/>
 
-        </StackLayout>
-
-    </Grid>
+    </StackLayout>
 
 </ContentPage>

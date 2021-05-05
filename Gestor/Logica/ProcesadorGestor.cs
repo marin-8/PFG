@@ -167,6 +167,17 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.ModificarMesaSitio:
+				{
+					comandoRespuesta =
+						Procesar_ModificarMesaSitio(
+							Comando.DeJson
+								<Comando_ModificarMesaSitio>
+									(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -420,12 +431,12 @@ namespace PFG.Gestor
 
 			var nuevaMesa = Comando.NuevaMesa;
 
-			if(GestionMesas.Mesas.Where(m => m.Numero == nuevaMesa.Numero).Any())
+			if(GestionMesas.Mesas.Any(m => m.Numero == nuevaMesa.Numero))
 			{
 				correcto = false;
 				mensaje = "Alguien ha creado una mesa con el mismo Número antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya";
 			}
-			else if(GestionMesas.Mesas.Where(m => m.SitioX == nuevaMesa.SitioX && m.SitioY == nuevaMesa.SitioY).Any())
+			else if(GestionMesas.Mesas.Any(m => m.SitioX == nuevaMesa.SitioX && m.SitioY == nuevaMesa.SitioY))
 			{
 				correcto = false;
 				mensaje = "Alguien ha creado una mesa en el mismo Sitio antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya";
@@ -443,7 +454,7 @@ namespace PFG.Gestor
 			bool correcto = true;
 			string mensaje = "";
 
-			if(GestionMesas.Mesas.Where(m => m.Numero == Comando.NuevoNumeroMesa).Any())
+			if(GestionMesas.Mesas.Any(m => m.Numero == Comando.NuevoNumeroMesa))
 			{
 				correcto = false;
 				mensaje = "Alguien ha creado una mesa con el mismo Número antes de que se haya cambiado el número de la tuya, por lo que no se ha modificado";
@@ -455,6 +466,29 @@ namespace PFG.Gestor
 					.First()
 						.Numero = Comando.NuevoNumeroMesa;
 			}
+
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+		}
+
+		private static string Procesar_ModificarMesaSitio(Comando_ModificarMesaSitio Comando)
+		{
+			bool correcto = true;
+			string mensaje = "";
+
+			Func<Mesa,bool> consultaMesaEnSitioDestino = (m) => m.SitioX == Comando.NuevoSitioX && m.SitioY == Comando.NuevoSitioY;
+
+			var mesaOrigen = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).First();
+
+			if(GestionMesas.Mesas.Any(consultaMesaEnSitioDestino))
+			{
+				var mesaDestino = GestionMesas.Mesas.Where(consultaMesaEnSitioDestino).First();
+			
+				mesaDestino.SitioX = mesaOrigen.SitioX;
+				mesaDestino.SitioY = mesaOrigen.SitioY;
+			}
+
+			mesaOrigen.SitioX = Comando.NuevoSitioX;
+			mesaOrigen.SitioY = Comando.NuevoSitioY;
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}

@@ -33,7 +33,7 @@ namespace PFG.Aplicacion
 
 		public static Mesas Instancia { get; private set; }
 
-		private const int ESPACIO_ENTRE_MESAS = 10;
+		public const int ESPACIO_ENTRE_MESAS = 10;
 
 		private byte ColumnasMesas;
 		private byte FilasMesas;
@@ -176,8 +176,7 @@ namespace PFG.Aplicacion
 
 				if(opcion == OpcionesMesaExistente[1]) // Mover
 				{
-					await Navigation.PushPopupAsync(new MoverMesa());
-
+					await Navigation.PushPopupAsync(new MoverMesa(ColumnasMesas, FilasMesas, MesasExistentes, mesaSeleccionada.Numero, GenerarBotonMesa, MoverMesa));
 					return;
 				}
 
@@ -209,7 +208,7 @@ namespace PFG.Aplicacion
 			Procesar_RecibirMesas(comandoRespuesta); 
 		}
 
-		private Button GenerarBotonMesa(byte GridX, byte GridY)
+		private Button GenerarBotonMesa(byte GridX, byte GridY, EventHandler EventoMesaPulsada)
 		{
 			var buttonMesa = new Button()
 			{
@@ -220,7 +219,7 @@ namespace PFG.Aplicacion
 				BackgroundColor=Color.FromRgb(240, 240, 240),
 				BindingContext=$"{GridX}.{GridY}"
 			};
-			buttonMesa.Clicked += MesaPulsada;
+			buttonMesa.Clicked += EventoMesaPulsada;
 
 			return buttonMesa;
 		}
@@ -312,6 +311,21 @@ namespace PFG.Aplicacion
 
 			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
 		}
+
+		private async void MoverMesa(byte numeroMesaOrigen, byte nuevoSitioX, byte nuevoSitioY)
+		{
+			UserDialogs.Instance.ShowLoading("Moviendo mesa...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_ModificarMesaSitio(numeroMesaOrigen, nuevoSitioX, nuevoSitioY).Enviar(Global.IPGestor);
+				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+			});
+
+			UserDialogs.Instance.HideLoading();
+
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+		}
 		
 	// ============================================================================================== //
 
@@ -347,7 +361,7 @@ namespace PFG.Aplicacion
 					for(int f = 0 ; f < FilasMesas ; f++)
 					{
 						MapaGrid.Children.Add(
-							GenerarBotonMesa((byte)(c+1), (byte)(f+1)),
+							GenerarBotonMesa((byte)(c+1), (byte)(f+1), MesaPulsada),
 							c*2,
 							f*2);
 					}
