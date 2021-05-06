@@ -197,6 +197,17 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.CrearArticulo:
+				{
+					comandoRespuesta =
+						Procesar_CrearArticulo(
+							Comando.DeJson
+								<Comando_CrearArticulo>
+									(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -536,9 +547,27 @@ namespace PFG.Gestor
 		{
 			return new Comando_MandarArticulos
 			(
-				GestionArticulosCategorias.Articulos.ToArray()
+				GestionArticulos.Articulos.ToArray()
 			)
 			.ToString();
+		}
+
+		private static string Procesar_CrearArticulo(Comando_CrearArticulo Comando)
+		{
+			bool correcto = true;
+			string mensaje = "";
+
+			if(GestionArticulos.Articulos.Select(a => a.Nombre).Contains(Comando.NuevoArticulo.Nombre))
+			{
+				correcto = false;
+				mensaje = "Alguien ha creado un artículo con el mismo Nombre antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo";
+			}
+			else
+			{
+				GestionArticulos.Articulos.Add(Comando.NuevoArticulo);
+			}
+
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

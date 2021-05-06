@@ -84,19 +84,19 @@ namespace PFG.Aplicacion
 				}
 				case ResultadosIniciarSesion.UsuarioNoExiste:
 				{
-					UserDialogs.Instance.Alert("El usuario no existe", "Alerta", "Aceptar");
+					await UserDialogs.Instance.AlertAsync("El usuario no existe", "Alerta", "Aceptar");
 
 					break;
 				}
 				case ResultadosIniciarSesion.ContrasenaIncorrecta:
 				{
-					UserDialogs.Instance.Alert("Contraseña incorrecta", "Alerta", "Aceptar");
+					await UserDialogs.Instance.AlertAsync("Contraseña incorrecta", "Alerta", "Aceptar");
 
 					break;
 				}
 				case ResultadosIniciarSesion.UsuarioYaConectado:
 				{
-					UserDialogs.Instance.Alert("Usuario ya conectado", "Alerta", "Aceptar");
+					await UserDialogs.Instance.AlertAsync("Usuario ya conectado", "Alerta", "Aceptar");
 
 					break;
 				}

@@ -35,7 +35,9 @@ namespace PFG.Comun
 		}
 
 		[JsonConstructor]
+		#pragma warning disable IDE0051
 		private Comando_ModificarUsuarioNombreUsuario(TiposComando TipoComandoJson, string Usuario, string NuevoNombreUsuario)
+		#pragma warning restore IDE0051
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(Usuario, NuevoNombreUsuario);

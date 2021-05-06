@@ -10,7 +10,5 @@ namespace PFG.Gestor
 	public static class Global
 	{
 		
-
-
 	}
 }

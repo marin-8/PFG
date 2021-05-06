@@ -28,5 +28,6 @@ namespace PFG.Comun
 
 		PedirArticulos = 20,
 		MandarArticulos = 21,
+		CrearArticulo = 22,
 	}
 }

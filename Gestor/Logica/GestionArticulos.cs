@@ -12,7 +12,7 @@ using PFG.Comun;
 
 namespace PFG.Gestor
 {
-	public static class GestionArticulosCategorias
+	public static class GestionArticulos
 	{
 		const string RUTA_ARCHIVO_JSON_ARTICULOS = @".\Archivos\Articulos.json";
 

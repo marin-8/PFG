@@ -55,13 +55,13 @@ namespace PFG.Aplicacion
 		{
 			Usuario nuevoUsuario = new("", "", "", Roles.Ninguno);
 
-			string nombre = await PedirAlUsuarioStringCorrecto("Nombre", true);
+			string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", true);
 			if(nombre == null) return;
 			nuevoUsuario.Nombre = nombre;	
 			
 			while(true)
 			{
-				string nombreUsuario = await PedirAlUsuarioStringCorrecto("Nombre de Usuario", false);
+				string nombreUsuario = await Global.PedirAlUsuarioStringCorrecto("Nombre de Usuario", false);
 				if(nombreUsuario == null) return;
 				nuevoUsuario.NombreUsuario = nombreUsuario;
 
@@ -73,7 +73,7 @@ namespace PFG.Aplicacion
 					break;
 			}
 
-			string contrasena = await PedirAlUsuarioStringCorrecto("Contraseña", false);
+			string contrasena = await Global.PedirAlUsuarioStringCorrecto("Contraseña", false);
 			if(contrasena == null) return;
 			nuevoUsuario.Contrasena = contrasena;	
 
@@ -140,7 +140,7 @@ namespace PFG.Aplicacion
 
 				while(true)
 				{
-					nuevoNombre = await PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {usuarioPulsado.Nombre})", true);
+					nuevoNombre = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {usuarioPulsado.Nombre})", true);
 					if(nuevoNombre == null) return;
 					if(nuevoNombre != usuarioPulsado.Nombre) break;
 
@@ -170,7 +170,7 @@ namespace PFG.Aplicacion
 
 				while(true)
 				{
-					nuevoNombreUsuario = await PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", true);
+					nuevoNombreUsuario = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", true);
 					if(nuevoNombreUsuario == null) return;
 
 					RefrescarUsuarios();
@@ -208,7 +208,7 @@ namespace PFG.Aplicacion
 
 				while(true)
 				{
-					nuevaContrasena = await PedirAlUsuarioStringCorrecto($"Nueva Contraseña\n(actual = {usuarioPulsado.Contrasena})", true);
+					nuevaContrasena = await Global.PedirAlUsuarioStringCorrecto($"Nueva Contraseña\n(actual = {usuarioPulsado.Contrasena})", true);
 					if(nuevaContrasena == null) return;
 					if(nuevaContrasena != usuarioPulsado.Contrasena) break;
 
@@ -298,40 +298,6 @@ namespace PFG.Aplicacion
 			Procesar_RecibirUsuarios(comandoRespuesta); 
 
 			UserDialogs.Instance.HideLoading();
-		}
-
-		private async Task<string> PedirAlUsuarioStringCorrecto(string Titulo, bool PermitirEspacios)
-		{
-			string stringCorrecto = null;
-
-			while(stringCorrecto == null)
-			{
-				var configuracionPrompt = new PromptConfig
-				{
-					InputType = InputType.Name,
-					IsCancellable = true,
-					Message = Titulo,
-					MaxLength = Comun.Global.MAX_CARACTERES_LOGIN
-				};
-
-				var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
-
-				if(!resultado.Ok) return null;
-
-				stringCorrecto = resultado.Text;
-
-				if(stringCorrecto.Equals("")) {
-					await DisplayAlert("Alerta", "No puede estar vacío", "Aceptar"); stringCorrecto = null; continue; }
-
-				string cp = Comun.Global.CARACTERES_PERMITIDOS_LOGIN;
-
-				if(!stringCorrecto.All(PermitirEspacios ? (cp+" ").Contains : cp.Contains)) {
-					await DisplayAlert("Alerta", $"Solo se pueden usar letras y números", "Aceptar"); stringCorrecto = null; continue; }
-
-				return stringCorrecto;
-			}
-
-			return null;
 		}
 
 		private static string[] RolesBaseToStringArray()

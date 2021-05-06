@@ -53,7 +53,23 @@ namespace PFG.Aplicacion
 
 		private async void NuevoArticulo_Clicked(object sender, EventArgs e)
 		{
+			Articulo nuevoArticulo = new("", "", 0f);
 
+			while(true)
+			{
+				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", true);
+				if(nombre == null) return;
+				nuevoArticulo.Nombre = nombre;	
+
+				RefrescarArticulos();
+
+				var articulos = Global.CategoriasLocal.SelectMany(cl => cl).ToList();
+
+				if(articulos.Any(a => a.Nombre.Equals(nombre)))
+					await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
+				else
+					break;
+			}
 		}
 
 		private void Refrescar_Clicked(object sender, EventArgs e)

@@ -42,7 +42,7 @@ namespace PFG.Gestor
 		{
 			GestionUsuarios.Cargar();
 			GestionMesas.Cargar();
-			GestionArticulosCategorias.Cargar();
+			GestionArticulos.Cargar();
 
 			ProcesadorMensajesRecibidos = new(RegistroIPs, RegistroComandos);
 
@@ -59,7 +59,7 @@ namespace PFG.Gestor
 
 			GestionUsuarios.Guardar();
 			GestionMesas.Guardar();
-			GestionArticulosCategorias.Guardar();
+			GestionArticulos.Guardar();
 		}
 
 		private void CerrarYSalir_Click(object sender, EventArgs e)
