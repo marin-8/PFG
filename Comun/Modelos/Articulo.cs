@@ -10,11 +10,11 @@ namespace PFG.Comun
 	{
 		[JsonProperty("1")] public string Nombre { get; set; }
 
-		[JsonProperty("2")] public Categoria Categoria { get; set; }
+		[JsonProperty("2")] public string Categoria { get; set; }
 
 		[JsonProperty("3")] public float Precio { get; set; }
 
-		public Articulo(string Nombre, Categoria Categoria, float Precio)
+		public Articulo(string Nombre, string Categoria, float Precio)
 		{
 			this.Nombre = Nombre;
 

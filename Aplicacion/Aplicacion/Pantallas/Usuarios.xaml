@@ -26,15 +26,15 @@
         Padding="20">
 
         <ListView
-                x:Name="ListaUsuarios"
-                SelectionMode="None"
-                HasUnevenRows="True"
-                BackgroundColor="Transparent"
-                SeparatorVisibility="None"
-                IsPullToRefreshEnabled="True"
-                RefreshControlColor="Blue"
-                Refreshing="ListaUsuarios_Refresh"
-                ItemTapped="ListaUsuarios_ItemTapped">
+            x:Name="ListaUsuarios"
+            SelectionMode="None"
+            HasUnevenRows="True"
+            BackgroundColor="Transparent"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="True"
+            RefreshControlColor="Blue"
+            Refreshing="ListaUsuarios_Refresh"
+            ItemTapped="ListaUsuarios_ItemTapped">
 
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="pfgcomun:Usuario">

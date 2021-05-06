@@ -25,5 +25,8 @@ namespace PFG.Comun
 		ModificarMesaNumero = 17,
 		ModificarMesaSitio = 18,
 		EliminarMesa = 19,
+
+		PedirArticulos = 20,
+		MandarArticulos = 21,
 	}
 }

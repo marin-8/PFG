@@ -11,7 +11,7 @@ namespace PFG.Comun
 	public class Global
 	{
 		public const byte MAX_CARACTERES_LOGIN = 20;
-		public const string CARACTERES_PERMITIDOS_LOGIN = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		public const string CARACTERES_PERMITIDOS_LOGIN = "abcdefghijklmnopqrstuvwxyzáéíóúABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚ0123456789";
 
 		public const byte MAXIMO_COLUMNAS_MESAS = 8;
 		public const byte MAXIMO_FILAS_MESAS = 12;

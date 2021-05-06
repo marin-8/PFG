@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -25,8 +26,7 @@ namespace PFG.Aplicacion
 		public static byte FilasMesas;
 		public static List<Mesa> MesasLocal = new();
 
-		public static List<Articulo> ArticulosLocal = new();
-		public static List<Categoria> CategoriasLocal = new();
+		public static ObservableCollection<List<Articulo>> CategoriasLocal = new();
 
 		public static void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
 		{

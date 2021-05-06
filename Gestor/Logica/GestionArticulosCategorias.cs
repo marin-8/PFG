@@ -17,15 +17,11 @@ namespace PFG.Gestor
 		const string RUTA_ARCHIVO_JSON_ARTICULOS = @".\Archivos\Articulos.json";
 
 		public static List<Articulo> Articulos { get; private set; } = new();
-		public static List<Categoria> Categorias { get; private set; } = new();
 
 		public static void Cargar()
 		{
 			string articulosJsonString = File.ReadAllText(RUTA_ARCHIVO_JSON_ARTICULOS);
 			Articulos = JsonConvert.DeserializeObject<List<Articulo>>(articulosJsonString);
-
-			foreach(var articulo in Articulos)
-				Categorias.Add(articulo.Categoria);
 		}
 
 		public static void Guardar()

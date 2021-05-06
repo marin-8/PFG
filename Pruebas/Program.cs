@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
 
@@ -38,6 +39,12 @@ namespace PFG.Pruebas
 			//var cmd2_str = cmd2.ToString();
 
 			//byte num = byte.Parse("07");
+
+			//string a = "aeiou-áéíóú";
+
+			//byte[] b = Encoding.UTF8.GetBytes(a);
+
+			//string c = Encoding.UTF8.GetString(b);
 		}
 	}
 }

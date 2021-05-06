@@ -189,6 +189,14 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.PedirArticulos:
+				{
+					comandoRespuesta =
+						Procesar_PedirArticulos();
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -522,6 +530,15 @@ namespace PFG.Gestor
 			}			
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+		}
+
+		private static string Procesar_PedirArticulos()
+		{
+			return new Comando_MandarArticulos
+			(
+				GestionArticulosCategorias.Articulos.ToArray()
+			)
+			.ToString();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

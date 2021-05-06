@@ -78,7 +78,7 @@ namespace PFG.Comun
 
 		private static void Enviar_EnviarMensaje(Socket Destino, string Mensaje)
 		{
-			byte[] data = Encoding.ASCII.GetBytes(Mensaje);
+			byte[] data = Encoding.UTF8.GetBytes(Mensaje);
 
 			Destino.Send(data);
 		}
@@ -95,7 +95,7 @@ namespace PFG.Comun
 
 			byte[] data = new byte[bytesRecibidos];
 			Array.Copy(buffer, data, bytesRecibidos);
-			string respuestaDestino = Encoding.ASCII.GetString(data);
+			string respuestaDestino = Encoding.UTF8.GetString(data);
 
 			return respuestaDestino;
 		}
@@ -131,13 +131,13 @@ namespace PFG.Comun
             byte[] bufferRecibido = new byte[numeroBytesRecibidos];
             Array.Copy(Buffer, bufferRecibido, numeroBytesRecibidos);
 
-            string mensajeRecibido = Encoding.ASCII.GetString(bufferRecibido);
+            string mensajeRecibido = Encoding.UTF8.GetString(bufferRecibido);
 
 			IPEndPoint clienteInfo = (IPEndPoint)cliente.RemoteEndPoint;
 			string ipCliente = clienteInfo.Address.ToString();
 			string resupuesta = FuncionAlRecibir(ipCliente, mensajeRecibido);
 
-			byte[] respuestaData = Encoding.ASCII.GetBytes(resupuesta);
+			byte[] respuestaData = Encoding.UTF8.GetBytes(resupuesta);
 			cliente.Send(respuestaData);
         }
 
