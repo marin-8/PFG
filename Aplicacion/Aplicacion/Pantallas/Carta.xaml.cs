@@ -59,7 +59,6 @@ namespace PFG.Aplicacion
 			{
 				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", true);
 				if(nombre == null) return;
-				nuevoArticulo.Nombre = nombre;	
 
 				RefrescarArticulos();
 
@@ -68,8 +67,39 @@ namespace PFG.Aplicacion
 				if(articulos.Any(a => a.Nombre.Equals(nombre)))
 					await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
 				else
-					break;
+					{ nuevoArticulo.Nombre = nombre; break; }
 			}
+
+			while(true)
+			{
+				var configuracionPrompt = new PromptConfig
+				{
+					InputType = InputType.DecimalNumber,
+					IsCancellable = true,
+					Title = "Precio",
+					Message = $"Mínimo: {Comun.Global.MINIMO_PRECIO_ARTICULO} €\nMáximo: {Comun.Global.MAXIMO_PRECIO_ARTICULO} €",
+					OkText = "Aceptar",
+					CancelText = "Cancelar",
+					MaxLength = (int)Math.Floor(Math.Log10(Comun.Global.MAXIMO_PRECIO_ARTICULO*100+1)+1),
+				};
+
+				var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
+				if (!resultado.Ok) return;
+
+				if(!float.TryParse(resultado.Text, out float precio) || float.Parse(resultado.Text) < Comun.Global.MINIMO_PRECIO_ARTICULO || float.Parse(resultado.Text) > Comun.Global.MAXIMO_PRECIO_ARTICULO) {
+					await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
+
+				nuevoArticulo.Precio = precio;
+
+				break;
+			}
+
+			RefrescarArticulos();
+
+			var categoriasExistentesMasOpcionNueva = Global.CategoriasLocal.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+			categoriasExistentesMasOpcionNueva.Add("+ Nueva");
+
+			// TODO - Seguir aquí
 		}
 
 		private void Refrescar_Clicked(object sender, EventArgs e)

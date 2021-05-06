@@ -16,6 +16,9 @@ namespace PFG.Comun
 		public const byte MAXIMO_COLUMNAS_MESAS = 8;
 		public const byte MAXIMO_FILAS_MESAS = 12;
 
+		public const float MINIMO_PRECIO_ARTICULO = 0.01f;
+		public const float MAXIMO_PRECIO_ARTICULO = 999.99f;
+
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
 		{
 			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new();
