@@ -1,8 +1,17 @@
 
-    Cosas futuras:
+    Mejoras:
     
         - Sistema de empezar/terminar día de trabajo
             - Durante el día de trabajo no se puede:
                 - Modificar usuarios
                 - Modificar mesas
                 - Modificar carta
+            - La App lo pide al hacer login
+            - El Gestor lo envía si cambia
+                
+        - Bloquear páginas en base al rol del usuario logueado
+        - Y quitar tanto "RefrescarX" en las pantallas de configuración
+        
+        - Revisar mayúsculas/minúsculas
+        - Revisar tipos (listas, enteros...)
+        - Revisar comparaciones de strings (usar Equals en vez de ==)

@@ -55,12 +55,12 @@ namespace PFG.Aplicacion
 		{
 			Articulo nuevoArticulo = new("", "", 0f);
 
+			RefrescarArticulos();
+
 			while(true)
 			{
-				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", true);
+				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", 100, true);
 				if(nombre == null) return;
-
-				RefrescarArticulos();
 
 				var articulos = Global.CategoriasLocal.SelectMany(cl => cl).ToList();
 
@@ -94,12 +94,39 @@ namespace PFG.Aplicacion
 				break;
 			}
 
-			RefrescarArticulos();
-
-			var categoriasExistentesMasOpcionNueva = Global.CategoriasLocal.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+			var categorias = Global.CategoriasLocal.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+			var categoriasExistentesMasOpcionNueva = categorias;
 			categoriasExistentesMasOpcionNueva.Add("+ Nueva");
 
-			// TODO - Seguir aquí
+			string categoriaONueva = await UserDialogs.Instance.ActionSheetAsync("Categoría", "Cancelar", null, null, categoriasExistentesMasOpcionNueva.ToArray());
+			if(categoriaONueva.Equals("Cancelar")) return;
+			
+			if(!categoriaONueva.Equals("+ Nueva"))
+				nuevoArticulo.Categoria = categoriaONueva;
+			else
+			{
+				while(true)
+				{
+					string nuevaCategoria = await Global.PedirAlUsuarioStringCorrecto("Nueva categoría", 100, true);
+					if(nuevaCategoria == null) return;
+
+					if(categorias.Contains(nuevaCategoria))
+						await UserDialogs.Instance.AlertAsync("Ya existe una Categoría con este nombre", "Alerta", "Aceptar");
+					else
+						{ nuevoArticulo.Categoria = nuevaCategoria; break; }
+				}
+			}
+
+			UserDialogs.Instance.ShowLoading("Creando artículo...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_CrearArticulo(nuevoArticulo).Enviar(Global.IPGestor);
+				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+			});
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarArticulos);
+
+			UserDialogs.Instance.HideLoading();
 		}
 
 		private void Refrescar_Clicked(object sender, EventArgs e)
@@ -116,9 +143,24 @@ namespace PFG.Aplicacion
 			RefrescarArticulos();
 		}
 
-		private async void ListaArticulos_ItemTapped(object sender, EventArgs e)
+		private static readonly string[] OpcionesArticulo = new string[]
 		{
+			"Cambiar Nombre",
+			"Cambiar Precio",
+			"Cambiar Categoría",
+			"Eliminar"
+		};
 
+		private async void ListaArticulos_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
+			var articuloPulsado = (Articulo)e.Item;
+
+			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{articuloPulsado.Nombre}", "Cancelar", null, null, OpcionesArticulo);
+			if(opcion.Equals("Cancelar")) return;
+
+			RefrescarArticulos();
+
+			//if(opcion.e)
 		}
 
 	// ============================================================================================== //

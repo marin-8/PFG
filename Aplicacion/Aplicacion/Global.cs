@@ -43,7 +43,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		public static async Task<string> PedirAlUsuarioStringCorrecto(string Titulo, bool PermitirEspacios)
+		public static async Task<string> PedirAlUsuarioStringCorrecto(string Titulo, int NumeroCaracteresMaximo, bool PermitirEspacios)
 		{
 			string stringCorrecto = null;
 
@@ -54,7 +54,7 @@ namespace PFG.Aplicacion
 					InputType = InputType.Name,
 					IsCancellable = true,
 					Message = Titulo,
-					MaxLength = Comun.Global.MAX_CARACTERES_LOGIN
+					MaxLength = NumeroCaracteresMaximo
 				};
 
 				var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);

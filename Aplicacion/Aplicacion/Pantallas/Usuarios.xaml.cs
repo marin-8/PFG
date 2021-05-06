@@ -55,13 +55,13 @@ namespace PFG.Aplicacion
 		{
 			Usuario nuevoUsuario = new("", "", "", Roles.Ninguno);
 
-			string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", true);
+			string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", Comun.Global.MAX_CARACTERES_LOGIN, true);
 			if(nombre == null) return;
 			nuevoUsuario.Nombre = nombre;	
 			
 			while(true)
 			{
-				string nombreUsuario = await Global.PedirAlUsuarioStringCorrecto("Nombre de Usuario", false);
+				string nombreUsuario = await Global.PedirAlUsuarioStringCorrecto("Nombre de Usuario", Comun.Global.MAX_CARACTERES_LOGIN, false);
 				if(nombreUsuario == null) return;
 				nuevoUsuario.NombreUsuario = nombreUsuario;
 
@@ -73,7 +73,7 @@ namespace PFG.Aplicacion
 					break;
 			}
 
-			string contrasena = await Global.PedirAlUsuarioStringCorrecto("Contraseña", false);
+			string contrasena = await Global.PedirAlUsuarioStringCorrecto("Contraseña", Comun.Global.MAX_CARACTERES_LOGIN, false);
 			if(contrasena == null) return;
 			nuevoUsuario.Contrasena = contrasena;	
 
@@ -140,7 +140,7 @@ namespace PFG.Aplicacion
 
 				while(true)
 				{
-					nuevoNombre = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {usuarioPulsado.Nombre})", true);
+					nuevoNombre = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {usuarioPulsado.Nombre})", Comun.Global.MAX_CARACTERES_LOGIN, true);
 					if(nuevoNombre == null) return;
 					if(nuevoNombre != usuarioPulsado.Nombre) break;
 
@@ -170,7 +170,7 @@ namespace PFG.Aplicacion
 
 				while(true)
 				{
-					nuevoNombreUsuario = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", true);
+					nuevoNombreUsuario = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", Comun.Global.MAX_CARACTERES_LOGIN, true);
 					if(nuevoNombreUsuario == null) return;
 
 					RefrescarUsuarios();
@@ -208,7 +208,7 @@ namespace PFG.Aplicacion
 
 				while(true)
 				{
-					nuevaContrasena = await Global.PedirAlUsuarioStringCorrecto($"Nueva Contraseña\n(actual = {usuarioPulsado.Contrasena})", true);
+					nuevaContrasena = await Global.PedirAlUsuarioStringCorrecto($"Nueva Contraseña\n(actual = {usuarioPulsado.Contrasena})", Comun.Global.MAX_CARACTERES_LOGIN, true);
 					if(nuevaContrasena == null) return;
 					if(nuevaContrasena != usuarioPulsado.Contrasena) break;
 
