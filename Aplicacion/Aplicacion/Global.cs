@@ -1,7 +1,8 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 using Acr.UserDialogs;
 
@@ -17,6 +18,12 @@ namespace PFG.Aplicacion
 
 		public static ControladorRed Servidor;
 		public static ProcesadorAplicacion ProcesadorMensajesRecibidos;
+
+		public static ObservableCollection<Usuario> UsuariosLocal = new();
+
+		public static byte ColumnasMesas;
+		public static byte FilasMesas;
+		public static List<Mesa> MesasLocal = new();
 
 		public static void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
 		{

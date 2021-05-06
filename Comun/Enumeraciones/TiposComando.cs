@@ -3,7 +3,6 @@ namespace PFG.Comun
 {
 	public enum TiposComando : byte
 	{
-		Error = 0,
 		ResultadoGenerico = 1,
 
 		IniciarSesion = 2,

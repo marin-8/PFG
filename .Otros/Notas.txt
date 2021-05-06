@@ -1,0 +1,8 @@
+
+    Cosas futuras:
+    
+        - Sistema de empezar/terminar día de trabajo
+            - Durante el día de trabajo no se puede:
+                - Modificar usuarios
+                - Modificar mesas
+                - Modificar carta

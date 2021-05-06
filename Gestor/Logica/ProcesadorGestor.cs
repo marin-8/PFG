@@ -35,12 +35,6 @@ namespace PFG.Gestor
 
 			switch(tipoComando)
 			{
-				case TiposComando.Error:
-				{
-					Procesar_Error(IP);
-					break;
-				}
-
 				case TiposComando.IniciarSesion:
 				{
 					comandoRespuesta =
@@ -220,16 +214,6 @@ namespace PFG.Gestor
 			}
 
 			return comandoRespuesta;
-		}
-
-		private static async void Procesar_Error(string IP)
-		{
-			string mensaje = "Ha ocurrido un error procesando el comando en el servidor.\nSi esto vuelve a ocurrir, por favor contacta con el desarrollador.\nGracias";
-
-			await Task.Run(() =>
-			{
-				new Comando_Error(mensaje).Enviar(IP);
-			});
 		}
 
 		private static string Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)

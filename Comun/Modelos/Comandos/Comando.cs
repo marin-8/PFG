@@ -12,16 +12,8 @@ namespace PFG.Comun
 
 		public static TiposComando Get_TipoComando_De_Json(string Json)
 		{
-			try
-			{
-				string tipoComando_string = JObject.Parse(Json)["0"].ToString();
-				return (TiposComando)Enum.Parse(typeof(TiposComando), tipoComando_string);
-			}
-			catch
-			{
-				string tipoComando_string = JObject.Parse(Json)["0"].ToString();
-				return (TiposComando)Enum.Parse(typeof(TiposComando), tipoComando_string);
-			}
+			string tipoComando_string = JObject.Parse(Json)["0"].ToString();
+			return (TiposComando)Enum.Parse(typeof(TiposComando), tipoComando_string);
 		}
 
 		protected Comando(TiposComando TipoComando)
@@ -31,26 +23,12 @@ namespace PFG.Comun
 
 		public static T DeJson<T>(string ComandoJson)
 		{
-			try
-			{
-				return JsonConvert.DeserializeObject<T>(ComandoJson);
-			}
-			catch
-			{
-				return JsonConvert.DeserializeObject<T>(ComandoJson);
-			}
+			return JsonConvert.DeserializeObject<T>(ComandoJson);
 		}
 
 		public override string ToString()
 		{
-			try
-			{
-				return JsonConvert.SerializeObject(this);
-			}
-			catch
-			{
-				return JsonConvert.SerializeObject(this);
-			}
+			return JsonConvert.SerializeObject(this);
 		}
 	}
 }

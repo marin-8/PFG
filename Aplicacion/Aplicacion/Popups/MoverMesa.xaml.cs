@@ -25,7 +25,7 @@ namespace PFG.Aplicacion
 		public MoverMesa(
 			byte ColumnasMesas,
 			byte FilasMesas,
-			Mesa[] MesasExistentes,
+			List<Mesa> MesasExistentes,
 			byte NumeroMesaSeleccionada,
 			Func<byte, byte, EventHandler, Button> GenerarBotonMesa,
 			Action<byte,byte,byte> EventoNuevoSitioSeleccionado)
@@ -63,7 +63,7 @@ namespace PFG.Aplicacion
 		private async void InicializarMapaGrid(
 			byte ColumnasMesas,
 			byte FilasMesas,
-			Mesa[] MesasExistentes,
+			List<Mesa> MesasExistentes,
 			byte NumeroMesaSeleccionada,
 			Func<byte, byte, EventHandler, Button> GenerarBotonMesa)
 		{

@@ -31,10 +31,6 @@ namespace PFG.Aplicacion
 
 		public const int ESPACIO_ENTRE_MESAS = 10;
 
-		private byte ColumnasMesas;
-		private byte FilasMesas;
-		private Mesa[] MesasExistentes;
-
 	// ============================================================================================== //
 
 		// Inicialización
@@ -106,13 +102,13 @@ namespace PFG.Aplicacion
 
 			bool condicionMesaSeleccionada(Mesa m) => m.SitioX == sitioPulsadoX && m.SitioY == sitioPulsadoY;
 
-			if (!MesasExistentes.Any(condicionMesaSeleccionada)) // Crear mesa
+			if (!Global.MesasLocal.Any(condicionMesaSeleccionada)) // Crear mesa
 			{
 				CrearMesa(sitioPulsadoX, sitioPulsadoY);
 			}
 			else
 			{
-				var mesaSeleccionada = MesasExistentes.Where(condicionMesaSeleccionada).First();
+				var mesaSeleccionada = Global.MesasLocal.Where(condicionMesaSeleccionada).First();
 
 				string opcion = await UserDialogs.Instance.ActionSheetAsync($"Mesa {mesaSeleccionada.Numero}", "Cancelar", null, null, OpcionesMesaExistente);
 				if(opcion.Equals("Cancelar")) return;
@@ -149,7 +145,7 @@ namespace PFG.Aplicacion
 
 						PedirMesas();
 
-						if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
+						if(Global.MesasLocal.Where(m => m.Numero == numeroNuevaMesa).Any())
 							await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 						else
 							break;
@@ -172,7 +168,7 @@ namespace PFG.Aplicacion
 
 				if(opcion == OpcionesMesaExistente[1]) // Mover
 				{
-					await Navigation.PushPopupAsync(new MoverMesa(ColumnasMesas, FilasMesas, MesasExistentes, mesaSeleccionada.Numero, GenerarBotonMesa, MoverMesa));
+					await Navigation.PushPopupAsync(new MoverMesa(Global.ColumnasMesas, Global.FilasMesas, Global.MesasLocal, mesaSeleccionada.Numero, GenerarBotonMesa, MoverMesa));
 					return;
 				}
 
@@ -300,7 +296,7 @@ namespace PFG.Aplicacion
 
 				PedirMesas();
 
-				if(MesasExistentes.Where(m => m.Numero == numeroNuevaMesa).Any())
+				if(Global.MesasLocal.Where(m => m.Numero == numeroNuevaMesa).Any())
 					await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 				else
 					break;
@@ -342,9 +338,9 @@ namespace PFG.Aplicacion
 
 		private async void Procesar_RecibirMesas(Comando_MandarMesas Comando)
 		{
-			ColumnasMesas = Comando.AnchoGrid;
-			FilasMesas = Comando.AltoGrid;
-			MesasExistentes = Comando.Mesas;
+			Global.ColumnasMesas = Comando.AnchoGrid;
+			Global.FilasMesas = Comando.AltoGrid;
+			Global.MesasLocal = Comando.Mesas.ToList();
 
 			UserDialogs.Instance.ShowLoading("Actualizando mapa mesas...");
 
@@ -353,21 +349,21 @@ namespace PFG.Aplicacion
 				MapaGrid.ColumnDefinitions.Clear();
 				MapaGrid.RowDefinitions.Clear();
 
-				for(int c = 0 ; c < ColumnasMesas-1; c++) {
+				for(int c = 0 ; c < Global.ColumnasMesas-1; c++) {
 					MapaGrid.ColumnDefinitions.Add(new());
 					MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)}); }
 				MapaGrid.ColumnDefinitions.Add(new());
 
-				for(int f = 0 ; f < FilasMesas-1 ; f++) {
+				for(int f = 0 ; f < Global.FilasMesas-1 ; f++) {
 					MapaGrid.RowDefinitions.Add(new());
 					MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)}); }
 				MapaGrid.RowDefinitions.Add(new());
 
 				MapaGrid.Children.Clear();
 
-				for(int c = 0 ; c < ColumnasMesas; c++)
+				for(int c = 0 ; c < Global.ColumnasMesas; c++)
 				{
-					for(int f = 0 ; f < FilasMesas ; f++)
+					for(int f = 0 ; f < Global.FilasMesas ; f++)
 					{
 						MapaGrid.Children.Add(
 							GenerarBotonMesa((byte)(c+1), (byte)(f+1), MesaPulsada),
@@ -376,7 +372,7 @@ namespace PFG.Aplicacion
 					}
 				}
 
-				foreach(var mesa in MesasExistentes)
+				foreach(var mesa in Global.MesasLocal)
 				{
 					var mesaMapaGrid = (Button)
 							MapaGrid.Children
