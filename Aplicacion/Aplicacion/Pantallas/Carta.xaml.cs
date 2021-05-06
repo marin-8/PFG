@@ -160,7 +160,136 @@ namespace PFG.Aplicacion
 
 			RefrescarArticulos();
 
-			//if(opcion.e)
+			if(opcion.Equals(OpcionesArticulo[0])) // Cambiar Nombre
+			{
+				string nuevoNombre = "";
+
+				while(true)
+				{
+					nuevoNombre = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {articuloPulsado.Nombre})", 100, true);
+					if(nuevoNombre == null) return;
+
+					var articulos = Global.CategoriasLocal.SelectMany(cl => cl).ToList();
+
+					if(articulos.Any(a => a.Nombre.Equals(nuevoNombre)))
+						await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
+					else
+						break;
+				}
+
+				UserDialogs.Instance.ShowLoading("Cambiando nombre...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarArticuloNombre(articuloPulsado.Nombre, nuevoNombre).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarArticulos();
+
+				return;
+			}
+
+			if(opcion.Equals(OpcionesArticulo[1])) // Cambiar Precio
+			{
+				float nuevoPrecio = 0f;
+
+				while(true)
+				{
+					var configuracionPrompt = new PromptConfig
+					{
+						InputType = InputType.DecimalNumber,
+						IsCancellable = true,
+						Title = $"Nuevo Precio\n(actual = {articuloPulsado.Precio} €)",
+						Message = $"Mínimo: {Comun.Global.MINIMO_PRECIO_ARTICULO} €\nMáximo: {Comun.Global.MAXIMO_PRECIO_ARTICULO} €",
+						OkText = "Aceptar",
+						CancelText = "Cancelar",
+						MaxLength = (int)Math.Floor(Math.Log10(Comun.Global.MAXIMO_PRECIO_ARTICULO*100+1)+1),
+					};
+
+					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
+					if (!resultado.Ok) return;
+
+					if(!float.TryParse(resultado.Text, out nuevoPrecio) || float.Parse(resultado.Text) < Comun.Global.MINIMO_PRECIO_ARTICULO || float.Parse(resultado.Text) > Comun.Global.MAXIMO_PRECIO_ARTICULO) {
+						await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
+
+					break;
+				}
+
+				UserDialogs.Instance.ShowLoading("Cambiando precio...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarArticuloPrecio(articuloPulsado.Nombre, nuevoPrecio).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarArticulos();
+
+				return;
+			}
+
+			if(opcion.Equals(OpcionesArticulo[2])) // Cambiar Categoría
+			{
+				string nuevaCategoria = "";
+
+				var categorias = Global.CategoriasLocal.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+				var categoriasExistentesMasOpcionNueva = categorias;
+				categoriasExistentesMasOpcionNueva.Add("+ Nueva");
+
+				string categoriaONueva = await UserDialogs.Instance.ActionSheetAsync($"Nueva Categoría\n(actual = {articuloPulsado.Categoria})", "Cancelar", null, null, categoriasExistentesMasOpcionNueva.ToArray());
+				if(categoriaONueva.Equals("Cancelar")) return;
+			
+				if(!categoriaONueva.Equals("+ Nueva"))
+					nuevaCategoria = categoriaONueva;
+				else
+				{
+					while(true)
+					{
+						string nuevaNuevaCategoria = await Global.PedirAlUsuarioStringCorrecto("Nueva categoría", 100, true);
+						if(nuevaNuevaCategoria == null) return;
+
+						if(categorias.Contains(nuevaNuevaCategoria))
+							await UserDialogs.Instance.AlertAsync("Ya existe una Categoría con este nombre", "Alerta", "Aceptar");
+						else
+							{ nuevaCategoria = nuevaNuevaCategoria; break; }
+					}
+				}
+
+				UserDialogs.Instance.ShowLoading("Cambiando categoria...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarArticuloCategoria(articuloPulsado.Nombre, nuevaCategoria).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				RefrescarArticulos();
+
+				return;
+			}
+
+			if(opcion.Equals(OpcionesArticulo[3])) // Eliminar
+			{
+				if(await UserDialogs.Instance.ConfirmAsync($"¿Eliminar el artículo '{articuloPulsado.Nombre}'?", "Confirmar eliminación", "Eliminar", "Cancelar"))
+				{
+					UserDialogs.Instance.ShowLoading("Eliminando artículo...");
+
+					await Task.Run(() =>
+					{
+						new Comando_EliminarArticulo(articuloPulsado.Nombre).Enviar(Global.IPGestor);
+					});
+
+					UserDialogs.Instance.HideLoading();
+
+					RefrescarArticulos();
+				}
+
+				return;
+			}
 		}
 
 	// ============================================================================================== //

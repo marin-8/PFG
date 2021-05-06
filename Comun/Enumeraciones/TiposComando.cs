@@ -29,5 +29,9 @@ namespace PFG.Comun
 		PedirArticulos = 20,
 		MandarArticulos = 21,
 		CrearArticulo = 22,
+		ModificarArticuloNombre = 23,
+		ModificarArticuloPrecio = 24,
+		ModificarArticuloCategoria = 25,
+		EliminarArticulo = 26,
 	}
 }

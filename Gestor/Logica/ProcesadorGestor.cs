@@ -31,7 +31,7 @@ namespace PFG.Gestor
 
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
-			string comandoRespuesta = "OK";
+			string comandoRespuesta = new Comando_ResultadoGenerico(true, "Correcto").ToString();
 
 			switch(tipoComando)
 			{
@@ -204,6 +204,46 @@ namespace PFG.Gestor
 							Comando.DeJson
 								<Comando_CrearArticulo>
 									(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.ModificarArticuloNombre:
+				{
+					Procesar_ModificarArticuloNombre(
+						Comando.DeJson
+							<Comando_ModificarArticuloNombre>
+								(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.ModificarArticuloPrecio:
+				{
+					Procesar_ModificarArticuloPrecio(
+						Comando.DeJson
+							<Comando_ModificarArticuloPrecio>
+								(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.ModificarArticuloCategoria:
+				{
+					Procesar_ModificarArticuloCategoria(
+						Comando.DeJson
+							<Comando_ModificarArticuloCategoria>
+								(ComandoJson));
+
+					break;
+				}
+
+				case TiposComando.EliminarArticulo:
+				{
+					Procesar_EliminarArticulo(
+						Comando.DeJson
+							<Comando_EliminarArticulo>
+								(ComandoJson));
 
 					break;
 				}
@@ -568,6 +608,40 @@ namespace PFG.Gestor
 			}
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+		}
+
+		private static void Procesar_ModificarArticuloNombre(Comando_ModificarArticuloNombre Comando)
+		{
+			GestionArticulos.Articulos
+				.Where(a => a.Nombre.Equals(Comando.NombreActual))
+				.First()
+					.Nombre = Comando.NombreNuevo;
+		}
+
+		private static void Procesar_ModificarArticuloPrecio(Comando_ModificarArticuloPrecio Comando)
+		{
+			GestionArticulos.Articulos
+				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+				.First()
+					.Precio = Comando.NuevoPrecio;
+		}
+
+		private static void Procesar_ModificarArticuloCategoria(Comando_ModificarArticuloCategoria Comando)
+		{
+			GestionArticulos.Articulos
+				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+				.First()
+					.Categoria = Comando.NuevaCategoria;
+		}
+
+		private static void Procesar_EliminarArticulo(Comando_EliminarArticulo Comando)
+		{
+			var articuloAEliminar =
+				GestionArticulos.Articulos
+					.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+					.First();
+
+			GestionArticulos.Articulos.Remove(articuloAEliminar);
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)
