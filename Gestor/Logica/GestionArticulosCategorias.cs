@@ -16,28 +16,22 @@ namespace PFG.Gestor
 	{
 		const string RUTA_ARCHIVO_JSON_ARTICULOS = @".\Archivos\Articulos.json";
 
-		private static byte[] _dimensionesGrid;
-		public static byte AnchoGrid { get => _dimensionesGrid[0]; set => _dimensionesGrid[0] = value; }
-		public static byte AltoGrid { get => _dimensionesGrid[1]; set => _dimensionesGrid[1] = value; }
-
-		public static List<Mesa> Mesas { get; private set; } = new();
+		public static List<Articulo> Articulos { get; private set; } = new();
+		public static List<Categoria> Categorias { get; private set; } = new();
 
 		public static void Cargar()
 		{
-			string mesasGridJsonString = File.ReadAllText(RUTA_ARCHIVO_JSON_MESAS_GRID);
-			_dimensionesGrid = JsonConvert.DeserializeObject<byte[]>(mesasGridJsonString);
+			string articulosJsonString = File.ReadAllText(RUTA_ARCHIVO_JSON_ARTICULOS);
+			Articulos = JsonConvert.DeserializeObject<List<Articulo>>(articulosJsonString);
 
-			string mesasJsonString = File.ReadAllText(RUTA_ARCHIVO_JSON_MESAS);
-			Mesas = JsonConvert.DeserializeObject<List<Mesa>>(mesasJsonString);
+			foreach(var articulo in Articulos)
+				Categorias.Add(articulo.Categoria);
 		}
 
 		public static void Guardar()
 		{
-			using StreamWriter archivo1 = File.CreateText(RUTA_ARCHIVO_JSON_MESAS_GRID);
-			new JsonSerializer().Serialize(archivo1, _dimensionesGrid);
-
-			using StreamWriter archivo2 = File.CreateText(RUTA_ARCHIVO_JSON_MESAS);
-			new JsonSerializer().Serialize(archivo2, Mesas);
+			using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON_ARTICULOS);
+			new JsonSerializer().Serialize(archivo, Articulos);
 		}
 	}
 }

@@ -15,8 +15,6 @@ namespace PFG.Gestor
 {
 	public partial class Principal : Form
 	{
-		private const int MAX_CARACTERES_REGISTRO = 62;
-
 		private ControladorRed Servidor;
 		private ProcesadorGestor ProcesadorMensajesRecibidos;
 
@@ -44,6 +42,7 @@ namespace PFG.Gestor
 		{
 			GestionUsuarios.Cargar();
 			GestionMesas.Cargar();
+			GestionArticulosCategorias.Cargar();
 
 			ProcesadorMensajesRecibidos = new(RegistroIPs, RegistroComandos);
 
@@ -60,6 +59,7 @@ namespace PFG.Gestor
 
 			GestionUsuarios.Guardar();
 			GestionMesas.Guardar();
+			GestionArticulosCategorias.Guardar();
 		}
 
 		private void CerrarYSalir_Click(object sender, EventArgs e)

@@ -35,7 +35,9 @@ namespace PFG.Comun
 		}
 
 		[JsonConstructor]
+		#pragma warning disable IDE0051
 		private Comando_ResultadoIniciarSesion(TiposComando TipoComandoJson, ResultadosIniciarSesion ResultadoIniciarSesion, Usuario UsuarioActual)
+		#pragma warning restore IDE0051
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(ResultadoIniciarSesion, UsuarioActual);

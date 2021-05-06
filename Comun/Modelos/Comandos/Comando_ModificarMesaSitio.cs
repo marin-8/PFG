@@ -37,7 +37,9 @@ namespace PFG.Comun
 		}
 
 		[JsonConstructor]
+		#pragma warning disable IDE0051
 		private Comando_ModificarMesaSitio(TiposComando TipoComandoJson, byte NumeroMesa, byte NuevoSitioX, byte NuevoSitioY)
+		#pragma warning restore IDE0051
 			: base(TipoComandoJson)
 		{
 			InicializarPropiedades(NumeroMesa, NuevoSitioX, NuevoSitioY);
