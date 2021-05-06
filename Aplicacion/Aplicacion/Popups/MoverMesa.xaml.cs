@@ -19,8 +19,8 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MoverMesa : PopupPage
 	{
-		private byte NumeroMesaSeleccionada;
-		private Action<byte,byte,byte> EventoNuevoSitioSeleccionado;
+		private readonly byte NumeroMesaSeleccionada;
+		private readonly Action<byte,byte,byte> EventoNuevoSitioSeleccionado;
 
 		public MoverMesa(
 			byte ColumnasMesas,

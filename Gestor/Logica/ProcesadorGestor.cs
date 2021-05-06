@@ -129,7 +129,7 @@ namespace PFG.Gestor
 				case TiposComando.PedirMesas:
 				{
 					comandoRespuesta =
-						Procesar_PedirMesas(IP);
+						Procesar_PedirMesas();
 
 					break;
 				}
@@ -358,7 +358,7 @@ namespace PFG.Gestor
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
-		private static string Procesar_PedirMesas(string IP)
+		private static string Procesar_PedirMesas()
 		{
 			return new Comando_MandarMesas
 			(
@@ -486,7 +486,7 @@ namespace PFG.Gestor
 			bool correcto = true;
 			string mensaje = "";
 
-			Func<Mesa,bool> consultaMesaEnSitioDestino = (m) => m.SitioX == Comando.NuevoSitioX && m.SitioY == Comando.NuevoSitioY;
+			bool consultaMesaEnSitioDestino(Mesa m) => m.SitioX == Comando.NuevoSitioX && m.SitioY == Comando.NuevoSitioY;
 
 			var mesaOrigen = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).First();
 

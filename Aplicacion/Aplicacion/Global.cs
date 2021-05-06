@@ -25,6 +25,9 @@ namespace PFG.Aplicacion
 		public static byte FilasMesas;
 		public static List<Mesa> MesasLocal = new();
 
+		public static List<Articulo> ArticulosLocal = new();
+		public static List<Categoria> CategoriasLocal = new();
+
 		public static void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
 		{
 			if(Comando.Correcto)
