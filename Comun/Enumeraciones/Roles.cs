@@ -3,14 +3,14 @@ namespace PFG.Comun
 {
 	public enum Roles : byte
 	{
-			  Ninguno = 0,
+			  Ninguno,
 
-			 Camarero = 1,
-			  Barista = 2,
-			 Cocinero = 3,
+			 Camarero,
+			  Barista,
+			 Cocinero,
 
-		Administrador = 4,
+		Administrador,
 
-		Desarrollador = 5
+		Desarrollador
 	}
 }

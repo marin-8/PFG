@@ -19,6 +19,25 @@ namespace PFG.Comun
 		public const float MINIMO_PRECIO_ARTICULO = 0.01f;
 		public const float MAXIMO_PRECIO_ARTICULO = 999.99f;
 
+		public readonly Dictionary<Roles, TiposTareas> Tareas = new()
+		{
+			{ Roles.Camarero , TiposTareas.ServirArticulos },
+			{ Roles.Camarero , TiposTareas.LimpiarMesa },
+			{ Roles.Barista  , TiposTareas.PrepararArticulos },
+			{ Roles.Cocinero , TiposTareas.PrepararArticulos },
+		};
+
+		public readonly Dictionary<Roles, TiposAcciones> Acciones = new()
+		{
+			{ Roles.Camarero , TiposAcciones.TomarNota },
+			{ Roles.Camarero , TiposAcciones.Cobrar },
+			{ Roles.Barista  , TiposAcciones.Cobrar },
+			{ Roles.Barista  , TiposAcciones.MarcarArticuloComoAcabado },
+			{ Roles.Barista  , TiposAcciones.MarcarArticuloComoDisponible },
+			{ Roles.Cocinero , TiposAcciones.MarcarArticuloComoAcabado },
+			{ Roles.Cocinero , TiposAcciones.MarcarArticuloComoDisponible },
+		};
+
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
 		{
 			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new();
