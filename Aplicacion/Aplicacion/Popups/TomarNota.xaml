@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<rg:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.TomarNota"
+    xmlns:pfgcomun="clr-namespace:PFG.Comun;assembly=Comun"
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+
+    <Frame 
+        BackgroundColor="White"
+        Margin="20">
+
+        <StackLayout
+            Spacing="0">
+
+            <Label
+                Text="Tomar nota"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                BackgroundColor="MediumBlue"
+                HeightRequest="40"/>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+
+            <StackLayout
+                Spacing="0"
+                Orientation="Horizontal"
+                HorizontalOptions="Center">
+
+                <Label
+                    Text="Mesa"
+                    FontSize="20"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"/>
+
+                <BoxView BackgroundColor="Transparent" WidthRequest="20"/>
+
+                <Button
+                    x:Name="SeleccionarMesa"
+                    Text="--"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    BackgroundColor="Silver"
+                    WidthRequest="48"
+                    Clicked="SeleccionarMesa_Clicked"/>
+
+                <BoxView WidthRequest="20" Color="Transparent"/>
+
+                <Label
+                    Text="Artículos"
+                    FontSize="20"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Start"
+                    VerticalTextAlignment="Center"/>
+
+                <BoxView BackgroundColor="Transparent" WidthRequest="20"/>
+
+                <Button
+                    Text="+"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="LimeGreen"
+                    FontAttributes="Bold"
+                    WidthRequest="48"
+                    Clicked="AnadirArticulo_Clicked"/>
+
+            </StackLayout>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+
+            <ListView
+                x:Name="ListaArticulos"
+                SelectionMode="None"
+                HasUnevenRows="True"
+                BackgroundColor="Transparent"
+                SeparatorVisibility="None">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="pfgcomun:Articulo">
+                        <ViewCell>
+
+                            <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                                <Frame BackgroundColor="LightSkyBlue" Padding="10">
+                                    <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                        
+                                        <Label FontSize="20" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
+
+                                        <BoxView BackgroundColor="Transparent" HeightRequest="10"/>
+                                        
+                                        <Grid
+                                            ColumnSpacing="0"
+                                            RowSpacing="0">
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="48"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+
+                                            <Label
+                                                Grid.Column="0"
+                                                FontSize="18"
+                                                Text="{Binding Categoria}"
+                                                TextColor="Black"
+                                                VerticalTextAlignment="Center"
+                                                HorizontalTextAlignment="Center"/>
+
+                                            <Button
+                                                Grid.Column="2"
+                                                Text="-"
+                                                FontSize="20"
+                                                TextColor="White"
+                                                FontAttributes="Bold"
+                                                BackgroundColor="Red"
+                                                WidthRequest="48"
+                                                HeightRequest="48"
+                                                Clicked="QuitarUnidadArticulo_Clicked"/>
+
+                                            <Label
+                                                Grid.Column="4"
+                                                FontSize="18"
+                                                Text="{Binding Unidades}"
+                                                TextColor="Black"
+                                                FontAttributes="Bold"
+                                                VerticalTextAlignment="Center"/>
+
+                                            <Button
+                                                Grid.Column="6"
+                                                Text="+"
+                                                FontSize="20"
+                                                TextColor="Black"
+                                                FontAttributes="Bold"
+                                                BackgroundColor="LimeGreen"
+                                                WidthRequest="48"
+                                                HeightRequest="48"
+                                                Clicked="AnadirUnidadArticulo_Clicked"/>
+
+                                        </Grid>
+                                        
+                                    </StackLayout>
+                                </Frame>
+                            </Frame>
+
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+            
+            <StackLayout
+                Spacing="0"
+                Orientation="Horizontal"
+                HorizontalOptions="Center">
+
+                <Button
+                    Text="Cancelar"
+                    FontSize="20"
+                    TextColor="White"
+                    BackgroundColor="Red"
+                    FontAttributes="Bold"
+                    Clicked="Cancelar_Clicked"/>
+
+                <BoxView BackgroundColor="Transparent" WidthRequest="20"/>
+
+                <Button
+                    Text="Aceptar"
+                    FontSize="20"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BackgroundColor="LimeGreen"
+                    Clicked="Aceptar_Clicked"/>
+
+            </StackLayout>
+
+        </StackLayout>
+
+    </Frame>
+
+</rg:PopupPage>

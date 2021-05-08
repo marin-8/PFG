@@ -18,6 +18,8 @@
         
         - Refrescar solo variables y actualizar solo si es necesario
         
+        - Revisar responsabilidades de clase (Mesas/MoverMesa por ejemplo)
+        
         - Al modificar algo, que se cargue el actual
         
         - MINIMIZAR CÓDIGO REPETIDO !!!

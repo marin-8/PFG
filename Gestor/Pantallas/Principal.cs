@@ -67,19 +67,13 @@ namespace PFG.Gestor
 			Close();
 		}
 
-		private void CerrarSesionDesarrollador_Click(object sender, EventArgs e)
+		private void CerrarTodasLasSesiones_Click(object sender, EventArgs e)
 		{
-			var usuarioDesarrollador = GestionUsuarios.Usuarios
-									  .Where(u => u.Rol == Roles.Desarrollador)
-									  .First();
+			foreach(var usuario in GestionUsuarios.Usuarios)
+				usuario.Conectado = false;
 
-			if(usuarioDesarrollador.Conectado)
-			{
-				usuarioDesarrollador.Conectado = false;
-
-				RegistroIPs.Items.Add("Gestor");
-				RegistroComandos.Items.Add("Cerrada sesión de Desarrollador");
-			}
+			RegistroIPs.Items.Add("Gestor");
+			RegistroComandos.Items.Add("Cerradas todas las sesiones");
 		}
 	}
 }

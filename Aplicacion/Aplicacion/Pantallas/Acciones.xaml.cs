@@ -77,14 +77,13 @@ namespace PFG.Aplicacion
 
 		// Eventos UI -> Contenido
 
-		private void AccionPulsada(object sender, EventArgs e)
+		private async void AccionPulsada(object sender, EventArgs e)
 		{
 			var accionPulsada = (TiposAcciones)((Button)sender).BindingContext;
 
 			if(accionPulsada == TiposAcciones.TomarNota)
 			{
-
-
+				await Navigation.PushPopupAsync(new TomarNota());
 				return;
 			}
 

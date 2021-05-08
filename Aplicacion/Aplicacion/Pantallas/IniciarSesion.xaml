@@ -38,7 +38,7 @@
 
         <Entry
             x:Name="Usuario"
-            Text="desarrollador"
+            Text="cam"
             Placeholder="Usuario"
             FontSize="22"
             TextColor="Black"
@@ -50,7 +50,7 @@
 
         <Entry
             x:Name="Contrasena"
-            Text="qwertyuiop"
+            Text="cam"
             Placeholder="Contraseña"
             FontSize="22"
             TextColor="Black"

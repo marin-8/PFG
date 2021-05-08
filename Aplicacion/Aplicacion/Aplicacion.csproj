@@ -54,6 +54,9 @@
     <Compile Update="Pantallas\IniciarSesion.xaml.cs">
       <DependentUpon>IniciarSesion.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Popups\TomarNota.xaml.cs">
+      <DependentUpon>TomarNota.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

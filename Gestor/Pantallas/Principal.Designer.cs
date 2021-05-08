@@ -36,7 +36,7 @@ namespace PFG.Gestor
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.CerrarSesionDesarrollador = new System.Windows.Forms.Button();
+			this.CerrarTodasLasSesiones = new System.Windows.Forms.Button();
 			this.RegistroComandos = new System.Windows.Forms.ListBox();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel1.SuspendLayout();
@@ -112,7 +112,7 @@ namespace PFG.Gestor
 			// panel2
 			// 
 			this.panel2.BackColor = System.Drawing.Color.Silver;
-			this.panel2.Controls.Add(this.CerrarSesionDesarrollador);
+			this.panel2.Controls.Add(this.CerrarTodasLasSesiones);
 			this.panel2.Controls.Add(this.RegistroComandos);
 			this.panel2.Controls.Add(this.label2);
 			this.panel2.Controls.Add(this.RegistroIPs);
@@ -122,18 +122,18 @@ namespace PFG.Gestor
 			this.panel2.Size = new System.Drawing.Size(529, 500);
 			this.panel2.TabIndex = 5;
 			// 
-			// CerrarSesionDesarrollador
+			// CerrarTodasLasSesiones
 			// 
-			this.CerrarSesionDesarrollador.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.CerrarSesionDesarrollador.Font = new System.Drawing.Font("Roboto Mono", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.CerrarSesionDesarrollador.ForeColor = System.Drawing.Color.Silver;
-			this.CerrarSesionDesarrollador.Location = new System.Drawing.Point(189, 8);
-			this.CerrarSesionDesarrollador.Name = "CerrarSesionDesarrollador";
-			this.CerrarSesionDesarrollador.Size = new System.Drawing.Size(328, 40);
-			this.CerrarSesionDesarrollador.TabIndex = 3;
-			this.CerrarSesionDesarrollador.Text = "Cerrar sesión de Desarrollador";
-			this.CerrarSesionDesarrollador.UseVisualStyleBackColor = false;
-			this.CerrarSesionDesarrollador.Click += new System.EventHandler(this.CerrarSesionDesarrollador_Click);
+			this.CerrarTodasLasSesiones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.CerrarTodasLasSesiones.Font = new System.Drawing.Font("Roboto Mono", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.CerrarTodasLasSesiones.ForeColor = System.Drawing.Color.Silver;
+			this.CerrarTodasLasSesiones.Location = new System.Drawing.Point(237, 8);
+			this.CerrarTodasLasSesiones.Name = "CerrarTodasLasSesiones";
+			this.CerrarTodasLasSesiones.Size = new System.Drawing.Size(280, 40);
+			this.CerrarTodasLasSesiones.TabIndex = 3;
+			this.CerrarTodasLasSesiones.Text = "Cerrar todas las sesiones";
+			this.CerrarTodasLasSesiones.UseVisualStyleBackColor = false;
+			this.CerrarTodasLasSesiones.Click += new System.EventHandler(this.CerrarTodasLasSesiones_Click);
 			// 
 			// RegistroComandos
 			// 
@@ -190,7 +190,7 @@ namespace PFG.Gestor
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.ListBox RegistroComandos;
-		private System.Windows.Forms.Button CerrarSesionDesarrollador;
+		private System.Windows.Forms.Button CerrarTodasLasSesiones;
 	}
 }
 
