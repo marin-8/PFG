@@ -19,23 +19,23 @@ namespace PFG.Comun
 		public const float MINIMO_PRECIO_ARTICULO = 0.01f;
 		public const float MAXIMO_PRECIO_ARTICULO = 999.99f;
 
-		public static readonly Dictionary<Roles, TiposTareas> RolesTareas = new()
+		public static readonly List<KeyValuePair<Roles,TiposTareas>> RolesTareas = new()
 		{
-			{ Roles.Camarero , TiposTareas.ServirArticulos },
-			{ Roles.Camarero , TiposTareas.LimpiarMesa },
-			{ Roles.Barista  , TiposTareas.PrepararArticulos },
-			{ Roles.Cocinero , TiposTareas.PrepararArticulos },
+			new KeyValuePair<Roles,TiposTareas>( Roles.Camarero , TiposTareas.ServirArticulos ),
+			new KeyValuePair<Roles,TiposTareas>( Roles.Camarero , TiposTareas.LimpiarMesa ),
+			new KeyValuePair<Roles,TiposTareas>( Roles.Barista  , TiposTareas.PrepararArticulos ),
+			new KeyValuePair<Roles,TiposTareas>( Roles.Cocinero , TiposTareas.PrepararArticulos ),
 		};
 
-		public static readonly Dictionary<Roles, TiposAcciones> RolesAcciones = new()
+		public static readonly List<KeyValuePair<Roles,TiposAcciones>> RolesAcciones = new()
 		{
-			{ Roles.Camarero , TiposAcciones.TomarNota },
-			{ Roles.Camarero , TiposAcciones.Cobrar },
-			{ Roles.Barista  , TiposAcciones.Cobrar },
-			{ Roles.Barista  , TiposAcciones.MarcarArticuloComoAcabado },
-			{ Roles.Barista  , TiposAcciones.MarcarArticuloComoDisponible },
-			{ Roles.Cocinero , TiposAcciones.MarcarArticuloComoAcabado },
-			{ Roles.Cocinero , TiposAcciones.MarcarArticuloComoDisponible },
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Camarero , TiposAcciones.TomarNota ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Camarero , TiposAcciones.Cobrar ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.Cobrar ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.MarcarArticuloComoAcabado ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.MarcarArticuloComoDisponible ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Cocinero , TiposAcciones.MarcarArticuloComoAcabado ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Cocinero , TiposAcciones.MarcarArticuloComoDisponible ),
 		};
 
 		public static readonly Dictionary<TiposTareas, string> TareasTitulos = new()
@@ -49,8 +49,8 @@ namespace PFG.Comun
 		{
 			{ TiposAcciones.TomarNota, "Tomar nota" },
 			{ TiposAcciones.Cobrar, "Cobrar" },
-			{ TiposAcciones.MarcarArticuloComoAcabado, "Marcar articulo como acabado" },
-			{ TiposAcciones.MarcarArticuloComoDisponible, "Marcar articulo como disponible" },
+			{ TiposAcciones.MarcarArticuloComoAcabado, "Marcar artículo como acabado" },
+			{ TiposAcciones.MarcarArticuloComoDisponible, "Marcar artículo como disponible" },
 		};
 
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()

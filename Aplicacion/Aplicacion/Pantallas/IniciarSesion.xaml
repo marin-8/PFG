@@ -15,60 +15,60 @@
         VerticalOptions="CenterAndExpand">
 
         <Label
-                x:Name="IniciarSesionLabel"
-                Text="Iniciar sesión"
-                FontSize="46"
-                TextColor="White"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
+            x:Name="IniciarSesionLabel"
+            Text="Iniciar sesión"
+            FontSize="46"
+            TextColor="White"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"/>
 
         <BoxView HeightRequest="60" Color="Transparent"/>
 
         <Entry
-                x:Name="IPGestor"
-                Text="192.168.1.130"
-                Placeholder="IP del Gestor (ej. 192.168.1.130)"
-                FontSize="22"
-                TextColor="Black"
-                BackgroundColor="White"
-                ClearButtonVisibility="WhileEditing"
-                MaxLength="15"/>
+            x:Name="IPGestor"
+            Text="192.168.1.130"
+            Placeholder="IP del Gestor (ej. 192.168.1.130)"
+            FontSize="22"
+            TextColor="Black"
+            BackgroundColor="White"
+            ClearButtonVisibility="WhileEditing"
+            MaxLength="15"/>
 
         <BoxView HeightRequest="10" Color="Transparent"/>
 
         <Entry
-                x:Name="Usuario"
-                Text="desarrollador"
-                Placeholder="Usuario"
-                FontSize="22"
-                TextColor="Black"
-                BackgroundColor="White"
-                ClearButtonVisibility="WhileEditing"
-                MaxLength="20"/>
+            x:Name="Usuario"
+            Text="desarrollador"
+            Placeholder="Usuario"
+            FontSize="22"
+            TextColor="Black"
+            BackgroundColor="White"
+            ClearButtonVisibility="WhileEditing"
+            MaxLength="20"/>
 
         <BoxView HeightRequest="10" Color="Transparent"/>
 
         <Entry
-                x:Name="Contrasena"
-                Text="qwertyuiop"
-                Placeholder="Contraseña"
-                FontSize="22"
-                TextColor="Black"
-                BackgroundColor="White"
-                ClearButtonVisibility="WhileEditing"
-                IsPassword="true"
-                MaxLength="20"/>
+            x:Name="Contrasena"
+            Text="qwertyuiop"
+            Placeholder="Contraseña"
+            FontSize="22"
+            TextColor="Black"
+            BackgroundColor="White"
+            ClearButtonVisibility="WhileEditing"
+            IsPassword="true"
+            MaxLength="20"/>
 
         <BoxView HeightRequest="60" Color="Transparent"/>
 
         <Button
-                x:Name="IniciarSesionB"
-                Text="Iniciar sesión"
-                FontSize="26"
-                FontAttributes="Bold"
-                TextColor="Black"
-                BackgroundColor="LimeGreen"
-                Clicked="IniciarSesion_Clicked"/>
+            x:Name="IniciarSesionB"
+            Text="Iniciar sesión"
+            FontSize="26"
+            FontAttributes="Bold"
+            TextColor="Black"
+            BackgroundColor="LimeGreen"
+            Clicked="IniciarSesion_Clicked"/>
 
     </StackLayout>
 

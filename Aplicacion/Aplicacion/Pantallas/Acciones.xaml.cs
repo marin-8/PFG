@@ -40,15 +40,25 @@ namespace PFG.Aplicacion
 					.Where(ra => ra.Key == Global.UsuarioActual.Rol)
 					.Select(ra => ra.Value);
 
-			foreach(var accion in accionesRolActual)
+			int row = 0;
+			foreach (var accion in accionesRolActual)
 			{
 				AccionesGrid.RowDefinitions.Add(new());
-				AccionesGrid.Children.Add(GenerarBotonAccion(Comun.Global.AccionesTitulos[accion], accion, AccionPulsada));
 
-				AccionesGrid.RowDefinitions.Add(new() { Height=20 });
+				var botonaAccion = GenerarBotonAccion
+				(
+					Comun.Global.AccionesTitulos[accion],
+					accion,
+					AccionPulsada
+				);
+				AccionesGrid.Children.Add(botonaAccion, 0, row); row += 2;
+
+				AccionesGrid.RowDefinitions.Add(new() { Height = 20 });
 			}
 
-			AccionesGrid.RowDefinitions.RemoveAt(AccionesGrid.RowDefinitions.Count-1);
+			if(AccionesGrid.RowDefinitions.Count > 0)
+				AccionesGrid.RowDefinitions.RemoveAt(
+					AccionesGrid.RowDefinitions.Count - 1);
 		}
 
 		//private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
@@ -69,7 +79,35 @@ namespace PFG.Aplicacion
 
 		private void AccionPulsada(object sender, EventArgs e)
 		{
+			var accionPulsada = (TiposAcciones)((Button)sender).BindingContext;
 
+			if(accionPulsada == TiposAcciones.TomarNota)
+			{
+
+
+				return;
+			}
+
+			if(accionPulsada == TiposAcciones.Cobrar)
+			{
+
+
+				return;
+			}
+
+			if(accionPulsada == TiposAcciones.MarcarArticuloComoAcabado)
+			{
+
+
+				return;
+			}
+
+			if(accionPulsada == TiposAcciones.MarcarArticuloComoDisponible)
+			{
+
+
+				return;
+			}
 		}
 
 	// ============================================================================================== //
@@ -82,7 +120,7 @@ namespace PFG.Aplicacion
 			{
 				Text=TituloAccion,
 				FontAttributes=FontAttributes.Bold,
-				FontSize=20,
+				FontSize=40,
 				Padding=new(0),
 				Margin=new(0),
 				BackgroundColor=Color.LimeGreen,
