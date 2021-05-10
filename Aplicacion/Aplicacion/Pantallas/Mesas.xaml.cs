@@ -48,7 +48,7 @@ namespace PFG.Aplicacion
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				PedirMesas();
+				ActualizarMapaMesas();
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace PFG.Aplicacion
 
 		private void RefrescarMesas(object sender, EventArgs e)
 		{
-			PedirMesas();
+			ActualizarMapaMesas();
 		}
 
 	// ============================================================================================== //
@@ -93,7 +93,7 @@ namespace PFG.Aplicacion
 
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
-			PedirMesas();
+			ActualizarMapaMesas();
 
 			var sitioPulsadoString = (string)((Button)sender).BindingContext;
 			int indiceDelPunto = sitioPulsadoString.IndexOf('.');
@@ -102,13 +102,13 @@ namespace PFG.Aplicacion
 
 			bool condicionMesaSeleccionada(Mesa m) => m.SitioX == sitioPulsadoX && m.SitioY == sitioPulsadoY;
 
-			if (!Global.MesasLocal.Any(condicionMesaSeleccionada)) // Crear mesa
+			if (!Global.Mesas.Any(condicionMesaSeleccionada)) // Crear mesa
 			{
 				CrearMesa(sitioPulsadoX, sitioPulsadoY);
 			}
 			else
 			{
-				var mesaSeleccionada = Global.MesasLocal.Where(condicionMesaSeleccionada).First();
+				var mesaSeleccionada = Global.Mesas.Where(condicionMesaSeleccionada).First();
 
 				string opcion = await UserDialogs.Instance.ActionSheetAsync($"Mesa {mesaSeleccionada.Numero}", "Cancelar", null, null, OpcionesMesaExistente);
 				if(opcion.Equals("Cancelar")) return;
@@ -143,9 +143,9 @@ namespace PFG.Aplicacion
 
 						numeroNuevaMesa = byte.Parse(resultado.Text);
 
-						PedirMesas();
+						ActualizarMapaMesas();
 
-						if(Global.MesasLocal.Where(m => m.Numero == numeroNuevaMesa).Any())
+						if(Global.Mesas.Where(m => m.Numero == numeroNuevaMesa).Any())
 							await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 						else
 							break;
@@ -161,14 +161,14 @@ namespace PFG.Aplicacion
 
 					UserDialogs.Instance.HideLoading();
 
-					Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+					Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 					return;
 				}
 
 				if(opcion == OpcionesMesaExistente[1]) // Mover
 				{
-					await Navigation.PushPopupAsync(new MoverMesa(Global.ColumnasMesas, Global.FilasMesas, Global.MesasLocal, mesaSeleccionada.Numero, GenerarBotonMesa, MoverMesa));
+					await Navigation.PushPopupAsync(new MoverMesa(mesaSeleccionada.Numero, MoverMesa));
 					return;
 				}
 
@@ -186,7 +186,7 @@ namespace PFG.Aplicacion
 
 						UserDialogs.Instance.HideLoading();
 
-						Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+						Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 						return;
 					}
@@ -197,37 +197,6 @@ namespace PFG.Aplicacion
 	// ============================================================================================== //
 
 		// Métodos privados
-
-		private async void PedirMesas()
-		{
-			UserDialogs.Instance.ShowLoading("Actualizando mesas...");
-
-			var comandoRespuesta = await Task.Run(() =>
-			{
-				string respuestaGestor = new Comando_PedirMesas().Enviar(Global.IPGestor);
-				return Comando.DeJson<Comando_MandarMesas>(respuestaGestor);
-			});
-
-			UserDialogs.Instance.HideLoading();
-
-			Procesar_RecibirMesas(comandoRespuesta); 
-		}
-
-		private Button GenerarBotonMesa(byte GridX, byte GridY, EventHandler EventoMesaPulsada)
-		{
-			var buttonMesa = new Button()
-			{
-				FontAttributes=FontAttributes.Bold,
-				FontSize=20,
-				Padding=new(0),
-				Margin=new(0),
-				BackgroundColor=Color.FromRgb(240, 240, 240),
-				BindingContext=$"{GridX}.{GridY}"
-			};
-			buttonMesa.Clicked += EventoMesaPulsada;
-
-			return buttonMesa;
-		}
 
 		private void AnadirColumna()
 		{
@@ -261,7 +230,7 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 		}
 
 		private async void CrearMesa(byte sitioX, byte sitioY)
@@ -294,9 +263,9 @@ namespace PFG.Aplicacion
 
 				numeroNuevaMesa = byte.Parse(resultado.Text);
 
-				PedirMesas();
+				ActualizarMapaMesas();
 
-				if(Global.MesasLocal.Where(m => m.Numero == numeroNuevaMesa).Any())
+				if(Global.Mesas.Where(m => m.Numero == numeroNuevaMesa).Any())
 					await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 				else
 					break;
@@ -314,7 +283,7 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 		}
 
 		private async void MoverMesa(byte numeroMesaOrigen, byte nuevoSitioX, byte nuevoSitioY)
@@ -329,18 +298,16 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, PedirMesas);
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 		}
 		
 	// ============================================================================================== //
 
 		// Métodos Procesar
 
-		private async void Procesar_RecibirMesas(Comando_MandarMesas Comando)
+		private async void ActualizarMapaMesas()
 		{
-			Global.ColumnasMesas = Comando.AnchoGrid;
-			Global.FilasMesas = Comando.AltoGrid;
-			Global.MesasLocal = Comando.Mesas.ToList();
+			await Global.Get_Mesas();
 
 			UserDialogs.Instance.ShowLoading("Actualizando mapa mesas...");
 
@@ -349,30 +316,30 @@ namespace PFG.Aplicacion
 				MapaGrid.ColumnDefinitions.Clear();
 				MapaGrid.RowDefinitions.Clear();
 
-				for(int c = 0 ; c < Global.ColumnasMesas-1; c++) {
+				for(int c = 0 ; c < Global.AnchoMapaMesas-1; c++) {
 					MapaGrid.ColumnDefinitions.Add(new());
 					MapaGrid.ColumnDefinitions.Add(new(){Width=new(ESPACIO_ENTRE_MESAS)}); }
 				MapaGrid.ColumnDefinitions.Add(new());
 
-				for(int f = 0 ; f < Global.FilasMesas-1 ; f++) {
+				for(int f = 0 ; f < Global.AltoMapaMesas-1 ; f++) {
 					MapaGrid.RowDefinitions.Add(new());
 					MapaGrid.RowDefinitions.Add(new(){Height=new(ESPACIO_ENTRE_MESAS)}); }
 				MapaGrid.RowDefinitions.Add(new());
 
 				MapaGrid.Children.Clear();
 
-				for(int c = 0 ; c < Global.ColumnasMesas; c++)
+				for(int c = 0 ; c < Global.AnchoMapaMesas; c++)
 				{
-					for(int f = 0 ; f < Global.FilasMesas ; f++)
+					for(int f = 0 ; f < Global.AltoMapaMesas ; f++)
 					{
 						MapaGrid.Children.Add(
-							GenerarBotonMesa((byte)(c+1), (byte)(f+1), MesaPulsada),
+							Global.GenerarBotonMesa((byte)(c+1), (byte)(f+1), MesaPulsada),
 							c*2,
 							f*2);
 					}
 				}
 
-				foreach(var mesa in Global.MesasLocal)
+				foreach(var mesa in Global.Mesas)
 				{
 					var mesaMapaGrid = (Button)
 							MapaGrid.Children

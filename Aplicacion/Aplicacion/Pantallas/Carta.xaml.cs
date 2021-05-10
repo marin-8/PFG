@@ -39,11 +39,11 @@ namespace PFG.Aplicacion
 			ListaArticulos.ItemsSource = Global.CategoriasLocal;
 		}
 
-		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				RefrescarArticulos();
+				await Global.Get_Articulos();
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace PFG.Aplicacion
 		{
 			Articulo nuevoArticulo = new("", "", 0f);
 
-			RefrescarArticulos();
+			await Global.Get_Articulos();
 
 			while(true)
 			{
@@ -124,23 +124,25 @@ namespace PFG.Aplicacion
 				string respuestaGestor = new Comando_CrearArticulo(nuevoArticulo).Enviar(Global.IPGestor);
 				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarArticulos);
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
 
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private void Refrescar_Clicked(object sender, EventArgs e)
+		private async void Refrescar_Clicked(object sender, EventArgs e)
 		{
-			RefrescarArticulos();
+			await Global.Get_Articulos();
 		}
 
 	// ============================================================================================== //
 
 		// Eventos UI -> Contenido
 
-		private void ListaArticulos_Refresh(object sender, EventArgs e)
+		private async void ListaArticulos_Refresh(object sender, EventArgs e)
 		{
-			RefrescarArticulos();
+			await Global.Get_Articulos();
+
+			ListaArticulos.EndRefresh();
 		}
 
 		private static readonly string[] OpcionesArticulo = new string[]
@@ -158,7 +160,7 @@ namespace PFG.Aplicacion
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{articuloPulsado.Nombre}", "Cancelar", null, null, OpcionesArticulo);
 			if(opcion.Equals("Cancelar")) return;
 
-			RefrescarArticulos();
+			await Global.Get_Articulos();
 
 			if(opcion.Equals(OpcionesArticulo[0])) // Cambiar Nombre
 			{
@@ -186,7 +188,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarArticulos();
+				await Global.Get_Articulos();
 
 				return;
 			}
@@ -226,7 +228,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarArticulos();
+				await Global.Get_Articulos();
 
 				return;
 			}
@@ -267,7 +269,7 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.HideLoading();
 
-				RefrescarArticulos();
+				await Global.Get_Articulos();
 
 				return;
 			}
@@ -285,7 +287,7 @@ namespace PFG.Aplicacion
 
 					UserDialogs.Instance.HideLoading();
 
-					RefrescarArticulos();
+					await Global.Get_Articulos();
 				}
 
 				return;
@@ -296,48 +298,9 @@ namespace PFG.Aplicacion
 
 		// Métodos privados
 
-		private async void RefrescarArticulos()
-		{
-			UserDialogs.Instance.ShowLoading("Actualizando lista de artículos...");
-
-			var comandoRespuesta = await Task.Run(() =>
-			{
-				string respuestaGestor = new Comando_PedirArticulos().Enviar(Global.IPGestor);
-				return Comando.DeJson<Comando_MandarArticulos>(respuestaGestor);
-			});
-			Procesar_RecibirArticulos(comandoRespuesta); 
-
-			UserDialogs.Instance.HideLoading();
-		}
-
 	// ============================================================================================== //
 
 		// Métodos Procesar
-
-		private void Procesar_RecibirArticulos(Comando_MandarArticulos Comando)
-		{
-			Global.CategoriasLocal.Clear();
-
-			var categorias =
-				Comando.Articulos
-					.OrderBy(a => a.Categoria)
-					.GroupBy(a => a.Categoria)
-					.Select(a => a.First().Categoria);
-
-			foreach(var categoria in categorias)
-			{
-				var nuevaCategoria = new GrupoArticuloCategoria(categoria);
-
-				nuevaCategoria.AddRange(
-					Comando.Articulos
-						.Where(a => a.Categoria.Equals(categoria))
-						.OrderBy(a => a.Nombre));
-
-				Global.CategoriasLocal.Add(nuevaCategoria);
-			}
-
-			ListaArticulos.EndRefresh();
-		}
 
 	// ============================================================================================== //
 	}

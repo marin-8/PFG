@@ -15,6 +15,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using Acr.UserDialogs;
+using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Extensions;
 
 using PFG.Comun;
@@ -81,31 +82,31 @@ namespace PFG.Aplicacion
 		{
 			var accionPulsada = (TiposAcciones)((Button)sender).BindingContext;
 
-			if(accionPulsada == TiposAcciones.TomarNota)
+			switch(accionPulsada)
 			{
-				await Navigation.PushPopupAsync(new TomarNota());
-				return;
-			}
+				case TiposAcciones.TomarNota:
+				{
+					await Navigation.PushPopupAsync(new TomarNota());
+					return;
+				}
 
-			if(accionPulsada == TiposAcciones.Cobrar)
-			{
+				case TiposAcciones.Cobrar:
+				{
+					//await Navigation.PushPopupAsync(new TomarNota());
+					return;
+				}
 
+				case TiposAcciones.MarcarArticuloComoAcabado:
+				{
+					//await Navigation.PushPopupAsync(new TomarNota());
+					return;
+				}
 
-				return;
-			}
-
-			if(accionPulsada == TiposAcciones.MarcarArticuloComoAcabado)
-			{
-
-
-				return;
-			}
-
-			if(accionPulsada == TiposAcciones.MarcarArticuloComoDisponible)
-			{
-
-
-				return;
+				case TiposAcciones.MarcarArticuloComoDisponible:
+				{
+					//await Navigation.PushPopupAsync(new TomarNota());
+					return;
+				}
 			}
 		}
 

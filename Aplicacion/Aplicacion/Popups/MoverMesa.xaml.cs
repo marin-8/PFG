@@ -22,20 +22,14 @@ namespace PFG.Aplicacion
 		private readonly byte NumeroMesaSeleccionada;
 		private readonly Action<byte,byte,byte> EventoNuevoSitioSeleccionado;
 
-		public MoverMesa(
-			byte ColumnasMesas,
-			byte FilasMesas,
-			List<Mesa> MesasExistentes,
-			byte NumeroMesaSeleccionada,
-			Func<byte, byte, EventHandler, Button> GenerarBotonMesa,
-			Action<byte,byte,byte> EventoNuevoSitioSeleccionado)
+		public MoverMesa(byte NumeroMesaSeleccionada, Action<byte,byte,byte> EventoNuevoSitioSeleccionado)
 		{
 			InitializeComponent();
 
 			this.NumeroMesaSeleccionada = NumeroMesaSeleccionada;
 			this.EventoNuevoSitioSeleccionado = EventoNuevoSitioSeleccionado;
 
-			InicializarMapaGrid(ColumnasMesas, FilasMesas, MesasExistentes, NumeroMesaSeleccionada, GenerarBotonMesa);
+			InicializarMapaGrid(NumeroMesaSeleccionada);
 		}
 
 		private async void MesaPulsada(object sender, EventArgs e)
@@ -60,42 +54,41 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private async void InicializarMapaGrid(
-			byte ColumnasMesas,
-			byte FilasMesas,
-			List<Mesa> MesasExistentes,
-			byte NumeroMesaSeleccionada,
-			Func<byte, byte, EventHandler, Button> GenerarBotonMesa)
+		private async void InicializarMapaGrid(byte NumeroMesaSeleccionada)
 		{
+			await Global.Get_Mesas();
+
+			UserDialogs.Instance.ShowLoading("Actualizando mapa mesas...");
+
 			await Device.InvokeOnMainThreadAsync(() =>
 			{
 				MapaGrid.ColumnDefinitions.Clear();
 				MapaGrid.RowDefinitions.Clear();
 
-				for(int c = 0 ; c < ColumnasMesas-1; c++) {
+				for(int c = 0 ; c < Global.AnchoMapaMesas-1; c++) {
 					MapaGrid.ColumnDefinitions.Add(new());
 					MapaGrid.ColumnDefinitions.Add(new(){Width=new(Mesas.ESPACIO_ENTRE_MESAS)}); }
 				MapaGrid.ColumnDefinitions.Add(new());
 
-				for(int f = 0 ; f < FilasMesas-1 ; f++) {
+				for(int f = 0 ; f < Global.AltoMapaMesas-1 ; f++) {
 					MapaGrid.RowDefinitions.Add(new());
 					MapaGrid.RowDefinitions.Add(new(){Height=new(Mesas.ESPACIO_ENTRE_MESAS)}); }
 				MapaGrid.RowDefinitions.Add(new());
 
 				MapaGrid.Children.Clear();
 
-				for(int c = 0 ; c < ColumnasMesas; c++)
+				for(int c = 0 ; c < Global.AnchoMapaMesas; c++)
 				{
-					for(int f = 0 ; f < FilasMesas ; f++)
+					for(int f = 0 ; f < Global.AltoMapaMesas ; f++)
 					{
 						MapaGrid.Children.Add(
-							GenerarBotonMesa((byte)(c+1), (byte)(f+1), MesaPulsada),
+							Global.GenerarBotonMesa((byte)(c+1), (byte)(f+1), MesaPulsada),
 							c*2,
 							f*2);
 					}
 				}
 
-				foreach(var mesa in MesasExistentes)
+				foreach(var mesa in Global.Mesas)
 				{
 					var mesaMapaGrid = (Button)
 							MapaGrid.Children
@@ -143,6 +136,8 @@ namespace PFG.Aplicacion
 					}
 				}
 			});
+
+			UserDialogs.Instance.HideLoading();
 		}
 	}
 }

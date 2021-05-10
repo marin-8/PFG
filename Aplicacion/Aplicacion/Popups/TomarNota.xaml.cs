@@ -20,22 +20,11 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TomarNota : PopupPage
 	{
-	// ============================================================================================== //
+		// ============================================================================================== //
 
 		// Variables y constantes
 
-		public readonly ObservableCollection<Articulo> ArticulosSeleccionados = new()
-		{
-			new("Cerveza Franziskaner", "Bebidas", 0.01f, 2),
-			new("Marianito", "Bebidas", 0.01f, 3),
-			new("Patatas asadas con salsa de champiñones y queso", "Entrantes", 0.01f, 255),
-			new("Cerveza Franziskaner", "Bebidas", 0.01f, 2),
-			new("Marianito", "Bebidas", 0.01f, 3),
-			new("Patatas asadas con salsa de champiñones y queso", "Entrantes", 0.01f, 255),
-			new("Cerveza Franziskaner", "Bebidas", 0.01f, 2),
-			new("Marianito", "Bebidas", 0.01f, 3),
-			new("Patatas asadas con salsa de champiñones y queso", "Entrantes", 0.01f, 255),
-		};
+		public readonly ObservableCollection<Articulo> ArticulosSeleccionados = new();
 
 	// ============================================================================================== //
 
@@ -52,24 +41,82 @@ namespace PFG.Aplicacion
 
 		// Eventos UI -> Contenido
 
-		private void SeleccionarMesa_Clicked(object sender, EventArgs e)
+		private async void SeleccionarMesa_Clicked(object sender, EventArgs e)
 		{
+			var popupSeleccionarMesa = new SeleccionarMesa();
+			await Navigation.PushPopupAsync(popupSeleccionarMesa);
+			var resultado = await popupSeleccionarMesa.Resultado;
 
+			if(resultado.Correcto)
+			{
+				SeleccionarMesa.Text = resultado.NumeroMesaSeleccionada.ToString();
+				SeleccionarMesa.BackgroundColor = Color.LimeGreen;
+			}
 		}
 
-		private void AnadirArticulo_Clicked(object sender, EventArgs e)
+		private async void AnadirArticulo_Clicked(object sender, EventArgs e)
 		{
+			var popupAnadirArticulo = new AnadirArticulo();
+			await Navigation.PushPopupAsync(popupAnadirArticulo);
+			var resultado = await popupAnadirArticulo.Resultado;
 
+			if(resultado.Correcto)
+			{
+				bool articuloYaSeleccionado(Articulo a) => a.Nombre == resultado.Articulo.Nombre;
+
+				if(ArticulosSeleccionados.ToList().Any(articuloYaSeleccionado))
+				{
+					ArticulosSeleccionados
+						.First(articuloYaSeleccionado)
+							.Unidades += 1;
+
+					// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
+					ListaArticulos.ItemsSource = null;
+					ListaArticulos.ItemsSource = ArticulosSeleccionados;
+				}
+				else
+				{
+					ArticulosSeleccionados.Add(resultado.Articulo);
+				}
+			}
 		}
 
 		private void QuitarUnidadArticulo_Clicked(object sender, EventArgs e)
 		{
+			var nombreArticulo = (string)((Button)sender).BindingContext;
 
+			bool articuloYaSeleccionado(Articulo a) => a.Nombre.Equals(nombreArticulo);
+
+			var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
+
+			if(articuloAModificar.Unidades == 1)
+				ArticulosSeleccionados.Remove(articuloAModificar);
+			else
+			{
+				articuloAModificar.Unidades -= 1;
+
+				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
+				ListaArticulos.ItemsSource = null;
+					ListaArticulos.ItemsSource = ArticulosSeleccionados;
+			}
 		}
 
 		private void AnadirUnidadArticulo_Clicked(object sender, EventArgs e)
 		{
+			var nombreArticulo = (string)((Button)sender).BindingContext;
 
+			bool articuloYaSeleccionado(Articulo a) => a.Nombre.Equals(nombreArticulo);
+
+			var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
+
+			if(articuloAModificar.Unidades < 255)
+			{
+				articuloAModificar.Unidades += 1;
+
+				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
+				ListaArticulos.ItemsSource = null;
+				ListaArticulos.ItemsSource = ArticulosSeleccionados;
+			}
 		}
 
 		private void Cancelar_Clicked(object sender, EventArgs e)

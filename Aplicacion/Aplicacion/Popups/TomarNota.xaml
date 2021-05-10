@@ -129,6 +129,7 @@
                                                 BackgroundColor="Red"
                                                 WidthRequest="48"
                                                 HeightRequest="48"
+                                                BindingContext="{Binding Nombre}"
                                                 Clicked="QuitarUnidadArticulo_Clicked"/>
 
                                             <Label
@@ -148,6 +149,7 @@
                                                 BackgroundColor="LimeGreen"
                                                 WidthRequest="48"
                                                 HeightRequest="48"
+                                                BindingContext="{Binding Nombre}"
                                                 Clicked="AnadirUnidadArticulo_Clicked"/>
 
                                         </Grid>

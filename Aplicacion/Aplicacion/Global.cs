@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+using Xamarin.Forms;
+
 using Acr.UserDialogs;
 
 using PFG.Comun;
@@ -23,9 +25,9 @@ namespace PFG.Aplicacion
 
 		public static ObservableCollection<Usuario> UsuariosLocal = new();
 
-		public static byte ColumnasMesas;
-		public static byte FilasMesas;
-		public static List<Mesa> MesasLocal = new();
+		public static byte AnchoMapaMesas { get; private set; }
+		public static byte AltoMapaMesas { get; private set; }
+		public static Mesa[] Mesas { get; private set; } = new Mesa[0];
 
 		public static ObservableCollection<List<Articulo>> CategoriasLocal = new();
 
@@ -75,6 +77,72 @@ namespace PFG.Aplicacion
 			}
 
 			return null;
+		}
+
+		public static Button GenerarBotonMesa(byte GridX, byte GridY, EventHandler EventoMesaPulsada)
+		{
+			var buttonMesa = new Button()
+			{
+				FontAttributes=FontAttributes.Bold,
+				FontSize=20,
+				Padding=new(0),
+				Margin=new(0),
+				BackgroundColor=Color.FromRgb(240, 240, 240),
+				BindingContext=$"{GridX}.{GridY}"
+			};
+			buttonMesa.Clicked += EventoMesaPulsada;
+
+			return buttonMesa;
+		}
+
+		public static async Task Get_Mesas()
+		{
+			UserDialogs.Instance.ShowLoading("Pidiendo mesas...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_PedirMesas().Enviar(IPGestor);
+				return Comando.DeJson<Comando_MandarMesas>(respuestaGestor);
+			});
+
+			AnchoMapaMesas = comandoRespuesta.AnchoMapa;
+			AltoMapaMesas = comandoRespuesta.AltoMapa;
+			Mesas = comandoRespuesta.Mesas;
+
+			UserDialogs.Instance.HideLoading();
+		}
+
+		public static async Task Get_Articulos()
+		{
+			UserDialogs.Instance.ShowLoading("Pidiendo artículos...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_PedirArticulos().Enviar(Global.IPGestor);
+				return Comando.DeJson<Comando_MandarArticulos>(respuestaGestor);
+			});
+			
+			CategoriasLocal.Clear();
+
+			var categorias =
+				comandoRespuesta.Articulos
+					.OrderBy(a => a.Categoria)
+					.GroupBy(a => a.Categoria)
+					.Select(a => a.First().Categoria);
+
+			foreach(var categoria in categorias)
+			{
+				var nuevaCategoria = new GrupoArticuloCategoria(categoria);
+
+				nuevaCategoria.AddRange(
+					comandoRespuesta.Articulos
+						.Where(a => a.Categoria.Equals(categoria))
+						.OrderBy(a => a.Nombre));
+
+				CategoriasLocal.Add(nuevaCategoria);
+			}
+
+			UserDialogs.Instance.HideLoading();
 		}
 	}
 }

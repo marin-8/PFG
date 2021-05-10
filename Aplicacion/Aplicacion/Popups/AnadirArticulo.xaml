@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<rg:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.AnadirArticulo"
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:pfgcomun="clr-namespace:PFG.Comun;assembly=Comun">
+
+    <Frame 
+        BackgroundColor="White"
+        Margin="20">
+
+        <StackLayout
+            Spacing="0">
+
+            <Label
+                Text="Selecciona Mesa"
+                FontSize="20"
+                TextColor="White"
+                BackgroundColor="MediumBlue"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                HeightRequest="40"/>
+
+            <BoxView HeightRequest="20" Color="Transparent"/>
+
+            <ListView
+                x:Name="ListaArticulos"
+                SelectionMode="None"
+                HasUnevenRows="True"
+                BackgroundColor="Transparent"
+                SeparatorVisibility="None"
+                IsPullToRefreshEnabled="True"
+                RefreshControlColor="Blue"
+                Refreshing="ListaArticulos_Refresh"
+                ItemTapped="ListaArticulos_ItemTapped"
+                IsGroupingEnabled="True"
+                GroupDisplayBinding="{Binding Categoria}">
+
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+
+                            <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                                <Frame BackgroundColor="MediumBlue" Padding="10">
+                                    <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                        <Label HorizontalTextAlignment="Center" FontSize="20" Text="{Binding Categoria}" TextColor="White" FontAttributes="Bold"></Label>
+                                    </StackLayout>
+                                </Frame>
+                            </Frame>
+
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="pfgcomun:Articulo">
+                        <ViewCell>
+
+                            <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                                <Frame BackgroundColor="LightSkyBlue" Padding="10">
+                                    <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                        <Label FontSize="20" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
+                                        <Label FontSize="18" Text="{Binding Precio, StringFormat='Precio: {0:C2}'}" TextColor="Black"></Label>
+                                    </StackLayout>
+                                </Frame>
+                            </Frame>
+
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+
+    </Frame>
+
+</rg:PopupPage>

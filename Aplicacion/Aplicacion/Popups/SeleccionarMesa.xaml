@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<rg:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.SeleccionarMesa"
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+
+    <Frame 
+        BackgroundColor="White"
+        Margin="20">
+
+        <StackLayout
+            Spacing="0">
+
+            <Label
+                Text="Selecciona Mesa"
+                FontSize="20"
+                TextColor="White"
+                BackgroundColor="MediumBlue"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                HeightRequest="40"/>
+
+            <BoxView HeightRequest="20" Color="Transparent"/>
+
+            <Grid
+                x:Name="MapaGrid"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                ColumnSpacing="0"
+                RowSpacing="0"
+                Margin="0"/>
+
+        </StackLayout>
+
+    </Frame>
+
+</rg:PopupPage>
