@@ -36,7 +36,7 @@ namespace PFG.Aplicacion
 
 			Shell.Current.Navigated += OnNavigatedTo;
 
-			ListaUsuarios.ItemsSource = Global.UsuariosLocal;
+			ListaUsuarios.ItemsSource = Global.Usuarios;
 		}
 
 		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
@@ -67,7 +67,7 @@ namespace PFG.Aplicacion
 
 				RefrescarUsuarios();
 
-				if(Global.UsuariosLocal.Any(u => u.NombreUsuario.Equals(nombreUsuario)))
+				if(Global.Usuarios.Any(u => u.NombreUsuario.Equals(nombreUsuario)))
 					await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
 				else
 					break;
@@ -175,7 +175,7 @@ namespace PFG.Aplicacion
 
 					RefrescarUsuarios();
 
-					if(Global.UsuariosLocal.Any(u => u.NombreUsuario.Equals(nuevoNombreUsuario)))
+					if(Global.Usuarios.Any(u => u.NombreUsuario.Equals(nuevoNombreUsuario)))
 						await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
 
 					else if(nuevoNombreUsuario.Equals(usuarioPulsado.NombreUsuario))
@@ -318,10 +318,10 @@ namespace PFG.Aplicacion
 
 		private void Procesar_RecibirUsuarios(Comando_MandarUsuarios Comando)
 		{
-			Global.UsuariosLocal.Clear();
+			Global.Usuarios.Clear();
 			
 			foreach(var usuario in Comando.Usuarios)
-				Global.UsuariosLocal.Add(usuario);
+				Global.Usuarios.Add(usuario);
 
 			ListaUsuarios.EndRefresh();
 		}

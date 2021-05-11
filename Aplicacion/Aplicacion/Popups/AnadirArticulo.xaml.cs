@@ -28,7 +28,7 @@ namespace PFG.Aplicacion
 		{
 			InitializeComponent();
 
-			ListaArticulos.ItemsSource = Global.CategoriasLocal;
+			ListaArticulos.ItemsSource = Global.Categorias;
 		}
 
 

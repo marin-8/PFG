@@ -36,7 +36,7 @@ namespace PFG.Aplicacion
 
 			Shell.Current.Navigated += OnNavigatedTo;
 
-			ListaArticulos.ItemsSource = Global.CategoriasLocal;
+			ListaArticulos.ItemsSource = Global.Categorias;
 		}
 
 		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
@@ -62,7 +62,7 @@ namespace PFG.Aplicacion
 				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", 100, true);
 				if(nombre == null) return;
 
-				var articulos = Global.CategoriasLocal.SelectMany(cl => cl).ToList();
+				var articulos = Global.Categorias.SelectMany(cl => cl).ToList();
 
 				if(articulos.Any(a => a.Nombre.Equals(nombre)))
 					await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
@@ -94,7 +94,7 @@ namespace PFG.Aplicacion
 				break;
 			}
 
-			var categorias = Global.CategoriasLocal.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+			var categorias = Global.Categorias.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
 			var categoriasExistentesMasOpcionNueva = categorias;
 			categoriasExistentesMasOpcionNueva.Add("+ Nueva");
 
@@ -171,7 +171,7 @@ namespace PFG.Aplicacion
 					nuevoNombre = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {articuloPulsado.Nombre})", 100, true);
 					if(nuevoNombre == null) return;
 
-					var articulos = Global.CategoriasLocal.SelectMany(cl => cl).ToList();
+					var articulos = Global.Categorias.SelectMany(cl => cl).ToList();
 
 					if(articulos.Any(a => a.Nombre.Equals(nuevoNombre)))
 						await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
@@ -237,7 +237,7 @@ namespace PFG.Aplicacion
 			{
 				string nuevaCategoria = "";
 
-				var categorias = Global.CategoriasLocal.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+				var categorias = Global.Categorias.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
 				var categoriasExistentesMasOpcionNueva = categorias;
 				categoriasExistentesMasOpcionNueva.Add("+ Nueva");
 

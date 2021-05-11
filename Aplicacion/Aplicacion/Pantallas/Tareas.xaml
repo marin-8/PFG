@@ -4,41 +4,73 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="PFG.Aplicacion.Tareas"
+    xmlns:pfgcomun="clr-namespace:PFG.Comun;assembly=Comun"
     
     Title="Tareas">
 
-    <Grid
-        ColumnSpacing="0"
-        RowSpacing="0">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Refrescar    "
+            Order="Primary"
+            Priority="1"
+            Clicked="Refrescar_Clicked"/>
+    </ContentPage.ToolbarItems>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+    <StackLayout
+        Spacing="0"
+        Padding="20">
 
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <ListView
+            x:Name="ListaTareas"
+            SelectionMode="None"
+            HasUnevenRows="True"
+            BackgroundColor="Transparent"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="True"
+            RefreshControlColor="Blue"
+            Refreshing="ListaTareas_Refresh"
+            ItemTapped="ListaTareas_ItemTapped">
 
-        <StackLayout
-            Spacing="0"
-            Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="pfgcomun:Tarea">
+                    <ViewCell>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+                        <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                            <Frame BackgroundColor="Silver" Padding="10">
+                                <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                    <Label FontSize="20" Text="{Binding TipoTarea}" TextColor="Black" FontAttributes="Bold">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="ServirArticulos">
+                                                <Setter Property="BackgroundColor" Value="White" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                                <Setter Property="BackgroundColor" Value="Black" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="PrepararArticulos">
+                                                <Setter Property="BackgroundColor" Value="White" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+                                <Frame.Triggers>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="ServirArticulos">
+                                        <Setter Property="BackgroundColor" Value="Red" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                        <Setter Property="BackgroundColor" Value="orange" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="PrepararArticulos">
+                                        <Setter Property="BackgroundColor" Value="DarkMagenta" />
+                                    </DataTrigger>
+                                </Frame.Triggers>
+                            </Frame>
+                        </Frame>
 
-            <Label
-                Text="Tareas"
-                FontSize="Title"
-                TextColor="Black"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
-
-        </StackLayout>
-
-    </Grid>
+    </StackLayout>
 
 </ContentPage>

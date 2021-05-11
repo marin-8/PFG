@@ -35,5 +35,7 @@ namespace PFG.Comun
 		EliminarArticulo,
 
 		TomarNota,
+
+		EnviarTarea
 	}
 }

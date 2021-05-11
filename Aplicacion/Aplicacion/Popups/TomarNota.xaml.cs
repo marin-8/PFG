@@ -114,7 +114,7 @@ namespace PFG.Aplicacion
 			{
 				articuloAModificar.Unidades += 1;
 				// TODO - PROBAR ESTO
-				ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre) );
+				ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
 
 				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
 				ListaArticulos.ItemsSource = null;

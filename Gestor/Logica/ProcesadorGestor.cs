@@ -248,6 +248,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.TomarNota:
+				{
+					Procesar_TomarNota(
+						Comando.DeJson
+							<Comando_TomarNota>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -642,6 +652,44 @@ namespace PFG.Gestor
 					.First();
 
 			GestionArticulos.Articulos.Remove(articuloAEliminar);
+		}		
+
+		private static async void Procesar_TomarNota(Comando_TomarNota Comando)
+		{
+			GestionMesas.Mesas
+				.First(m => m.Numero == Comando.NumeroMesa)
+					.EstadoMesa = EstadosMesa.Esperando;
+
+
+
+			var usuarioAsignarTarea = 
+				GestionUsuarios.Usuarios
+					.Where(u => u.Conectado)
+					.OrderBy(u =>
+						GestionTareas.Tareas
+							.Where(t => t.NombreUsuario == u.NombreUsuario && !t.Completada)
+							.Count())
+					.ThenBy(u => 
+						GestionTareas.Tareas
+							.Where(t => t.NombreUsuario == u.NombreUsuario && t.Completada)
+							.Count())
+					.First();
+
+
+
+			var nuevaTarea = new Tarea(
+				Global.NuevoIDTarea,
+				TiposTareas.ServirArticulos,
+				usuarioAsignarTarea.NombreUsuario,
+				Comando.Articulos,
+				Comando.NumeroMesa);
+
+			GestionTareas.Tareas.Add(nuevaTarea);
+
+			await Task.Run(() =>
+			{
+				new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignarTarea.IP);
+			});
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

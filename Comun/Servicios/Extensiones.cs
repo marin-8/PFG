@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -16,6 +17,18 @@ namespace PFG.Comun
 		{
 			var listaOrdenable = new List<T>(coleccion);
 			listaOrdenable.Sort(comparacion);
+
+			for(int i = 0 ; i < listaOrdenable.Count; i++)
+				coleccion.Move(coleccion.IndexOf(listaOrdenable[i]), i);
+		}
+
+		public static void Ordenar(this ObservableCollection<Tarea> coleccion)
+		{
+			List<Tarea> listaOrdenable =
+				coleccion
+					.OrderBy(t => t.TipoTarea)
+					.ThenBy(t => t.FechaHoraCreacion)
+					.ToList();
 
 			for(int i = 0 ; i < listaOrdenable.Count; i++)
 				coleccion.Move(coleccion.IndexOf(listaOrdenable[i]), i);

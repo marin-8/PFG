@@ -28,6 +28,16 @@ namespace PFG.Aplicacion
 
 			switch(tipoComando)
 			{
+				case TiposComando.EnviarTarea:
+				{
+					Procesar_EnviarTarea(
+						Comando.DeJson
+							<Comando_EnviarTarea>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -48,6 +58,13 @@ namespace PFG.Aplicacion
 			}
 
 			return comandoRespuesta;
+		}
+
+		private void Procesar_EnviarTarea(Comando_EnviarTarea Comando)
+		{
+			Global.TareasPersonales.Add(Comando.Tarea);
+
+			Global.TareasPersonales.Ordenar();
 		}
 
 		//private string Procesar_XXXXX(Comando_XXXXX Comando)

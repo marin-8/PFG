@@ -23,13 +23,15 @@ namespace PFG.Aplicacion
 		public static ControladorRed Servidor;
 		public static ProcesadorAplicacion ProcesadorMensajesRecibidos;
 
-		public static ObservableCollection<Usuario> UsuariosLocal = new();
+		public static ObservableCollection<Usuario> Usuarios = new();
 
 		public static byte AnchoMapaMesas { get; private set; }
 		public static byte AltoMapaMesas { get; private set; }
 		public static Mesa[] Mesas { get; private set; } = new Mesa[0];
 
-		public static ObservableCollection<List<Articulo>> CategoriasLocal = new();
+		public static ObservableCollection<List<Articulo>> Categorias = new();
+
+		public static ObservableCollection<Tarea> TareasPersonales = new();
 
 		public static async void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
 		{
@@ -122,7 +124,7 @@ namespace PFG.Aplicacion
 				return Comando.DeJson<Comando_MandarArticulos>(respuestaGestor);
 			});
 			
-			CategoriasLocal.Clear();
+			Categorias.Clear();
 
 			var categorias =
 				comandoRespuesta.Articulos
@@ -139,7 +141,7 @@ namespace PFG.Aplicacion
 						.Where(a => a.Categoria.Equals(categoria))
 						.OrderBy(a => a.Nombre));
 
-				CategoriasLocal.Add(nuevaCategoria);
+				Categorias.Add(nuevaCategoria);
 			}
 
 			UserDialogs.Instance.HideLoading();
