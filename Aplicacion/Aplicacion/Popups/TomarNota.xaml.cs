@@ -97,7 +97,7 @@ namespace PFG.Aplicacion
 
 				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
 				ListaArticulos.ItemsSource = null;
-					ListaArticulos.ItemsSource = ArticulosSeleccionados;
+				ListaArticulos.ItemsSource = ArticulosSeleccionados;
 			}
 		}
 
@@ -112,6 +112,8 @@ namespace PFG.Aplicacion
 			if(articuloAModificar.Unidades < 255)
 			{
 				articuloAModificar.Unidades += 1;
+				// TODO - PROBAR ESTO
+				ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre) );
 
 				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
 				ListaArticulos.ItemsSource = null;
@@ -119,14 +121,16 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private void Cancelar_Clicked(object sender, EventArgs e)
+		private async void Cancelar_Clicked(object sender, EventArgs e)
 		{
-
+			await Navigation.PopPopupAsync();
 		}
 
-		private void Aceptar_Clicked(object sender, EventArgs e)
+		private async void Aceptar_Clicked(object sender, EventArgs e)
 		{
+			//
 
+			await Navigation.PopPopupAsync();
 		}
 
 	// ============================================================================================== //

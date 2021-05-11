@@ -118,7 +118,7 @@ namespace PFG.Aplicacion
 
 			var comandoRespuesta = await Task.Run(() =>
 			{
-				string respuestaGestor = new Comando_PedirArticulos().Enviar(Global.IPGestor);
+				string respuestaGestor = new Comando_PedirArticulos().Enviar(IPGestor);
 				return Comando.DeJson<Comando_MandarArticulos>(respuestaGestor);
 			});
 			
