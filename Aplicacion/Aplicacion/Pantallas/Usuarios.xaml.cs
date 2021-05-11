@@ -93,14 +93,14 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-	// ============================================================================================== //
-
-		// Eventos UI -> Contenido
-
 		private void ListaUsuarios_Refresh(object sender, EventArgs e)
 		{
 			RefrescarUsuarios();
 		}
+
+	// ============================================================================================== //
+
+		// Eventos UI -> Contenido
 
 		private static readonly string[] OpcionesUsuario = new string[]
 		{

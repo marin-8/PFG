@@ -258,6 +258,17 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.PedirTareas:
+				{
+					comandoRespuesta =
+						Procesar_PedirTareas(
+							Comando.DeJson
+								<Comando_PedirTareas>
+									(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -690,6 +701,19 @@ namespace PFG.Gestor
 			{
 				new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignarTarea.IP);
 			});
+		}
+
+		private static string Procesar_PedirTareas(Comando_PedirTareas Comando)
+		{
+			return new Comando_MandarTareas
+			(
+				GestionTareas.Tareas
+					.Where(
+						t => !t.Completada && 
+						t.NombreUsuario.Equals(Comando.NombreUsuario))
+					.ToArray()
+			)
+			.ToString();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

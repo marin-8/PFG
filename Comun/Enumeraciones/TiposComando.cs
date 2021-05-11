@@ -35,7 +35,9 @@ namespace PFG.Comun
 		EliminarArticulo,
 
 		TomarNota,
+		EnviarTarea,
 
-		EnviarTarea
+		PedirTareas,
+		MandarTareas,
 	}
 }

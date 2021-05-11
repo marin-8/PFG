@@ -13,7 +13,7 @@
             Text="Refrescar    "
             Order="Primary"
             Priority="1"
-            Clicked="Refrescar_Clicked"/>
+            Clicked="ListaTareas_Refresh"/>
     </ContentPage.ToolbarItems>
 
     <StackLayout
