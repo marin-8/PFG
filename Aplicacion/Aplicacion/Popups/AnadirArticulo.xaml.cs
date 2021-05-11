@@ -64,10 +64,14 @@ namespace PFG.Aplicacion
 
 		private async void ListaArticulos_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
-			ResultadoArticulo = (Articulo)e.Item;
-			ResultadoArticulo.Unidades = 1;
+			var articuloPulsado = (Articulo)e.Item;
 
-			await Navigation.PopPopupAsync();
+			if(articuloPulsado.Disponible)
+			{
+				ResultadoArticulo = (Articulo)e.Item;
+
+				await Navigation.PopPopupAsync();
+			}
 		}
 	}
 }

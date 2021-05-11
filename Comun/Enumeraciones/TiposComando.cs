@@ -33,5 +33,7 @@ namespace PFG.Comun
 		ModificarArticuloPrecio,
 		ModificarArticuloCategoria,
 		EliminarArticulo,
+
+		TomarNota,
 	}
 }

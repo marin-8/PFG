@@ -65,6 +65,11 @@
                                         <Label FontSize="20" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
                                         <Label FontSize="18" Text="{Binding Precio, StringFormat='Precio: {0:C2}'}" TextColor="Black"></Label>
                                     </StackLayout>
+                                    <Frame.Triggers>
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Disponible}" Value="false">
+                                            <Setter Property="BackgroundColor" Value="Silver" />
+                                        </DataTrigger>
+                                    </Frame.Triggers>
                                 </Frame>
                             </Frame>
 

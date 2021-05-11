@@ -76,6 +76,7 @@ namespace PFG.Aplicacion
 				}
 				else
 				{
+					resultado.Articulo.Unidades = 1;
 					ArticulosSeleccionados.Add(resultado.Articulo);
 				}
 			}
@@ -128,7 +129,27 @@ namespace PFG.Aplicacion
 
 		private async void Aceptar_Clicked(object sender, EventArgs e)
 		{
-			//
+			if(!byte.TryParse(SeleccionarMesa.Text, out byte mesaSeleccionada))
+			{
+				await UserDialogs.Instance.AlertAsync("No se ha seleccionado una mesa", "Alerta", "Aceptar");
+
+				return;
+			}
+			else if(ArticulosSeleccionados.Count() == 0)
+			{
+				await UserDialogs.Instance.AlertAsync("No se ha seleccionado ningún artículo", "Alerta", "Aceptar");
+
+				return;
+			}
+
+			UserDialogs.Instance.ShowLoading("Mandando pedido...");
+
+			await Task.Run(() =>
+			{
+				new Comando_TomarNota(mesaSeleccionada, ArticulosSeleccionados.ToArray()).Enviar(Global.IPGestor);
+			});
+
+			UserDialogs.Instance.HideLoading();
 
 			await Navigation.PopPopupAsync();
 		}
