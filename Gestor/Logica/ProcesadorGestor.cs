@@ -690,6 +690,7 @@ namespace PFG.Gestor
 
 			var nuevaTarea = new Tarea(
 				Global.NuevoIDTarea,
+				DateTime.Now,
 				TiposTareas.ServirArticulos,
 				usuarioAsignarTarea.NombreUsuario,
 				Comando.Articulos,

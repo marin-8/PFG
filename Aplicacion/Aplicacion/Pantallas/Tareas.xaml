@@ -38,16 +38,49 @@
                         <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
                             <Frame BackgroundColor="Silver" Padding="10">
                                 <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
-                                    <Label FontSize="20" Text="{Binding TipoTarea}" TextColor="Black" FontAttributes="Bold">
+                                    <Label FontSize="20" Text="{Binding TipoTarea}" TextColor="White" FontAttributes="Bold">
                                         <Label.Triggers>
-                                            <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="ServirArticulos">
-                                                <Setter Property="BackgroundColor" Value="White" />
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                                <Setter Property="TextColor" Value="Black" />
                                             </DataTrigger>
-                                            <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
-                                                <Setter Property="BackgroundColor" Value="Black" />
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label FontSize="18" Text="{Binding NumeroMesa, StringFormat='Mesa: {0}'}" TextColor="White">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                                <Setter Property="TextColor" Value="Black" />
                                             </DataTrigger>
-                                            <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="PrepararArticulos">
-                                                <Setter Property="BackgroundColor" Value="White" />
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label FontSize="18" Text="Artículos:" TextColor="White">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                                <Setter Property="TextColor" Value="Black" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <StackLayout BindableLayout.ItemsSource="{Binding Articulos}" Spacing="0">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="pfgcomun:Articulo">
+                                                <Grid
+                                                    ColumnSpacing="0"
+                                                    RowSpacing="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="12"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="10"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="1" FontSize="18" Text="{Binding Unidades, StringFormat='- {0}  x'}" TextColor="White"/>
+                                                    <Label Grid.Column="3" FontSize="18" Text="{Binding Nombre, StringFormat='{0}'}" TextColor="White"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
+                                    <Label HorizontalTextAlignment="End" FontSize="18" Text="{Binding FechaHoraCreacion, StringFormat='Hora: {0:HH\\:mm}'}" TextColor="White">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                                <Setter Property="TextColor" Value="Black" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>

@@ -17,13 +17,13 @@ namespace PFG.Comun
 		public Articulo[] Articulos { get; private set; }
 		public byte NumeroMesa { get; private set; }
 
-		public Tarea(int ID, TiposTareas TipoTarea, string NombreUsuario, Articulo[] Articulos = null, byte NumeroMesa = 0)
+		public Tarea(int ID, DateTime FechaHoraCreacion, TiposTareas TipoTarea, string NombreUsuario, Articulo[] Articulos = null, byte NumeroMesa = 0)
 		{
 			this.ID = ID;
 
 			Completada = false;
 
-			FechaHoraCreacion = DateTime.Now;
+			this.FechaHoraCreacion = FechaHoraCreacion;
 
 			this.TipoTarea = TipoTarea;
 			this.NombreUsuario = NombreUsuario;
