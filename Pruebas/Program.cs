@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -45,6 +46,19 @@ namespace PFG.Pruebas
 			//byte[] b = Encoding.UTF8.GetBytes(a);
 
 			//string c = Encoding.UTF8.GetString(b);
+
+			//DateTime[] fechasHoras = new DateTime[]
+			//{
+			//	new(2021,10,10, 20, 0, 0),
+			//	new(2021,10,10, 22, 0, 0),
+			//	new(2021,10,11,  2, 0, 0),
+			//	new(2021,10,10, 18, 0, 0),
+			//};
+
+			//var fechasHorasOrdenadas =
+			//	fechasHoras
+			//		.OrderBy(fh => fh)
+			//		.ToArray();
 		}
 	}
 }

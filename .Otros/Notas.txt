@@ -13,8 +13,10 @@
         - Y quitar tanto "RefrescarX" en las pantallas de configuración
         
         - Revisar mayúsculas/minúsculas
-        - Revisar tipos (listas, enteros...)
+        - Revisar tipos (listas, enteros...) (de comandos) (arrays en vez de listas)
         - Revisar comparaciones de strings (usar Equals en vez de ==)
+        
+        - Revisar public/protected/private
         
         - Refrescar solo variables y actualizar solo si es necesario
         

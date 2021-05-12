@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<rg:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.CobrarTicket"
+    xmlns:pfgcomun="clr-namespace:PFG.Comun;assembly=Comun"
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+
+    <Frame 
+        BackgroundColor="White"
+        Margin="20">
+
+        <StackLayout
+            Spacing="0">
+
+            <Label
+                x:Name="Titulo"
+                FontSize="20"
+                TextColor="White"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                BackgroundColor="MediumBlue"
+                HeightRequest="40"/>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+
+            <ScrollView
+                Orientation="Vertical"
+                BackgroundColor="Transparent"
+                Padding="0"
+                Margin="0"
+                VerticalOptions="StartAndExpand">
+
+                <StackLayout
+                    VerticalOptions="StartAndExpand"
+                    Spacing="0"
+                    Padding="0"
+                    Margin="0">
+
+                    <Grid
+                        x:Name="GridItemsTicket"
+                        VerticalOptions="StartAndExpand"
+                        ColumnSpacing="12"
+                        RowSpacing="5">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                    </Grid>
+
+                </StackLayout>
+
+            </ScrollView>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+
+            <Label
+                x:Name="Total"
+                FontSize="20"
+                TextColor="Black"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                BackgroundColor="LightGray"
+                HeightRequest="40"/>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+            
+            <StackLayout
+                Spacing="0"
+                Orientation="Horizontal"
+                HorizontalOptions="Center">
+
+                <Button
+                    Text="Cancelar"
+                    FontSize="20"
+                    TextColor="White"
+                    BackgroundColor="Red"
+                    FontAttributes="Bold"
+                    Clicked="Cancelar_Clicked"/>
+
+                <BoxView BackgroundColor="Transparent" WidthRequest="20"/>
+
+                <Button
+                    Text="Aceptar"
+                    FontSize="20"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BackgroundColor="LimeGreen"
+                    Clicked="Aceptar_Clicked"/>
+
+            </StackLayout>
+
+        </StackLayout>
+
+    </Frame>
+
+</rg:PopupPage>

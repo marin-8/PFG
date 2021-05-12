@@ -83,11 +83,17 @@ namespace PFG.Aplicacion
 
 		private async void ListaTareas_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
-			// TODO - ESTO
+			var tareaPulsada = (Tarea)e.Item;
 
-			// TODO - APUNTAR ->  string.PadLeft(n,'c');
+			if(await UserDialogs.Instance.ConfirmAsync("¿Tarea completada?", "Confirmar", "Si", "Cancelar"))
+			{
+				await Task.Run(() =>
+				{
+					new Comando_TareaCompletada(tareaPulsada.ID).Enviar(Global.IPGestor);
+				});
 
-			await UserDialogs.Instance.AlertAsync("hey", "Sin implementar", "Aceptar");
+				// TODO - Gestionar esto en el Gestor xD
+			}
 		}
 
 	// ============================================================================================== //

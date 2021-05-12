@@ -35,10 +35,15 @@ namespace PFG.Comun
 		ModificarArticuloSitioDePreparacion,
 		EliminarArticulo,
 
-		TomarNota,
-		EnviarTarea,
+		PedirTicketMesa,
+		MandarTicketMesa,
 
+		TomarNota,
+		Cobrar,
+
+		EnviarTarea,
 		PedirTareas,
 		MandarTareas,
+		TareaCompletada,
 	}
 }

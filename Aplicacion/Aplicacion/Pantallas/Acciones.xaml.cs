@@ -92,8 +92,35 @@ namespace PFG.Aplicacion
 
 				case TiposAcciones.Cobrar:
 				{
-					//await Navigation.PushPopupAsync(new XXXXX());
-					return;
+					while(true)
+					{
+						var popupSeleccionarMesa = new SeleccionarMesa();
+						await Navigation.PushPopupAsync(popupSeleccionarMesa);
+						var resultado = await popupSeleccionarMesa.Resultado;
+
+						if(resultado.Correcto)
+						{
+							var estadoMesaSeleccionada =
+								Global.Mesas
+									.First(m => m.Numero == resultado.NumeroMesaSeleccionada)
+										.EstadoMesa;
+
+							if(estadoMesaSeleccionada == EstadosMesa.Vacia)
+								await UserDialogs.Instance.AlertAsync("No se puede cobrar a una mesa vacía", "Alerta", "Aceptar");
+							
+							else if(estadoMesaSeleccionada == EstadosMesa.Esperando)
+								await UserDialogs.Instance.AlertAsync("No se puede cobrar a una mesa que está esperando ser servida", "Alerta", "Aceptar");
+
+							else if(estadoMesaSeleccionada == EstadosMesa.Sucia)
+								await UserDialogs.Instance.AlertAsync("No se puede cobrar a una mesa vacía (además está sucia)", "Alerta", "Aceptar");
+
+							else {
+								await Navigation.PushPopupAsync(new CobrarTicket(resultado.NumeroMesaSeleccionada));
+								return; }
+						}
+						else
+							return;
+					}
 				}
 
 				case TiposAcciones.MarcarArticuloComoAcabado:

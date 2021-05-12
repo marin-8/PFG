@@ -279,6 +279,18 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.PedirTicketMesa:
+				{
+					comandoRespuesta =
+						Procesar_PedirTicketMesa(
+							Comando.DeJson
+								<Comando_PedirTicketMesa>
+									(ComandoJson));
+
+					break;
+				}
+
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -762,6 +774,33 @@ namespace PFG.Gestor
 						t => !t.Completada && 
 						t.NombreUsuario.Equals(Comando.NombreUsuario))
 					.ToArray()
+			)
+			.ToString();
+		}
+
+		private static string Procesar_PedirTicketMesa(Comando_PedirTicketMesa Comando)
+		{
+			var tareaUltimaLimpiezaDeMesa =
+				GestionTareas.Tareas
+					.Where(t => t.NumeroMesa == Comando.NumeroMesa
+						     && t.TipoTarea == TiposTareas.LimpiarMesa)
+					.OrderBy(t => t.FechaHoraCreacion)
+					.LastOrDefault();
+
+			var fechaHoraUltimaLimpiezaMesa =
+				tareaUltimaLimpiezaDeMesa == null
+				? new DateTime(2000, 1, 1, 0, 0, 0)
+				: tareaUltimaLimpiezaDeMesa.FechaHoraCreacion;
+
+			return new Comando_MandarTicketMesa
+			(
+				GestionTareas.Tareas
+					.Where(t => t.NumeroMesa == Comando.NumeroMesa
+							 && t.TipoTarea == TiposTareas.ServirArticulos
+					         && t.FechaHoraCreacion > fechaHoraUltimaLimpiezaMesa)
+					.SelectMany(t => t.Articulos)
+						.Select(a => new ItemTicket(a.Unidades, a.Nombre, a.Precio))
+							.ToArray()
 			)
 			.ToString();
 		}

@@ -60,6 +60,9 @@
     <Compile Update="Popups\SeleccionarMesa.xaml.cs">
       <DependentUpon>SeleccionarMesa.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Popups\CobrarTicket.xaml.cs">
+      <DependentUpon>CobrarTicket.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Popups\TomarNota.xaml.cs">
       <DependentUpon>TomarNota.xaml</DependentUpon>
     </Compile>
