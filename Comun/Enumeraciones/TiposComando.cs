@@ -30,8 +30,9 @@ namespace PFG.Comun
 		MandarArticulos,
 		CrearArticulo,
 		ModificarArticuloNombre,
-		ModificarArticuloPrecio,
 		ModificarArticuloCategoria,
+		ModificarArticuloPrecio,
+		ModificarArticuloSitioDePreparacion,
 		EliminarArticulo,
 
 		TomarNota,

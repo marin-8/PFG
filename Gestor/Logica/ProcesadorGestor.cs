@@ -218,6 +218,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.ModificarArticuloCategoria:
+				{
+					Procesar_ModificarArticuloCategoria(
+						Comando.DeJson
+							<Comando_ModificarArticuloCategoria>
+								(ComandoJson));
+
+					break;
+				}
+
 				case TiposComando.ModificarArticuloPrecio:
 				{
 					Procesar_ModificarArticuloPrecio(
@@ -228,11 +238,11 @@ namespace PFG.Gestor
 					break;
 				}
 
-				case TiposComando.ModificarArticuloCategoria:
+				case TiposComando.ModificarArticuloSitioDePreparacion:
 				{
-					Procesar_ModificarArticuloCategoria(
+					Procesar_ModificarArticuloSitioDePreparacion(
 						Comando.DeJson
-							<Comando_ModificarArticuloCategoria>
+							<Comando_ModificarArticuloSitioDePreparacion>
 								(ComandoJson));
 
 					break;
@@ -639,6 +649,14 @@ namespace PFG.Gestor
 					.Nombre = Comando.NombreNuevo;
 		}
 
+		private static void Procesar_ModificarArticuloCategoria(Comando_ModificarArticuloCategoria Comando)
+		{
+			GestionArticulos.Articulos
+				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+				.First()
+					.Categoria = Comando.NuevaCategoria;
+		}
+
 		private static void Procesar_ModificarArticuloPrecio(Comando_ModificarArticuloPrecio Comando)
 		{
 			GestionArticulos.Articulos
@@ -647,12 +665,12 @@ namespace PFG.Gestor
 					.Precio = Comando.NuevoPrecio;
 		}
 
-		private static void Procesar_ModificarArticuloCategoria(Comando_ModificarArticuloCategoria Comando)
+		private static void Procesar_ModificarArticuloSitioDePreparacion(Comando_ModificarArticuloSitioDePreparacion Comando)
 		{
 			GestionArticulos.Articulos
 				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
 				.First()
-					.Categoria = Comando.NuevaCategoria;
+					.SitioPreparacionArticulo = Comando.NuevoSitioPreparacion;
 		}
 
 		private static void Procesar_EliminarArticulo(Comando_EliminarArticulo Comando)
@@ -671,37 +689,68 @@ namespace PFG.Gestor
 				.First(m => m.Numero == Comando.NumeroMesa)
 					.EstadoMesa = EstadosMesa.Esperando;
 
+			// ===== //
 
+			Usuario usuarioAsignarPreparacionBarra;
+			Usuario usuarioAsignarPreparacionCocina;
 
-			var usuarioAsignarTarea = 
-				GestionUsuarios.Usuarios
-					.Where(u => u.Conectado)
-					.OrderBy(u =>
-						GestionTareas.Tareas
-							.Where(t => t.NombreUsuario == u.NombreUsuario && !t.Completada)
-							.Count())
-					.ThenBy(u => 
-						GestionTareas.Tareas
-							.Where(t => t.NombreUsuario == u.NombreUsuario && t.Completada)
-							.Count())
-					.First();
+			// ===== //
 
-
-
-			var nuevaTarea = new Tarea(
-				Global.NuevoIDTarea,
-				DateTime.Now,
-				TiposTareas.ServirArticulos,
-				usuarioAsignarTarea.NombreUsuario,
-				Comando.Articulos,
-				Comando.NumeroMesa);
-
-			GestionTareas.Tareas.Add(nuevaTarea);
-
-			await Task.Run(() =>
+			var articulosPreparacionBarra = Comando.Articulos.Where(a => a.SitioPreparacionArticulo == SitioPreparacionArticulo.Barra).ToArray();			
+			
+			if(articulosPreparacionBarra.Any())
 			{
-				new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignarTarea.IP);
-			});
+				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
+					usuarioAsignarPreparacionBarra = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Barista);
+				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
+					usuarioAsignarPreparacionBarra = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Camarero);
+				else
+					usuarioAsignarPreparacionBarra = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+
+				var nuevaTareaBarra = new Tarea(
+					Global.NuevoIDTarea,
+					DateTime.Now,
+					TiposTareas.PrepararArticulos,
+					usuarioAsignarPreparacionBarra.NombreUsuario,
+					articulosPreparacionBarra,
+					Comando.NumeroMesa);
+
+				GestionTareas.Tareas.Add(nuevaTareaBarra);
+
+				await Task.Run(() =>
+				{
+					new Comando_EnviarTarea(nuevaTareaBarra).Enviar(usuarioAsignarPreparacionBarra.IP);
+				});
+			}
+
+			// ===== //
+
+			var articulosPreparacionCocina = Comando.Articulos.Where(a => a.SitioPreparacionArticulo == SitioPreparacionArticulo.Cocina).ToArray();			
+			
+			if(articulosPreparacionCocina.Any())
+			{
+				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Cocinero))
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Camarero);
+				else
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+
+				var nuevaTareaCocina = new Tarea(
+					Global.NuevoIDTarea,
+					DateTime.Now,
+					TiposTareas.PrepararArticulos,
+					usuarioAsignarPreparacionCocina.NombreUsuario,
+					articulosPreparacionCocina,
+					Comando.NumeroMesa);
+
+				GestionTareas.Tareas.Add(nuevaTareaCocina);
+
+				await Task.Run(() =>
+				{
+					new Comando_EnviarTarea(nuevaTareaCocina).Enviar(usuarioAsignarPreparacionCocina.IP);
+				});
+			}
 		}
 
 		private static string Procesar_PedirTareas(Comando_PedirTareas Comando)

@@ -26,6 +26,8 @@ namespace PFG.Aplicacion
 
 		// Variables y constantes
 
+		private static Tareas _instancia;
+
 	// ============================================================================================== //
 
 		// Inicialización
@@ -37,6 +39,8 @@ namespace PFG.Aplicacion
 			Shell.Current.Navigated += OnNavigatedTo;
 
 			ListaTareas.ItemsSource = Global.TareasPersonales;
+
+			_instancia = this;
 		}
 
 		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
@@ -45,6 +49,23 @@ namespace PFG.Aplicacion
 			{
 				RefrescarTareasPersonales();
 			}
+		}
+
+	// ============================================================================================== //
+
+		// Métodos públicos
+
+		public static async void RefrescarTareasPersonalesDesdeFuera()
+		{
+			UserDialogs.Instance.ShowLoading("Cargando pantalla de tareas");
+
+			await Task.Run(async () => {
+				while(_instancia == null)
+					await Task.Delay(25); });
+
+			UserDialogs.Instance.HideLoading();
+
+			_instancia.RefrescarTareasPersonales();
 		}
 
 	// ============================================================================================== //
@@ -63,6 +84,8 @@ namespace PFG.Aplicacion
 		private async void ListaTareas_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
 			// TODO - ESTO
+
+			// TODO - APUNTAR ->  string.PadLeft(n,'c');
 
 			await UserDialogs.Instance.AlertAsync("hey", "Sin implementar", "Aceptar");
 		}

@@ -70,6 +70,29 @@ namespace PFG.Aplicacion
 					{ nuevoArticulo.Nombre = nombre; break; }
 			}
 
+			var categorias = Global.Categorias.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
+			var categoriasExistentesMasOpcionNueva = categorias;
+			categoriasExistentesMasOpcionNueva.Add("+ Nueva");
+
+			string categoriaONueva = await UserDialogs.Instance.ActionSheetAsync("Categoría", "Cancelar", null, null, categoriasExistentesMasOpcionNueva.ToArray());
+			if(categoriaONueva.Equals("Cancelar")) return;
+			
+			if(!categoriaONueva.Equals("+ Nueva"))
+				nuevoArticulo.Categoria = categoriaONueva;
+			else
+			{
+				while(true)
+				{
+					string nuevaCategoria = await Global.PedirAlUsuarioStringCorrecto("Nueva categoría", 100, true);
+					if(nuevaCategoria == null) return;
+
+					if(categorias.Contains(nuevaCategoria))
+						await UserDialogs.Instance.AlertAsync("Ya existe una Categoría con este nombre", "Alerta", "Aceptar");
+					else
+						{ nuevoArticulo.Categoria = nuevaCategoria; break; }
+				}
+			}
+
 			while(true)
 			{
 				var configuracionPrompt = new PromptConfig
@@ -94,28 +117,9 @@ namespace PFG.Aplicacion
 				break;
 			}
 
-			var categorias = Global.Categorias.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToList();
-			var categoriasExistentesMasOpcionNueva = categorias;
-			categoriasExistentesMasOpcionNueva.Add("+ Nueva");
-
-			string categoriaONueva = await UserDialogs.Instance.ActionSheetAsync("Categoría", "Cancelar", null, null, categoriasExistentesMasOpcionNueva.ToArray());
-			if(categoriaONueva.Equals("Cancelar")) return;
-			
-			if(!categoriaONueva.Equals("+ Nueva"))
-				nuevoArticulo.Categoria = categoriaONueva;
-			else
-			{
-				while(true)
-				{
-					string nuevaCategoria = await Global.PedirAlUsuarioStringCorrecto("Nueva categoría", 100, true);
-					if(nuevaCategoria == null) return;
-
-					if(categorias.Contains(nuevaCategoria))
-						await UserDialogs.Instance.AlertAsync("Ya existe una Categoría con este nombre", "Alerta", "Aceptar");
-					else
-						{ nuevoArticulo.Categoria = nuevaCategoria; break; }
-				}
-			}
+			string sitioPreparacionString = await UserDialogs.Instance.ActionSheetAsync("Se prepara en...", "Cancelar", null, null, SitiosPreparacionArticulo_ToStringArray());
+			if(sitioPreparacionString.Equals("Cancelar")) return;
+			nuevoArticulo.SitioPreparacionArticulo = (SitioPreparacionArticulo)Enum.Parse(typeof(SitioPreparacionArticulo), sitioPreparacionString);
 
 			UserDialogs.Instance.ShowLoading("Creando artículo...");
 
@@ -148,8 +152,9 @@ namespace PFG.Aplicacion
 		private static readonly string[] OpcionesArticulo = new string[]
 		{
 			"Cambiar Nombre",
-			"Cambiar Precio",
 			"Cambiar Categoría",
+			"Cambiar Precio",
+			"Cambiar Sitio de Preparación",
 			"Eliminar"
 		};
 
@@ -193,47 +198,7 @@ namespace PFG.Aplicacion
 				return;
 			}
 
-			if(opcion.Equals(OpcionesArticulo[1])) // Cambiar Precio
-			{
-				float nuevoPrecio = 0f;
-
-				while(true)
-				{
-					var configuracionPrompt = new PromptConfig
-					{
-						InputType = InputType.DecimalNumber,
-						IsCancellable = true,
-						Title = $"Nuevo Precio\n(actual = {articuloPulsado.Precio} €)",
-						Message = $"Mínimo: {Comun.Global.MINIMO_PRECIO_ARTICULO} €\nMáximo: {Comun.Global.MAXIMO_PRECIO_ARTICULO} €",
-						OkText = "Aceptar",
-						CancelText = "Cancelar",
-						MaxLength = (int)Math.Floor(Math.Log10(Comun.Global.MAXIMO_PRECIO_ARTICULO*100+1)+1),
-					};
-
-					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
-					if (!resultado.Ok) return;
-
-					if(!float.TryParse(resultado.Text, out nuevoPrecio) || float.Parse(resultado.Text) < Comun.Global.MINIMO_PRECIO_ARTICULO || float.Parse(resultado.Text) > Comun.Global.MAXIMO_PRECIO_ARTICULO) {
-						await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
-
-					break;
-				}
-
-				UserDialogs.Instance.ShowLoading("Cambiando precio...");
-
-				await Task.Run(() =>
-				{
-					new Comando_ModificarArticuloPrecio(articuloPulsado.Nombre, nuevoPrecio).Enviar(Global.IPGestor);
-				});
-
-				UserDialogs.Instance.HideLoading();
-
-				await Global.Get_Articulos();
-
-				return;
-			}
-
-			if(opcion.Equals(OpcionesArticulo[2])) // Cambiar Categoría
+			if(opcion.Equals(OpcionesArticulo[1])) // Cambiar Categoría
 			{
 				string nuevaCategoria = "";
 
@@ -274,7 +239,82 @@ namespace PFG.Aplicacion
 				return;
 			}
 
-			if(opcion.Equals(OpcionesArticulo[3])) // Eliminar
+			if(opcion.Equals(OpcionesArticulo[2])) // Cambiar Precio
+			{
+				float nuevoPrecio = 0f;
+
+				while(true)
+				{
+					var configuracionPrompt = new PromptConfig
+					{
+						InputType = InputType.DecimalNumber,
+						IsCancellable = true,
+						Title = $"Nuevo Precio\n(actual = {articuloPulsado.Precio} €)",
+						Message = $"Mínimo: {Comun.Global.MINIMO_PRECIO_ARTICULO} €\nMáximo: {Comun.Global.MAXIMO_PRECIO_ARTICULO} €",
+						OkText = "Aceptar",
+						CancelText = "Cancelar",
+						MaxLength = (int)Math.Floor(Math.Log10(Comun.Global.MAXIMO_PRECIO_ARTICULO*100+1)+1),
+					};
+
+					var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
+					if (!resultado.Ok) return;
+
+					if(!float.TryParse(resultado.Text, out nuevoPrecio) || float.Parse(resultado.Text) < Comun.Global.MINIMO_PRECIO_ARTICULO || float.Parse(resultado.Text) > Comun.Global.MAXIMO_PRECIO_ARTICULO) {
+						await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
+
+					break;
+				}
+
+				UserDialogs.Instance.ShowLoading("Cambiando precio...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarArticuloPrecio(articuloPulsado.Nombre, nuevoPrecio).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				await Global.Get_Articulos();
+
+				return;
+			}
+
+			if(opcion.Equals(OpcionesArticulo[3])) // Cambiar Sitio de Preparación
+			{
+				SitioPreparacionArticulo nuevoSitioPreparacion;
+
+				var sitiosPreparacionArticulo_menosActual = 
+					SitiosPreparacionArticulo_ToStringArray()
+						.Where(s => !s.Equals(articuloPulsado.SitioPreparacionArticulo.ToString()))
+						.ToArray();
+
+				string nuevoSitioPreparacionString =
+					await UserDialogs.Instance.ActionSheetAsync(
+						$"Cambiar a preparar en...\n(actualmente en {articuloPulsado.SitioPreparacionArticulo})",
+						"Cancelar", 
+						null, null, 
+						sitiosPreparacionArticulo_menosActual);
+
+				if(nuevoSitioPreparacionString.Equals("Cancelar"))
+					return;
+				
+				nuevoSitioPreparacion = (SitioPreparacionArticulo)Enum.Parse(typeof(SitioPreparacionArticulo), nuevoSitioPreparacionString);
+
+				UserDialogs.Instance.ShowLoading("Cambiando sitio de preparación...");
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarArticuloSitioDePreparacion(articuloPulsado.Nombre, nuevoSitioPreparacion).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+
+				await Global.Get_Articulos();
+
+				return;
+			}
+
+			if(opcion.Equals(OpcionesArticulo[4])) // Eliminar
 			{
 				if(await UserDialogs.Instance.ConfirmAsync($"¿Eliminar el artículo '{articuloPulsado.Nombre}'?", "Confirmar eliminación", "Eliminar", "Cancelar"))
 				{
@@ -297,6 +337,15 @@ namespace PFG.Aplicacion
 	// ============================================================================================== //
 
 		// Métodos privados
+
+		private static string[] SitiosPreparacionArticulo_ToStringArray()
+		{
+			return
+				Enum.GetValues(typeof(SitioPreparacionArticulo))
+					.Cast<SitioPreparacionArticulo>()
+						.Select(s => s.ToString())
+						.ToArray();
+		}
 
 	// ============================================================================================== //
 

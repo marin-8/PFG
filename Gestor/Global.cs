@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using PFG.Comun;
@@ -14,6 +15,22 @@ namespace PFG.Gestor
 		{
 			get => _nuevoIDTarea++;
 			private set { _nuevoIDTarea = value; }
+		}
+
+		public static Usuario Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles rol)
+		{
+			return 
+				GestionUsuarios.Usuarios
+					.Where(u => u.Conectado && u.Rol == rol)
+					.OrderBy(u =>
+						GestionTareas.Tareas
+							.Where(t => t.NombreUsuario == u.NombreUsuario && !t.Completada)
+							.Count())
+					.ThenBy(u => 
+						GestionTareas.Tareas
+							.Where(t => t.NombreUsuario == u.NombreUsuario && t.Completada)
+							.Count())
+					.FirstOrDefault();
 		}
 	}
 }

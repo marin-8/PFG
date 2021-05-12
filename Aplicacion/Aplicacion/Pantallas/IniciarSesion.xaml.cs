@@ -80,6 +80,8 @@ namespace PFG.Aplicacion
 					await Device.InvokeOnMainThreadAsync(async () => 
 						await Shell.Current.GoToAsync("//Principal") );
 
+					Tareas.RefrescarTareasPersonalesDesdeFuera();
+
 					break;
 				}
 				case ResultadosIniciarSesion.UsuarioNoExiste:

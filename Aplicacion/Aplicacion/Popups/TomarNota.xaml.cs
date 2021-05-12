@@ -78,6 +78,7 @@ namespace PFG.Aplicacion
 				{
 					resultado.Articulo.Unidades = 1;
 					ArticulosSeleccionados.Add(resultado.Articulo);
+					ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
 				}
 			}
 		}

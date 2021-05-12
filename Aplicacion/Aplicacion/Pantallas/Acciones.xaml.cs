@@ -92,19 +92,19 @@ namespace PFG.Aplicacion
 
 				case TiposAcciones.Cobrar:
 				{
-					//await Navigation.PushPopupAsync(new TomarNota());
+					//await Navigation.PushPopupAsync(new XXXXX());
 					return;
 				}
 
 				case TiposAcciones.MarcarArticuloComoAcabado:
 				{
-					//await Navigation.PushPopupAsync(new TomarNota());
+					//await Navigation.PushPopupAsync(new XXXXX());
 					return;
 				}
 
 				case TiposAcciones.MarcarArticuloComoDisponible:
 				{
-					//await Navigation.PushPopupAsync(new TomarNota());
+					//await Navigation.PushPopupAsync(new XXXXX());
 					return;
 				}
 			}

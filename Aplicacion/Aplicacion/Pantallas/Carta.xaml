@@ -62,6 +62,7 @@
                             <Frame BackgroundColor="LightSkyBlue" Padding="10">
                                 <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
                                     <Label FontSize="20" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
+                                    <Label FontSize="18" Text="{Binding SitioPreparacionArticulo, StringFormat='Se prepara en: {0}'}" TextColor="Black"></Label>
                                     <Label FontSize="18" Text="{Binding Precio, StringFormat='Precio: {0:C2}'}" TextColor="Black"></Label>
                                 </StackLayout>
                                 <Frame.Triggers>

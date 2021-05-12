@@ -40,8 +40,15 @@
                                 <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
                                     <Label FontSize="20" Text="{Binding TipoTarea}" TextColor="White" FontAttributes="Bold">
                                         <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="ServirArticulos">
+                                                <Setter Property="Text" Value="Servir árticulos" />
+                                            </DataTrigger>
                                             <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
+                                                <Setter Property="Text" Value="Limpiar mesa" />
                                                 <Setter Property="TextColor" Value="Black" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="PrepararArticulos">
+                                                <Setter Property="Text" Value="Preparar árticulos" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>

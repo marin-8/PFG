@@ -25,3 +25,5 @@
         - MINIMIZAR CÓDIGO REPETIDO !!!
         
         - Carta -> Modificar nombre categoría
+        
+        - Mejorar espacios de nombres (?) (No reduce runtime performance pero si compilation time)

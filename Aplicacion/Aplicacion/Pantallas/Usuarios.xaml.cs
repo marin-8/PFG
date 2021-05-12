@@ -304,10 +304,11 @@ namespace PFG.Aplicacion
 		{
 			int i = 0;
 			var roles =
-				Enum.GetValues(typeof(Roles)).Cast<Roles>()
-					.Where(r => (byte)r < (byte)Roles.Administrador)
-					.Select(r => $"{++i} - {r}")
-					.Reverse();
+				Enum.GetValues(typeof(Roles))
+					.Cast<Roles>()
+						.Where(r => (byte)r < (byte)Roles.Administrador)
+						.Select(r => $"{++i} - {r}")
+						.Reverse();
 
 			return roles.ToArray();
 		}
