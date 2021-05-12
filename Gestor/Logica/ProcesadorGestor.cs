@@ -290,6 +290,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.TareaCompletada:
+				{
+					Procesar_TareaCompletada(
+						Comando.DeJson
+							<Comando_TareaCompletada>
+								(ComandoJson));
+
+					break;
+				}
+
 
 				//case TiposComando.XXXXX:
 				//{
@@ -794,15 +804,81 @@ namespace PFG.Gestor
 
 			return new Comando_MandarTicketMesa
 			(
+				// TODO - Bug: si hay dos pedidos distintos con el mismo artículo, no se juntan en el ticket
+
 				GestionTareas.Tareas
 					.Where(t => t.NumeroMesa == Comando.NumeroMesa
 							 && t.TipoTarea == TiposTareas.ServirArticulos
 					         && t.FechaHoraCreacion > fechaHoraUltimaLimpiezaMesa)
 					.SelectMany(t => t.Articulos)
+						.OrderBy(a => a.Nombre)
 						.Select(a => new ItemTicket(a.Unidades, a.Nombre, a.Precio))
 							.ToArray()
 			)
 			.ToString();
+		}
+
+		private static async void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
+		{
+			var tareaCompletada =
+				GestionTareas.Tareas
+					.First(t => t.ID == Comando.ID);
+
+			tareaCompletada.CompletarTarea();
+
+			switch(tareaCompletada.TipoTarea)
+			{
+				case TiposTareas.ServirArticulos:
+				{
+					if(!GestionTareas.Tareas
+						.Any(t => !t.Completada
+						       && (t.TipoTarea == TiposTareas.PrepararArticulos || t.TipoTarea == TiposTareas.ServirArticulos)
+							   && t.NumeroMesa == tareaCompletada.NumeroMesa))
+					{
+						GestionMesas.Mesas
+							.First(m => m.Numero == tareaCompletada.NumeroMesa)
+								.EstadoMesa = EstadosMesa.Ocupada;
+					}
+
+					break;
+				}
+				case TiposTareas.LimpiarMesa:
+				{
+					GestionMesas.Mesas
+						.First(m => m.Numero == tareaCompletada.NumeroMesa)
+							.EstadoMesa = EstadosMesa.Vacia;
+
+					break;
+				}
+				case TiposTareas.PrepararArticulos:
+				{
+					Usuario usuarioAsignarServirArticulos;
+
+					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
+						usuarioAsignarServirArticulos = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Camarero);
+					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
+						usuarioAsignarServirArticulos = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Barista);
+					else
+						usuarioAsignarServirArticulos = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+
+					var nuevaTareaServirArticulos = new Tarea(
+						Global.NuevoIDTarea,
+						DateTime.Now,
+						TiposTareas.ServirArticulos,
+						usuarioAsignarServirArticulos.NombreUsuario,
+						tareaCompletada.Articulos,
+						tareaCompletada.NumeroMesa);
+
+					GestionTareas.Tareas.Add(nuevaTareaServirArticulos);
+
+					await Task.Run(() =>
+					{
+						new Comando_EnviarTarea(nuevaTareaServirArticulos).Enviar(usuarioAsignarServirArticulos.IP);
+					});
+
+					break;
+				}
+			}
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

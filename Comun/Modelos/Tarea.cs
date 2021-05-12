@@ -32,7 +32,7 @@ namespace PFG.Comun
 			this.NumeroMesa = NumeroMesa;
 		}
 
-		public void CompletadarTarea()
+		public void CompletarTarea()
 		{
 			Completada = true;
 		}

@@ -22,16 +22,17 @@ namespace PFG.Aplicacion
 
 		public static ControladorRed Servidor;
 		public static ProcesadorAplicacion ProcesadorMensajesRecibidos;
-
-		public static ObservableCollection<Usuario> Usuarios = new();
+		// TODO - Lockear ObservableCollections cuando se modifiquen
+		public static ObservableCollection<Usuario> Usuarios = new(); public static object UsuariosLock = new();
 
 		public static byte AnchoMapaMesas { get; private set; }
 		public static byte AltoMapaMesas { get; private set; }
 		public static Mesa[] Mesas { get; private set; } = new Mesa[0];
 
-		public static ObservableCollection<List<Articulo>> Categorias = new();
 
-		public static ObservableCollection<Tarea> TareasPersonales = new();
+		public static ObservableCollection<List<Articulo>> Categorias = new(); public static object CategoriasLock = new();
+
+		public static ObservableCollection<Tarea> TareasPersonales = new(); public static object TareasPersonalesLock = new();
 
 		public static async void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
 		{

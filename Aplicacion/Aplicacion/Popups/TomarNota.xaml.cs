@@ -24,7 +24,7 @@ namespace PFG.Aplicacion
 
 		// Variables y constantes
 
-		public readonly ObservableCollection<Articulo> ArticulosSeleccionados = new();
+		public readonly ObservableCollection<Articulo> ArticulosSeleccionados = new();  public object ArticulosSeleccionadosLock = new();
 
 	// ============================================================================================== //
 

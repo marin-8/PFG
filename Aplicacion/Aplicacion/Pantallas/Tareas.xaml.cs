@@ -92,7 +92,8 @@ namespace PFG.Aplicacion
 					new Comando_TareaCompletada(tareaPulsada.ID).Enviar(Global.IPGestor);
 				});
 
-				// TODO - Gestionar esto en el Gestor xD
+				Global.TareasPersonales.Remove(tareaPulsada);
+				Global.TareasPersonales.Ordenar();
 			}
 		}
 
