@@ -62,9 +62,12 @@ namespace PFG.Aplicacion
 
 		private void Procesar_EnviarTarea(Comando_EnviarTarea Comando)
 		{
-			Global.TareasPersonales.Add(Comando.Tarea);
+			lock(Global.TareasPersonalesLock)
+			{
+				Global.TareasPersonales.Add(Comando.Tarea);
 
-			Global.TareasPersonales.Ordenar();
+				Global.TareasPersonales.Ordenar();
+			}
 		}
 
 		//private string Procesar_XXXXX(Comando_XXXXX Comando)

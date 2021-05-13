@@ -22,17 +22,20 @@ namespace PFG.Aplicacion
 
 		public static ControladorRed Servidor;
 		public static ProcesadorAplicacion ProcesadorMensajesRecibidos;
-		// TODO - Lockear ObservableCollections cuando se modifiquen
-		public static ObservableCollection<Usuario> Usuarios = new(); public static object UsuariosLock = new();
+
+		public static ObservableCollection<Usuario> Usuarios = new();
+		public static readonly object UsuariosLock = new();
 
 		public static byte AnchoMapaMesas { get; private set; }
 		public static byte AltoMapaMesas { get; private set; }
 		public static Mesa[] Mesas { get; private set; } = new Mesa[0];
 
 
-		public static ObservableCollection<List<Articulo>> Categorias = new(); public static object CategoriasLock = new();
+		public static ObservableCollection<List<Articulo>> Categorias = new();
+		public static readonly object CategoriasLock = new();
 
-		public static ObservableCollection<Tarea> TareasPersonales = new(); public static object TareasPersonalesLock = new();
+		public static ObservableCollection<Tarea> TareasPersonales = new();
+		public static readonly object TareasPersonalesLock = new();
 
 		public static async void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
 		{
@@ -125,24 +128,27 @@ namespace PFG.Aplicacion
 				return Comando.DeJson<Comando_MandarArticulos>(respuestaGestor);
 			});
 			
-			Categorias.Clear();
-
-			var categorias =
-				comandoRespuesta.Articulos
-					.OrderBy(a => a.Categoria)
-					.GroupBy(a => a.Categoria)
-					.Select(a => a.First().Categoria);
-
-			foreach(var categoria in categorias)
+			lock(CategoriasLock)
 			{
-				var nuevaCategoria = new GrupoArticuloCategoria(categoria);
+				Categorias.Clear();
 
-				nuevaCategoria.AddRange(
+				var categorias =
 					comandoRespuesta.Articulos
-						.Where(a => a.Categoria.Equals(categoria))
-						.OrderBy(a => a.Nombre));
+						.OrderBy(a => a.Categoria)
+						.GroupBy(a => a.Categoria)
+						.Select(a => a.First().Categoria);
 
-				Categorias.Add(nuevaCategoria);
+				foreach(var categoria in categorias)
+				{
+					var nuevaCategoria = new GrupoArticuloCategoria(categoria);
+
+					nuevaCategoria.AddRange(
+						comandoRespuesta.Articulos
+							.Where(a => a.Categoria.Equals(categoria))
+							.OrderBy(a => a.Nombre));
+
+					Categorias.Add(nuevaCategoria);
+				}
 			}
 
 			UserDialogs.Instance.HideLoading();

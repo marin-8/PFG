@@ -24,7 +24,8 @@ namespace PFG.Aplicacion
 
 		// Variables y constantes
 
-		public readonly ObservableCollection<Articulo> ArticulosSeleccionados = new();  public object ArticulosSeleccionadosLock = new();
+		public readonly ObservableCollection<Articulo> ArticulosSeleccionados = new();
+		public readonly object ArticulosSeleccionadosLock = new();
 
 	// ============================================================================================== //
 
@@ -34,7 +35,8 @@ namespace PFG.Aplicacion
 		{
 			InitializeComponent();
 
-			ListaArticulos.ItemsSource = ArticulosSeleccionados;
+			lock(ArticulosSeleccionadosLock)
+				ListaArticulos.ItemsSource = ArticulosSeleccionados;
 		}
 
 	// ============================================================================================== //
@@ -64,21 +66,24 @@ namespace PFG.Aplicacion
 			{
 				bool articuloYaSeleccionado(Articulo a) => a.Nombre == resultado.Articulo.Nombre;
 
-				if(ArticulosSeleccionados.ToList().Any(articuloYaSeleccionado))
+				lock(ArticulosSeleccionadosLock)
 				{
-					ArticulosSeleccionados
-						.First(articuloYaSeleccionado)
-							.Unidades += 1;
+					if(ArticulosSeleccionados.Any(articuloYaSeleccionado))
+					{
+						ArticulosSeleccionados
+							.First(articuloYaSeleccionado)
+								.Unidades += 1;
 
-					// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
-					ListaArticulos.ItemsSource = null;
-					ListaArticulos.ItemsSource = ArticulosSeleccionados;
-				}
-				else
-				{
-					resultado.Articulo.Unidades = 1;
-					ArticulosSeleccionados.Add(resultado.Articulo);
-					ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
+						// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
+						ListaArticulos.ItemsSource = null;
+						ListaArticulos.ItemsSource = ArticulosSeleccionados;
+					}
+					else
+					{
+						resultado.Articulo.Unidades = 1;
+						ArticulosSeleccionados.Add(resultado.Articulo);
+						ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
+					}
 				}
 			}
 		}
@@ -89,17 +94,20 @@ namespace PFG.Aplicacion
 
 			bool articuloYaSeleccionado(Articulo a) => a.Nombre.Equals(nombreArticulo);
 
-			var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
-
-			if(articuloAModificar.Unidades == 1)
-				ArticulosSeleccionados.Remove(articuloAModificar);
-			else
+			lock(ArticulosSeleccionadosLock)
 			{
-				articuloAModificar.Unidades -= 1;
+				var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
 
-				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
-				ListaArticulos.ItemsSource = null;
-				ListaArticulos.ItemsSource = ArticulosSeleccionados;
+				if(articuloAModificar.Unidades == 1)
+					ArticulosSeleccionados.Remove(articuloAModificar);
+				else
+				{
+					articuloAModificar.Unidades -= 1;
+
+					// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
+					ListaArticulos.ItemsSource = null;
+					ListaArticulos.ItemsSource = ArticulosSeleccionados;
+				}
 			}
 		}
 
@@ -109,17 +117,20 @@ namespace PFG.Aplicacion
 
 			bool articuloYaSeleccionado(Articulo a) => a.Nombre.Equals(nombreArticulo);
 
-			var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
-
-			if(articuloAModificar.Unidades < 255)
+			lock(ArticulosSeleccionadosLock)
 			{
-				articuloAModificar.Unidades += 1;
+				var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
 
-				ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
+				if(articuloAModificar.Unidades < 255)
+				{
+					articuloAModificar.Unidades += 1;
 
-				// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
-				ListaArticulos.ItemsSource = null;
-				ListaArticulos.ItemsSource = ArticulosSeleccionados;
+					ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
+
+					// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
+					ListaArticulos.ItemsSource = null;
+					ListaArticulos.ItemsSource = ArticulosSeleccionados;
+				}
 			}
 		}
 
@@ -130,13 +141,17 @@ namespace PFG.Aplicacion
 
 		private async void Aceptar_Clicked(object sender, EventArgs e)
 		{
+			int articulosSeleccionadosCount;
+			lock(ArticulosSeleccionadosLock)
+				articulosSeleccionadosCount = ArticulosSeleccionados.Count();
+
 			if(!byte.TryParse(SeleccionarMesa.Text, out byte mesaSeleccionada))
 			{
 				await UserDialogs.Instance.AlertAsync("No se ha seleccionado una mesa", "Alerta", "Aceptar");
 
 				return;
 			}
-			else if(ArticulosSeleccionados.Count() == 0)
+			else if(articulosSeleccionadosCount == 0)
 			{
 				await UserDialogs.Instance.AlertAsync("No se ha seleccionado ningún artículo", "Alerta", "Aceptar");
 
@@ -145,9 +160,13 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.ShowLoading("Mandando pedido...");
 
+			Articulo[] articulosSeleccionados;
+			lock(ArticulosSeleccionadosLock)
+				articulosSeleccionados = ArticulosSeleccionados.ToArray();
+
 			await Task.Run(() =>
 			{
-				new Comando_TomarNota(mesaSeleccionada, ArticulosSeleccionados.ToArray()).Enviar(Global.IPGestor);
+				new Comando_TomarNota(mesaSeleccionada, articulosSeleccionados).Enviar(Global.IPGestor);
 			});
 
 			UserDialogs.Instance.HideLoading();

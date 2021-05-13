@@ -38,7 +38,8 @@ namespace PFG.Aplicacion
 
 			Shell.Current.Navigated += OnNavigatedTo;
 
-			ListaTareas.ItemsSource = Global.TareasPersonales;
+			lock(Global.TareasPersonalesLock)
+				ListaTareas.ItemsSource = Global.TareasPersonales;
 
 			_instancia = this;
 		}
@@ -92,8 +93,11 @@ namespace PFG.Aplicacion
 					new Comando_TareaCompletada(tareaPulsada.ID).Enviar(Global.IPGestor);
 				});
 
-				Global.TareasPersonales.Remove(tareaPulsada);
-				Global.TareasPersonales.Ordenar();
+				lock(Global.TareasPersonalesLock)
+				{
+					Global.TareasPersonales.Remove(tareaPulsada);
+					Global.TareasPersonales.Ordenar();
+				}
 			}
 		}
 
@@ -121,12 +125,15 @@ namespace PFG.Aplicacion
 
 		private void Procesar_RecibirTareas(Comando_MandarTareas Comando)
 		{
-			Global.TareasPersonales.Clear();
+			lock(Global.TareasPersonalesLock)
+			{
+				Global.TareasPersonales.Clear();
 			
-			foreach(var tarea in Comando.Tareas)
-				Global.TareasPersonales.Add(tarea);
+				foreach(var tarea in Comando.Tareas)
+					Global.TareasPersonales.Add(tarea);
 
-			Global.TareasPersonales.Ordenar();
+				Global.TareasPersonales.Ordenar();
+			}
 
 			ListaTareas.EndRefresh();
 		}
