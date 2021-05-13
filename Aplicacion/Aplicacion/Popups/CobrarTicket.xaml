@@ -24,7 +24,7 @@
                 BackgroundColor="MediumBlue"
                 HeightRequest="40"/>
 
-            <BoxView BackgroundColor="Transparent" HeightRequest="20"/>
+            <BoxView BackgroundColor="Transparent" HeightRequest="10"/>
 
             <ScrollView
                 Orientation="Vertical"
@@ -54,7 +54,48 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Column="0"
+                            Text="U"
+                            FontSize="18"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            HeightRequest="40"/>
+
+                        <Label
+                            Grid.Column="1"
+                            Text="Artículo"
+                            FontSize="18"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            HeightRequest="40"/>
+
+                        <Label
+                            Grid.Column="2"
+                            Text="€/U"
+                            FontSize="18"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            HeightRequest="40"/>
+
+                        <Label
+                            Grid.Column="3"
+                            Text="Total"
+                            FontSize="18"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            HeightRequest="40"/>
 
                     </Grid>
 
@@ -92,7 +133,7 @@
                 <BoxView BackgroundColor="Transparent" WidthRequest="20"/>
 
                 <Button
-                    Text="Aceptar"
+                    Text="Cobrar"
                     FontSize="20"
                     TextColor="Black"
                     FontAttributes="Bold"

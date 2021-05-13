@@ -300,6 +300,15 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.CobrarMesa:
+				{
+					Procesar_CobrarMesa(
+						Comando.DeJson
+							<Comando_CobrarMesa>
+								(ComandoJson));
+
+					break;
+				}
 
 				//case TiposComando.XXXXX:
 				//{
@@ -723,11 +732,11 @@ namespace PFG.Gestor
 			if(articulosPreparacionBarra.Any())
 			{
 				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
-					usuarioAsignarPreparacionBarra = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Barista);
+					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
 				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-					usuarioAsignarPreparacionBarra = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Camarero);
+					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
 				else
-					usuarioAsignarPreparacionBarra = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 
 				var nuevaTareaBarra = new Tarea(
 					Global.NuevoIDTarea,
@@ -752,11 +761,11 @@ namespace PFG.Gestor
 			if(articulosPreparacionCocina.Any())
 			{
 				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Cocinero))
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Camarero);
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
 				else
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 
 				var nuevaTareaCocina = new Tarea(
 					Global.NuevoIDTarea,
@@ -804,16 +813,23 @@ namespace PFG.Gestor
 
 			return new Comando_MandarTicketMesa
 			(
-				// TODO - Bug: si hay dos pedidos distintos con el mismo artículo, no se juntan en el ticket
+				// Me dirás que no es beia' esta consulta <3
 
 				GestionTareas.Tareas
 					.Where(t => t.NumeroMesa == Comando.NumeroMesa
 							 && t.TipoTarea == TiposTareas.ServirArticulos
 					         && t.FechaHoraCreacion > fechaHoraUltimaLimpiezaMesa)
 					.SelectMany(t => t.Articulos)
-						.OrderBy(a => a.Nombre)
-						.Select(a => new ItemTicket(a.Unidades, a.Nombre, a.Precio))
-							.ToArray()
+						.GroupBy(a => a.Nombre)
+						.Select(g => 
+							new ItemTicket
+							(
+								g.Sum(a => a.Unidades),
+								g.Key,
+								g.First().Precio
+							))
+						.OrderBy(it => it.NombreArticulo)
+						.ToArray()
 			)
 			.ToString();
 		}
@@ -855,11 +871,11 @@ namespace PFG.Gestor
 					Usuario usuarioAsignarServirArticulos;
 
 					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-						usuarioAsignarServirArticulos = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Camarero);
+						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
 					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
-						usuarioAsignarServirArticulos = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Barista);
+						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
 					else
-						usuarioAsignarServirArticulos = Global.Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles.Cocinero);
+						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 
 					var nuevaTareaServirArticulos = new Tarea(
 						Global.NuevoIDTarea,
@@ -879,6 +895,37 @@ namespace PFG.Gestor
 					break;
 				}
 			}
+		}
+
+		private static async void Procesar_CobrarMesa(Comando_CobrarMesa Comando)
+		{
+			GestionMesas.Mesas
+				.First(m => m.Numero == Comando.NumeroMesa)
+					.EstadoMesa = EstadosMesa.Sucia;
+
+			Usuario usuarioAsignarLimpiarMesa;
+
+			if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
+				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
+			else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
+				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
+			else
+				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
+		
+			var nuevaTareaLimpiarMesa = new Tarea(
+				Global.NuevoIDTarea,
+				DateTime.Now,
+				TiposTareas.LimpiarMesa,
+				usuarioAsignarLimpiarMesa.NombreUsuario,
+				null,
+				Comando.NumeroMesa);
+
+			GestionTareas.Tareas.Add(nuevaTareaLimpiarMesa);
+
+			await Task.Run(() =>
+			{
+				new Comando_EnviarTarea(nuevaTareaLimpiarMesa).Enviar(usuarioAsignarLimpiarMesa.IP);
+			});
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

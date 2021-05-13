@@ -1,14 +1,16 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace PFG.Comun
 {
 	public class ItemTicket
 	{
-		public byte Unidades { get; private set; }
-		public string NombreArticulo { get; private set; }
-		public float PrecioUnitario { get; private set; }
-		public float PrecioTotal { get; private set; }
+		[JsonProperty("1")] public int Unidades { get; private set; }
+		[JsonProperty("2")] public string NombreArticulo { get; private set; }
+		[JsonProperty("3")] public float PrecioUnitario { get; private set; }
+			   [JsonIgnore] public float PrecioTotal { get; private set; }
 
-		public ItemTicket(byte Unidades, string NombreArticulo, float PrecioUnitario)
+		public ItemTicket(int Unidades, string NombreArticulo, float PrecioUnitario)
 		{
 			this.Unidades = Unidades;
 			this.NombreArticulo = NombreArticulo;

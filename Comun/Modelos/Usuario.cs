@@ -14,8 +14,8 @@ namespace PFG.Comun
 
 		[JsonProperty("4")] public Roles Rol { get; set; }
 
-		[JsonIgnore] public string IP { get; set; }
-		[JsonIgnore] public bool Conectado { get; set; }
+			   [JsonIgnore] public string IP { get; set; }
+			   [JsonIgnore] public bool Conectado { get; set; }
 
 		public Usuario(string Nombre, string NombreUsuario, string Contrasena, Roles Rol, string IP = "", bool Conectado = false)
 		{

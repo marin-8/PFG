@@ -45,14 +45,29 @@ namespace PFG.Aplicacion
 
 		private async void SeleccionarMesa_Clicked(object sender, EventArgs e)
 		{
-			var popupSeleccionarMesa = new SeleccionarMesa();
-			await Navigation.PushPopupAsync(popupSeleccionarMesa);
-			var resultado = await popupSeleccionarMesa.Resultado;
-
-			if(resultado.Correcto)
+			while(true)
 			{
-				SeleccionarMesa.Text = resultado.NumeroMesaSeleccionada.ToString();
-				SeleccionarMesa.BackgroundColor = Color.LimeGreen;
+				var popupSeleccionarMesa = new SeleccionarMesa();
+				await Navigation.PushPopupAsync(popupSeleccionarMesa);
+				var resultado = await popupSeleccionarMesa.Resultado;
+
+				if(resultado.Correcto)
+				{
+					var estadoMesaSeleccionada =
+						Global.Mesas
+							.First(m => m.Numero == resultado.NumeroMesaSeleccionada)
+								.EstadoMesa;
+
+					if(estadoMesaSeleccionada == EstadosMesa.Sucia)
+						await UserDialogs.Instance.AlertAsync("No se puede tomar nota a una mesa que está sucia", "Alerta", "Aceptar");
+					
+					else {
+						SeleccionarMesa.Text = resultado.NumeroMesaSeleccionada.ToString();
+						SeleccionarMesa.BackgroundColor = Color.LimeGreen;;
+						return; }
+				}
+				else
+					return;
 			}
 		}
 

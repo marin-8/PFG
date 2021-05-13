@@ -24,17 +24,20 @@ namespace PFG.Aplicacion
 
 		// Variables y constantes
 
+		private byte NumeroMesa;
 		private ItemTicket[] ItemsTicket;
 
 	// ============================================================================================== //
 
 		// Inicialización
 
-		public CobrarTicket(byte NumeroMesaSeleccionada)
+		public CobrarTicket(byte NumeroMesa)
 		{
 			InitializeComponent();
 
-			InicializarInterfaz(NumeroMesaSeleccionada);
+			InicializarInterfaz(NumeroMesa);
+
+			this.NumeroMesa = NumeroMesa;
 		}
 
 	// ============================================================================================== //
@@ -48,29 +51,14 @@ namespace PFG.Aplicacion
 
 		private async void Aceptar_Clicked(object sender, EventArgs e)
 		{
-			// TODO - Cobrar
+			UserDialogs.Instance.ShowLoading("Cobrando mesa...");
 
-			//if (!byte.TryParse(SeleccionarMesa.Text, out byte mesaSeleccionada))
-			//{
-			//	await UserDialogs.Instance.AlertAsync("No se ha seleccionado una mesa", "Alerta", "Aceptar");
+			await Task.Run(() =>
+			{
+				new Comando_CobrarMesa(NumeroMesa).Enviar(Global.IPGestor);
+			});
 
-			//	return;
-			//}
-			//else if (ItemsTicket.Count() == 0)
-			//{
-			//	await UserDialogs.Instance.AlertAsync("No se ha seleccionado ningún artículo", "Alerta", "Aceptar");
-
-			//	return;
-			//}
-
-			//UserDialogs.Instance.ShowLoading("Mandando pedido...");
-
-			//await Task.Run(() =>
-			//{
-			//	new Comando_CobrarTicket(mesaSeleccionada, ItemsTicket.ToArray()).Enviar(Global.IPGestor);
-			//});
-
-			//UserDialogs.Instance.HideLoading();
+			UserDialogs.Instance.HideLoading();
 
 			await Navigation.PopPopupAsync();
 		}
@@ -81,7 +69,7 @@ namespace PFG.Aplicacion
 
 		private async void InicializarInterfaz(byte NumeroMesa)
 		{
-			Titulo.Text = $"Cobrar mesa {NumeroMesa}";
+			Titulo.Text = $"Ticket mesa {NumeroMesa}";
 
 			await PedirTicket(NumeroMesa);
 
@@ -132,7 +120,7 @@ namespace PFG.Aplicacion
 
 				var total = ItemsTicket.Sum(i => i.PrecioTotal);
 
-				Total.Text = $"TOTAL:    {total} €";
+				Total.Text = $"TOTAL:    {string.Format("{0:n}", total)} €";
 			});
 
 			UserDialogs.Instance.HideLoading();

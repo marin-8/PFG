@@ -20,7 +20,9 @@ namespace PFG.Aplicacion
 
 		}
 
+		#pragma warning disable IDE0060
 		public string Procesar(string IP, string ComandoJson)
+		#pragma warning restore IDE0060
 		{
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 

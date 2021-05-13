@@ -11,6 +11,7 @@
                 
         - Bloquear páginas en base al rol del usuario logueado
         - Y quitar tanto "RefrescarX" en las pantallas de configuración
+        - Poner bien "RefrescarX" en las pantallas de trabajo
         
         - Revisar mayúsculas/minúsculas
         - Revisar tipos (listas, enteros...) (de comandos) (arrays en vez de listas)
@@ -28,4 +29,8 @@
         
         - Carta -> Modificar nombre categoría
         
+        - Gestionar tareas no enviadads porque no hay usuarios conectado
+        
         - Mejorar espacios de nombres (?) (No reduce runtime performance pero si compilation time)
+
+        - Notificaciones al recibir tareas

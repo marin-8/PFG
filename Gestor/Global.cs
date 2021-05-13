@@ -17,7 +17,7 @@ namespace PFG.Gestor
 			private set { _nuevoIDTarea = value; }
 		}
 
-		public static Usuario Get_UsuarioMenosTareasPendientesMenosTareasCompletadas(Roles rol)
+		public static Usuario Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles rol)
 		{
 			return 
 				GestionUsuarios.Usuarios
