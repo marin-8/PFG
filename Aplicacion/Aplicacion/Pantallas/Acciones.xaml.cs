@@ -141,7 +141,8 @@ namespace PFG.Aplicacion
 						else
 							nuevoEstadoString = "Disponible";
 
-						if(await UserDialogs.Instance.ConfirmAsync($"¿Marcar artículo como {nuevoEstadoString}?", "Confirmar", "Si", "Cancelar"))
+						if(await UserDialogs.Instance.ConfirmAsync($"Artículo: {resultado.Articulo.Nombre}",
+							$"¿Marcar artículo como {nuevoEstadoString}?", "Si", "Cancelar"))
 						{
 							await Task.Run(() =>
 							{

@@ -36,3 +36,5 @@
         - Notificaciones al recibir tareas
         
         - Hacer lo popups super reutilizables
+        
+        - Todos los artículos empiezan como disponibles

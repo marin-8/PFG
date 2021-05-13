@@ -23,28 +23,28 @@
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="Carta">
+    <FlyoutItem x:Name="PantallaCarta" Title="Carta">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Carta}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Mesas">
+    <FlyoutItem x:Name="PantallaMesas" Title="Mesas">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Mesas}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Usuarios">
+    <FlyoutItem x:Name="PantallaUsuarios" Title="Usuarios">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Usuarios}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="--- Desarrollo">
-        <ShellContent ContentTemplate="{DataTemplate pantallas:Desarrollo}" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Ajustes">
+    <FlyoutItem x:Name="PantallaAjustes" Title="Ajustes">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Ajustes}" />
     </FlyoutItem>
 
+    <FlyoutItem x:Name="PantallaDesarrollo" Title="=====  Desarrollo">
+        <ShellContent ContentTemplate="{DataTemplate pantallas:Desarrollo}" />
+    </FlyoutItem>
+    
     <MenuItem
-        Text="Cerrar sesión"
+        Text="=====  Cerrar sesión"
         Clicked="CerrarSesion" />
 
 </Shell>

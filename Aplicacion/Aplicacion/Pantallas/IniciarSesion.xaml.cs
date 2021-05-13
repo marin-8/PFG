@@ -77,6 +77,8 @@ namespace PFG.Aplicacion
 				{
 					Global.UsuarioActual = Comando.UsuarioActual;
 
+					AppShell.ConfigurarPantallasAMostrar(Global.UsuarioActual.Rol);
+
 					await Device.InvokeOnMainThreadAsync(async () => 
 						await Shell.Current.GoToAsync("//Principal") );
 

@@ -19,9 +19,27 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class AppShell : Shell
 	{
+		private static AppShell Instancia;
+
 		public AppShell()
 		{
 			InitializeComponent();
+
+			Instancia = this;
+		}
+
+		public static void ConfigurarPantallasAMostrar(Roles Rol)
+		{
+			bool mostrarOno =
+				Rol == Roles.Administrador ||
+				Rol == Roles.Desarrollador;
+
+			Instancia.PantallaCarta.FlyoutItemIsVisible = mostrarOno;
+			Instancia.PantallaMesas.FlyoutItemIsVisible = mostrarOno;
+			Instancia.PantallaUsuarios.FlyoutItemIsVisible = mostrarOno;
+			Instancia.PantallaAjustes.FlyoutItemIsVisible = mostrarOno;
+
+			Instancia.PantallaDesarrollo.FlyoutItemIsVisible = Rol == Roles.Desarrollador;
 		}
 
 		private async void CerrarSesion(object sender, EventArgs e)
