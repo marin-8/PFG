@@ -34,3 +34,5 @@
         - Mejorar espacios de nombres (?) (No reduce runtime performance pero si compilation time)
 
         - Notificaciones al recibir tareas
+        
+        - Hacer lo popups super reutilizables

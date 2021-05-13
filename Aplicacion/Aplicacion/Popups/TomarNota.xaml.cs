@@ -73,9 +73,9 @@ namespace PFG.Aplicacion
 
 		private async void AnadirArticulo_Clicked(object sender, EventArgs e)
 		{
-			var popupAnadirArticulo = new AnadirArticulo();
-			await Navigation.PushPopupAsync(popupAnadirArticulo);
-			var resultado = await popupAnadirArticulo.Resultado;
+			var popupSeleccionarArticulo = new SeleccionarArticulo();
+			await Navigation.PushPopupAsync(popupSeleccionarArticulo);
+			var resultado = await popupSeleccionarArticulo.Resultado;
 
 			if(resultado.Correcto)
 			{

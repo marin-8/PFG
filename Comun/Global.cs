@@ -32,10 +32,8 @@ namespace PFG.Comun
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Camarero , TiposAcciones.TomarNota ),
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Camarero , TiposAcciones.Cobrar ),
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.Cobrar ),
-			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.MarcarArticuloComoAcabado ),
-			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.MarcarArticuloComoDisponible ),
-			new KeyValuePair<Roles,TiposAcciones>( Roles.Cocinero , TiposAcciones.MarcarArticuloComoAcabado ),
-			new KeyValuePair<Roles,TiposAcciones>( Roles.Cocinero , TiposAcciones.MarcarArticuloComoDisponible ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.CambiarDisponibilidadArticulo ),
+			new KeyValuePair<Roles,TiposAcciones>( Roles.Cocinero , TiposAcciones.CambiarDisponibilidadArticulo ),
 		};
 
 		public static readonly Dictionary<TiposTareas, string> TareasTitulos = new()
@@ -49,8 +47,7 @@ namespace PFG.Comun
 		{
 			{ TiposAcciones.TomarNota, "Tomar nota" },
 			{ TiposAcciones.Cobrar, "Cobrar" },
-			{ TiposAcciones.MarcarArticuloComoAcabado, "Marcar artículo como acabado" },
-			{ TiposAcciones.MarcarArticuloComoDisponible, "Marcar artículo como disponible" },
+			{ TiposAcciones.CambiarDisponibilidadArticulo, "Cambiar estado\nde artículo\n(acabado/disponible)" },
 		};
 
 		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()

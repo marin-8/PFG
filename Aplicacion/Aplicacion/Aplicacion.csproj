@@ -54,8 +54,8 @@
     <Compile Update="Pantallas\IniciarSesion.xaml.cs">
       <DependentUpon>IniciarSesion.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Popups\AnadirArticulo.xaml.cs">
-      <DependentUpon>AnadirArticulo.xaml</DependentUpon>
+    <Compile Update="Popups\SeleccionarArticulo.xaml.cs">
+      <DependentUpon>SeleccionarArticulo.xaml</DependentUpon>
     </Compile>
     <Compile Update="Popups\SeleccionarMesa.xaml.cs">
       <DependentUpon>SeleccionarMesa.xaml</DependentUpon>

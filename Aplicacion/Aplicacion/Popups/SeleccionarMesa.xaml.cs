@@ -16,6 +16,13 @@ using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
+	public enum FiltrarArticulos : byte
+	{
+		Todos,
+		Disponibles,
+		Acabados
+	}
+
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SeleccionarMesa : PopupPage
 	{

@@ -36,10 +36,13 @@ namespace PFG.Aplicacion
 		{
 			InitializeComponent();
 
+			// TODO - Ajuste para acciones por rol o siempre todas
+
 			var accionesRolActual =
 				Comun.Global.RolesAcciones
-					.Where(ra => ra.Key == Global.UsuarioActual.Rol)
-					.Select(ra => ra.Value);
+					//.Where(ra => ra.Key == Global.UsuarioActual.Rol) // o esto
+					.Select(ra => ra.Value)
+					.Distinct();									   // o esto
 
 			int row = 0;
 			foreach (var accion in accionesRolActual)
@@ -123,13 +126,7 @@ namespace PFG.Aplicacion
 					}
 				}
 
-				case TiposAcciones.MarcarArticuloComoAcabado:
-				{
-					//await Navigation.PushPopupAsync(new XXXXX());
-					return;
-				}
-
-				case TiposAcciones.MarcarArticuloComoDisponible:
+				case TiposAcciones.CambiarDisponibilidadArticulo:
 				{
 					//await Navigation.PushPopupAsync(new XXXXX());
 					return;
@@ -143,11 +140,27 @@ namespace PFG.Aplicacion
 
 		private Button GenerarBotonAccion(string TituloAccion, TiposAcciones TipoAccion, EventHandler EventoMesaPulsada)
 		{
+			double tamanoFuente;
+
+			switch(TipoAccion)
+			{
+				case TiposAcciones.TomarNota:
+
+				case TiposAcciones.Cobrar:
+					{ tamanoFuente = 48; break; }
+
+				case TiposAcciones.CambiarDisponibilidadArticulo:
+					{ tamanoFuente = 32; break; }
+
+				default:
+					{ tamanoFuente = 12; break; }
+			}
+
 			var buttonMesa = new Button()
 			{
 				Text=TituloAccion,
 				FontAttributes=FontAttributes.Bold,
-				FontSize=40,
+				FontSize=tamanoFuente,
 				Padding=new(0),
 				Margin=new(0),
 				BackgroundColor=Color.LimeGreen,

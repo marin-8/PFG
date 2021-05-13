@@ -17,19 +17,22 @@ using PFG.Comun;
 namespace PFG.Aplicacion
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AnadirArticulo : PopupPage
+	public partial class SeleccionarArticulo : PopupPage
 	{
 		private TaskCompletionSource<(bool Correcto, Articulo Articulo)> _taskCompletionSource;
 		public Task<(bool Correcto, Articulo Articulo)> Resultado => _taskCompletionSource.Task;
 
+		bool PermitirSeleccionarAcabados;
 		private Articulo ResultadoArticulo;
 
-		public AnadirArticulo()
+		public SeleccionarArticulo(bool PermitirSeleccionarAcabados = false)
 		{
 			InitializeComponent();
 
 			lock(Global.CategoriasLock)
 				ListaArticulos.ItemsSource = Global.Categorias;
+
+			this.PermitirSeleccionarAcabados = PermitirSeleccionarAcabados;
 		}
 
 
@@ -67,7 +70,7 @@ namespace PFG.Aplicacion
 		{
 			var articuloPulsado = (Articulo)e.Item;
 
-			if(articuloPulsado.Disponible)
+			if(articuloPulsado.Disponible || PermitirSeleccionarAcabados)
 			{
 				ResultadoArticulo = (Articulo)e.Item;
 

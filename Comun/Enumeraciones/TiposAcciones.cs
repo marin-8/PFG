@@ -5,7 +5,6 @@ namespace PFG.Comun
 	{
 		TomarNota,
 		Cobrar,
-		MarcarArticuloComoAcabado,
-		MarcarArticuloComoDisponible
+		CambiarDisponibilidadArticulo
 	}
 }
