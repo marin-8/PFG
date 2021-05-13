@@ -772,10 +772,10 @@ namespace PFG.Gestor
 			{
 				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Cocinero))
 					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
-				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
+				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
 				else
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
+					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
 
 				var nuevaTareaCocina = new Tarea(
 					Global.NuevoIDTarea,

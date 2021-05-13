@@ -9,7 +9,6 @@
             - La App lo pide al hacer login
             - El Gestor lo envía si cambia
                 
-        - Bloquear páginas en base al rol del usuario logueado
         - Y quitar tanto "RefrescarX" en las pantallas de configuración
         - Poner bien "RefrescarX" en las pantallas de trabajo
         
@@ -27,6 +26,8 @@
         
         - MINIMIZAR CÓDIGO REPETIDO !!!
         
+        - Guardar tareas en memoria cada vez que se reciben por si se cierra sin querer
+        
         - Carta -> Modificar nombre categoría
         
         - Gestionar tareas no enviadads porque no hay usuarios conectado
@@ -38,3 +39,5 @@
         - Hacer lo popups super reutilizables
         
         - Todos los artículos empiezan como disponibles
+        
+        - Quitar usings innecesarios
