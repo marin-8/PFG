@@ -42,6 +42,8 @@ namespace PFG.Comun
 
 		TomarNota,
 		CobrarMesa,
+		CambiarDisponibilidadArticulo,
+		RefrescarDisponibilidadArticulos,
 
 		PedirTicketMesa,
 		MandarTicketMesa,

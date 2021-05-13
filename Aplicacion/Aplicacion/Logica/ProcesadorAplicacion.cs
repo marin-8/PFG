@@ -40,6 +40,16 @@ namespace PFG.Aplicacion
 					break;
 				}
 
+				case TiposComando.RefrescarDisponibilidadArticulos:
+				{
+					Procesar_RefrescarDisponibilidadArticulos(
+						Comando.DeJson
+							<Comando_RefrescarDisponibilidadArticulos>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -70,6 +80,12 @@ namespace PFG.Aplicacion
 
 				Global.TareasPersonales.Ordenar();
 			}
+		}
+
+		private async void Procesar_RefrescarDisponibilidadArticulos(Comando_RefrescarDisponibilidadArticulos Comando)
+		{
+			await Device.InvokeOnMainThreadAsync(async () => 
+				await Global.Get_Articulos() );
 		}
 
 		//private string Procesar_XXXXX(Comando_XXXXX Comando)

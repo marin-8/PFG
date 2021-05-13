@@ -136,7 +136,8 @@ namespace PFG.Aplicacion
 					comandoRespuesta.Articulos
 						.OrderBy(a => a.Categoria)
 						.GroupBy(a => a.Categoria)
-						.Select(a => a.First().Categoria);
+						.Select(a => a.First().Categoria)
+						.ToArray();
 
 				foreach(var categoria in categorias)
 				{

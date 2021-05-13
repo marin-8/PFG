@@ -128,7 +128,28 @@ namespace PFG.Aplicacion
 
 				case TiposAcciones.CambiarDisponibilidadArticulo:
 				{
-					//await Navigation.PushPopupAsync(new XXXXX());
+					var popupSeleccionarArticulo = new SeleccionarArticulo(true);
+					await Navigation.PushPopupAsync(popupSeleccionarArticulo);
+					var resultado = await popupSeleccionarArticulo.Resultado;
+
+					if(resultado.Correcto)
+					{
+						string nuevoEstadoString;
+
+						if(resultado.Articulo.Disponible)
+							nuevoEstadoString = "Acabado";
+						else
+							nuevoEstadoString = "Disponible";
+
+						if(await UserDialogs.Instance.ConfirmAsync($"¿Marcar artículo como {nuevoEstadoString}?", "Confirmar", "Si", "Cancelar"))
+						{
+							await Task.Run(() =>
+							{
+								new Comando_CambiarDisponibilidadArticulo(resultado.Articulo.Nombre).Enviar(Global.IPGestor);
+							});
+						}
+					}					
+
 					return;
 				}
 			}

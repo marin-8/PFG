@@ -310,6 +310,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.CambiarDisponibilidadArticulo:
+				{
+					Procesar_CambiarDisponibilidadArticulo(
+						Comando.DeJson
+							<Comando_CambiarDisponibilidadArticulo>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -926,6 +936,28 @@ namespace PFG.Gestor
 			{
 				new Comando_EnviarTarea(nuevaTareaLimpiarMesa).Enviar(usuarioAsignarLimpiarMesa.IP);
 			});
+		}
+
+		private static async void Procesar_CambiarDisponibilidadArticulo(Comando_CambiarDisponibilidadArticulo Comando)
+		{
+			var articuloAModificar = 
+				GestionArticulos.Articulos
+					.First(a => a.Nombre == Comando.NombreArticulo);
+					
+			articuloAModificar.Disponible = !articuloAModificar.Disponible;
+
+			var usuariosConectados =
+				GestionUsuarios.Usuarios
+					.Where(u => u.Conectado);
+
+			foreach(var usuarioConectado in usuariosConectados)
+			{
+				await Task.Run(() =>
+				{
+					new Comando_RefrescarDisponibilidadArticulos().Enviar(usuarioConectado.IP);
+				});
+			}
+			
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)
