@@ -1,30 +1,61 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Threading;
-using System.Text.RegularExpressions;
 
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-using Acr.UserDialogs;
-
-using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
 	public partial class ConsultarCarta : ContentPage
 	{
+	// ============================================================================================== //
+
+		// Variables y constantes
+
+	// ============================================================================================== //
+
+		// Inicialización
+
 		public ConsultarCarta()
 		{
 			InitializeComponent();
+
+			lock(Global.CategoriasLock)
+				ListaArticulos.ItemsSource = Global.Categorias;
 		}
+
+		protected override async void OnAppearing()
+		{
+			await Global.Get_Articulos();
+		}
+
+	// ============================================================================================== //
+
+		// Eventos UI -> Barra navegación 
+
+		private async void Refrescar_Clicked(object sender, EventArgs e)
+		{
+			await Global.Get_Articulos();
+		}
+
+	// ============================================================================================== //
+
+		// Eventos UI -> Contenido
+
+		private async void ListaArticulos_Refresh(object sender, EventArgs e)
+		{
+			await Global.Get_Articulos();
+
+			ListaArticulos.EndRefresh();
+		}
+
+	// ============================================================================================== //
+
+		// Métodos privados
+
+	// ============================================================================================== //
+
+		// Métodos Procesar
+
+	// ============================================================================================== //
 	}
 }

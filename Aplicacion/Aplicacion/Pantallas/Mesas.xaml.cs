@@ -27,8 +27,6 @@ namespace PFG.Aplicacion
 
 		// Variables y constantes
 
-		public static Mesas Instancia { get; private set; }
-
 		public const int ESPACIO_ENTRE_MESAS = 10;
 
 	// ============================================================================================== //
@@ -38,8 +36,6 @@ namespace PFG.Aplicacion
 		public Mesas()
 		{
 			InitializeComponent();
-
-			Instancia = this;
 
 			Shell.Current.Navigated += OnNavigatedTo;
 		}
@@ -93,8 +89,6 @@ namespace PFG.Aplicacion
 
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
-			ActualizarMapaMesas();
-
 			var sitioPulsadoString = (string)((Button)sender).BindingContext;
 			int indiceDelPunto = sitioPulsadoString.IndexOf('.');
 			byte sitioPulsadoX = byte.Parse(sitioPulsadoString.Substring(0, indiceDelPunto));
@@ -143,8 +137,6 @@ namespace PFG.Aplicacion
 
 						numeroNuevaMesa = byte.Parse(resultado.Text);
 
-						ActualizarMapaMesas();
-
 						if(Global.Mesas.Where(m => m.Numero == numeroNuevaMesa).Any())
 							await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 						else
@@ -158,10 +150,9 @@ namespace PFG.Aplicacion
 						string respuestaGestor = new Comando_ModificarMesaNumero(mesaSeleccionada.Numero, numeroNuevaMesa).Enviar(Global.IPGestor);
 						return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 					});
+					Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 					UserDialogs.Instance.HideLoading();
-
-					Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 					return;
 				}
@@ -183,10 +174,9 @@ namespace PFG.Aplicacion
 							string respuestaGestor = new Comando_EliminarMesa(mesaSeleccionada.Numero).Enviar(Global.IPGestor);
 							return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 						});
+						Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 						UserDialogs.Instance.HideLoading();
-
-						Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 						return;
 					}
@@ -227,10 +217,9 @@ namespace PFG.Aplicacion
 				string respuestaGestor = new Comando_EditarMapaMesas(TipoEdicionMapaMesas).Enviar(Global.IPGestor);
 				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 			UserDialogs.Instance.HideLoading();
-
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 		}
 
 		private async void CrearMesa(byte sitioX, byte sitioY)
@@ -263,8 +252,6 @@ namespace PFG.Aplicacion
 
 				numeroNuevaMesa = byte.Parse(resultado.Text);
 
-				ActualizarMapaMesas();
-
 				if(Global.Mesas.Where(m => m.Numero == numeroNuevaMesa).Any())
 					await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 				else
@@ -280,10 +267,9 @@ namespace PFG.Aplicacion
 				string respuestaGestor = new Comando_CrearMesa(nuevaMesa).Enviar(Global.IPGestor);
 				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 			UserDialogs.Instance.HideLoading();
-
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 		}
 
 		private async void MoverMesa(byte numeroMesaOrigen, byte nuevoSitioX, byte nuevoSitioY)
@@ -295,10 +281,9 @@ namespace PFG.Aplicacion
 				string respuestaGestor = new Comando_ModificarMesaSitio(numeroMesaOrigen, nuevoSitioX, nuevoSitioY).Enviar(Global.IPGestor);
 				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 			});
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 
 			UserDialogs.Instance.HideLoading();
-
-			Global.Procesar_ResultadoGenerico(comandoRespuesta, ActualizarMapaMesas);
 		}
 		
 	// ============================================================================================== //
@@ -372,7 +357,7 @@ namespace PFG.Aplicacion
 						}
 						case EstadosMesa.Sucia:
 						{
-							mesaMapaGrid.BackgroundColor = Color.DarkGreen;
+							mesaMapaGrid.BackgroundColor = Color.DarkOrange;
 							mesaMapaGrid.TextColor = Color.White;
 							break;
 						}

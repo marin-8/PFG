@@ -89,16 +89,42 @@ namespace PFG.Aplicacion
 		{
 			var buttonMesa = new Button()
 			{
-				FontAttributes=FontAttributes.Bold,
-				FontSize=20,
-				Padding=new(0),
-				Margin=new(0),
-				BackgroundColor=Color.FromRgb(240, 240, 240),
-				BindingContext=$"{GridX}.{GridY}"
+				         FontAttributes = FontAttributes.Bold,
+							   FontSize = 20,
+						     	Padding = new(0),
+							     Margin = new(0),
+						BackgroundColor = Color.FromRgb(240, 240, 240),
+						 BindingContext = $"{GridX}.{GridY}"
 			};
 			buttonMesa.Clicked += EventoMesaPulsada;
 
 			return buttonMesa;
+		}
+
+		public static Frame GenerarFrameLabelMesa(byte GridX, byte GridY)
+		{
+			var labelMesa = new Label()
+			{
+				         FontAttributes = FontAttributes.Bold,
+							   FontSize = 20,
+				HorizontalTextAlignment = TextAlignment.Center,
+				  VerticalTextAlignment = TextAlignment.Center,
+						     	Padding = new(0),
+							     Margin = new(0),
+						BackgroundColor = Color.FromRgb(240, 240, 240),
+						 BindingContext = $"{GridX}.{GridY}",
+						VerticalOptions = LayoutOptions.FillAndExpand,
+					  HorizontalOptions = LayoutOptions.FillAndExpand
+			};
+
+			return new Frame()
+			{
+				     Content = labelMesa,
+				CornerRadius = 2f,
+				     Padding = new(0),
+					  Margin = new(0),
+				   HasShadow = false
+			};
 		}
 
 		public static async Task Get_Mesas()

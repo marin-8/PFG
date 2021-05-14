@@ -4,41 +4,74 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="PFG.Aplicacion.ConsultarCarta"
+    xmlns:pfgcomun="clr-namespace:PFG.Comun;assembly=Comun"
     
     Title="Consultar Carta">
 
-    <Grid
-        ColumnSpacing="0"
-        RowSpacing="0">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Refrescar    "
+            Order="Primary"
+            Priority="1"
+            Clicked="Refrescar_Clicked"/>
+    </ContentPage.ToolbarItems>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+    <StackLayout
+        Spacing="0"
+        Padding="20">
 
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <ListView
+            x:Name="ListaArticulos"
+            SelectionMode="None"
+            HasUnevenRows="True"
+            BackgroundColor="Transparent"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="True"
+            RefreshControlColor="Blue"
+            Refreshing="ListaArticulos_Refresh"
+            IsGroupingEnabled="True"
+            GroupDisplayBinding="{Binding Categoria}">
 
-        <StackLayout
-            Spacing="0"
-            Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ViewCell>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+                        <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                            <Frame BackgroundColor="MediumBlue" Padding="10">
+                                <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                    <Label HorizontalTextAlignment="Center" FontSize="20" Text="{Binding Categoria}" TextColor="White" FontAttributes="Bold"></Label>
+                                </StackLayout>
+                            </Frame>
+                        </Frame>
 
-            <Label
-                Text="Consultar Carta"
-                FontSize="Title"
-                TextColor="Black"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="pfgcomun:Articulo">
+                    <ViewCell>
 
-        </StackLayout>
+                        <Frame BackgroundColor="Transparent" Padding="0,10,0,10">
+                            <Frame BackgroundColor="LightSkyBlue" Padding="10">
+                                <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
+                                    <Label FontSize="20" Text="{Binding Nombre}" TextColor="Black" FontAttributes="Bold"></Label>
+                                    <Label FontSize="18" Text="{Binding SitioPreparacionArticulo, StringFormat='Se prepara en: {0}'}" TextColor="Black"></Label>
+                                    <Label FontSize="18" Text="{Binding Precio, StringFormat='Precio: {0:C2}'}" TextColor="Black"></Label>
+                                </StackLayout>
+                                <Frame.Triggers>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding Disponible}" Value="false">
+                                        <Setter Property="BackgroundColor" Value="Silver" />
+                                    </DataTrigger>
+                                </Frame.Triggers>
+                            </Frame>
+                        </Frame>
 
-    </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </StackLayout>
 
 </ContentPage>

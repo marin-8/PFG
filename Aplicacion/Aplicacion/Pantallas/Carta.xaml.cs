@@ -56,8 +56,6 @@ namespace PFG.Aplicacion
 		{
 			Articulo nuevoArticulo = new("", "", 0f);
 
-			await Global.Get_Articulos();
-
 			while(true)
 			{
 				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", 100, true);
@@ -172,8 +170,6 @@ namespace PFG.Aplicacion
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{articuloPulsado.Nombre}", "Cancelar", null, null, OpcionesArticulo);
 			if(opcion.Equals("Cancelar")) return;
 
-			await Global.Get_Articulos();
-
 			if(opcion.Equals(OpcionesArticulo[0])) // Cambiar Nombre
 			{
 				string nuevoNombre = "";
@@ -196,14 +192,14 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Cambiando nombre...");
 
-				await Task.Run(() =>
+				var comandoRespuesta = await Task.Run(() =>
 				{
-					new Comando_ModificarArticuloNombre(articuloPulsado.Nombre, nuevoNombre).Enviar(Global.IPGestor);
+					string respuestaGestor = new Comando_ModificarArticuloNombre(articuloPulsado.Nombre, nuevoNombre).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
 
 				UserDialogs.Instance.HideLoading();
-
-				await Global.Get_Articulos();
 
 				return;
 			}
@@ -240,14 +236,14 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Cambiando categoria...");
 
-				await Task.Run(() =>
+				var comandoRespuesta = await Task.Run(() =>
 				{
-					new Comando_ModificarArticuloCategoria(articuloPulsado.Nombre, nuevaCategoria).Enviar(Global.IPGestor);
+					string respuestaGestor = new Comando_ModificarArticuloCategoria(articuloPulsado.Nombre, nuevaCategoria).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
 
 				UserDialogs.Instance.HideLoading();
-
-				await Global.Get_Articulos();
 
 				return;
 			}
@@ -280,14 +276,14 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Cambiando precio...");
 
-				await Task.Run(() =>
+				var comandoRespuesta = await Task.Run(() =>
 				{
-					new Comando_ModificarArticuloPrecio(articuloPulsado.Nombre, nuevoPrecio).Enviar(Global.IPGestor);
+					string respuestaGestor = new Comando_ModificarArticuloPrecio(articuloPulsado.Nombre, nuevoPrecio).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
 
 				UserDialogs.Instance.HideLoading();
-
-				await Global.Get_Articulos();
 
 				return;
 			}
@@ -315,14 +311,14 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Cambiando sitio de preparación...");
 
-				await Task.Run(() =>
+				var comandoRespuesta = await Task.Run(() =>
 				{
-					new Comando_ModificarArticuloSitioDePreparacion(articuloPulsado.Nombre, nuevoSitioPreparacion).Enviar(Global.IPGestor);
+					string respuestaGestor = new Comando_ModificarArticuloSitioDePreparacion(articuloPulsado.Nombre, nuevoSitioPreparacion).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
 
 				UserDialogs.Instance.HideLoading();
-
-				await Global.Get_Articulos();
 
 				return;
 			}
@@ -333,14 +329,14 @@ namespace PFG.Aplicacion
 				{
 					UserDialogs.Instance.ShowLoading("Eliminando artículo...");
 
-					await Task.Run(() =>
+					var comandoRespuesta = await Task.Run(() =>
 					{
-						new Comando_EliminarArticulo(articuloPulsado.Nombre).Enviar(Global.IPGestor);
+						string respuestaGestor = new Comando_EliminarArticulo(articuloPulsado.Nombre).Enviar(Global.IPGestor);
+						return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
 					});
+					Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
 
 					UserDialogs.Instance.HideLoading();
-
-					await Global.Get_Articulos();
 				}
 
 				return;

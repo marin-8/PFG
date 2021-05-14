@@ -32,6 +32,7 @@ namespace PFG.Aplicacion
 		{
 			bool mostrarOno = Rol == Roles.Administrador;
 
+			Instancia.PantallaPrincipal.FlyoutItemIsVisible = mostrarOno;
 			Instancia.PantallaCarta.FlyoutItemIsVisible = mostrarOno;
 			Instancia.PantallaMesas.FlyoutItemIsVisible = mostrarOno;
 			Instancia.PantallaUsuarios.FlyoutItemIsVisible = mostrarOno;

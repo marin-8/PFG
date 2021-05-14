@@ -1,13 +1,5 @@
 
     Mejoras:
-    
-        - Sistema de empezar/terminar día de trabajo
-            - Durante el día de trabajo no se puede:
-                - Modificar usuarios
-                - Modificar mesas
-                - Modificar carta
-            - La App lo pide al hacer login
-            - El Gestor lo envía si cambia
                 
         - Y quitar tanto "RefrescarX" en las pantallas de configuración
         - Poner bien "RefrescarX" en las pantallas de trabajo
@@ -52,6 +44,8 @@
         - No poder acceder como admin si la jornada ha empezado
         
         - Hacer lo popups super reutilizables
+        
+        - Poner comentarios // ===== // en todas las clases grandes
         
         - Todos los artículos empiezan como disponibles
         

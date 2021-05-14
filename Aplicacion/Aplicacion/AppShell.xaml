@@ -12,7 +12,7 @@
         FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate pantallas:IniciarSesion}" />
 
-    <FlyoutItem Title="Tareas y Acciones" Route="Principal">
+    <FlyoutItem x:Name="PantallaPrincipal" Title="Tareas y Acciones" Route="Principal">
         <Tab>
             <ShellContent
                 Title="Tareas"
@@ -29,7 +29,7 @@
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem x:Name="PantallaCarta" Title="Carta">
+    <FlyoutItem x:Name="PantallaCarta" Title="Carta" Route="Carta">
         <ShellContent ContentTemplate="{DataTemplate pantallas:Carta}" />
     </FlyoutItem>
 

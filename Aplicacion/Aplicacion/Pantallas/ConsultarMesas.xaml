@@ -7,38 +7,19 @@
     
     Title="Consultar Mesas">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Refrescar    "
+            Order="Primary"
+            Priority="1"
+            Clicked="Refrescar_Clicked"/>
+    </ContentPage.ToolbarItems>
+
     <Grid
+        x:Name="MapaGrid"
         ColumnSpacing="0"
-        RowSpacing="0">
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <StackLayout
-            Spacing="0"
-            Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
-
-            <BoxView HeightRequest="20" Color="Transparent"/>
-
-            <Label
-                Text="Consultar Mesas"
-                FontSize="Title"
-                TextColor="Black"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
-
-            <BoxView HeightRequest="20" Color="Transparent"/>
-
-        </StackLayout>
-
-    </Grid>
+        RowSpacing="0"
+        Margin="0"
+        Padding="20"/>
 
 </ContentPage>

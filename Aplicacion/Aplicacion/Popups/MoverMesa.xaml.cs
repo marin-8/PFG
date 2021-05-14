@@ -128,7 +128,7 @@ namespace PFG.Aplicacion
 							}
 							case EstadosMesa.Sucia:
 							{
-								mesaMapaGrid.BackgroundColor = Color.DarkGreen;
+								mesaMapaGrid.BackgroundColor = Color.DarkOrange;
 								mesaMapaGrid.TextColor = Color.White;
 								break;
 							}

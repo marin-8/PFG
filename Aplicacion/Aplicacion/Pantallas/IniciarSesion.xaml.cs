@@ -79,8 +79,16 @@ namespace PFG.Aplicacion
 
 					AppShell.ConfigurarPantallasAMostrar(Global.UsuarioActual.Rol);
 
-					await Device.InvokeOnMainThreadAsync(async () => 
-						await Shell.Current.GoToAsync("//Principal") );
+					if(Global.UsuarioActual.Rol != Roles.Administrador)
+					{
+						await Device.InvokeOnMainThreadAsync(async () => 
+							await Shell.Current.GoToAsync("//Principal") );
+					}
+					else
+					{
+						await Device.InvokeOnMainThreadAsync(async () => 
+							await Shell.Current.GoToAsync("//Carta") );
+					}
 
 					Tareas.RefrescarTareasPersonalesDesdeFuera();
 

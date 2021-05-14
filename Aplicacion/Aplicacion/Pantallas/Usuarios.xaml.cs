@@ -66,8 +66,6 @@ namespace PFG.Aplicacion
 				if(nombreUsuario == null) return;
 				nuevoUsuario.NombreUsuario = nombreUsuario;
 
-				RefrescarUsuarios();
-
 				bool algunUsuarioConMismoNombre;
 
 				lock(Global.UsuariosLock)
@@ -140,8 +138,6 @@ namespace PFG.Aplicacion
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{usuarioPulsado.Nombre}", "Cancelar", null, null, opcionesUsuario);
 			if(opcion.Equals("Cancelar")) return;
 
-			RefrescarUsuarios();
-
 			if(opcion == OpcionesUsuario[0]) // Cambiar Nombre
 			{
 				string nuevoNombre;
@@ -157,17 +153,17 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Modificando Nombre...");
 
-				await Task.Run(() =>
-				{
-					new Comando_ModificarUsuarioNombre(usuarioPulsado.NombreUsuario, nuevoNombre).Enviar(Global.IPGestor);
-				});
-
-				UserDialogs.Instance.HideLoading();
-
 				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
 					Global.UsuarioActual.Nombre = nuevoNombre;
 
-				RefrescarUsuarios();
+				var comandoRespuesta = await Task.Run(() =>
+				{
+					string respuestaGestor = new Comando_ModificarUsuarioNombre(usuarioPulsado.NombreUsuario, nuevoNombre).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarUsuarios);
+
+				UserDialogs.Instance.HideLoading();
 
 				return;
 			}
@@ -180,8 +176,6 @@ namespace PFG.Aplicacion
 				{
 					nuevoNombreUsuario = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre de Usuario\n(actual = {usuarioPulsado.NombreUsuario})", Comun.Global.MAX_CARACTERES_LOGIN, true);
 					if(nuevoNombreUsuario == null) return;
-
-					RefrescarUsuarios();
 
 					bool algunUsuarioConMismoNombre;
 
@@ -202,17 +196,17 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
 
-				await Task.Run(() =>
-				{
-					new Comando_ModificarUsuarioNombreUsuario(usuarioPulsado.NombreUsuario, nuevoNombreUsuario).Enviar(Global.IPGestor);
-				});
-
 				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
 					Global.UsuarioActual.NombreUsuario = nuevoNombreUsuario;
 
-				UserDialogs.Instance.HideLoading();
+				var comandoRespuesta = await Task.Run(() =>
+				{
+					string respuestaGestor = new Comando_ModificarUsuarioNombreUsuario(usuarioPulsado.NombreUsuario, nuevoNombreUsuario).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarUsuarios);
 
-				RefrescarUsuarios();
+				UserDialogs.Instance.HideLoading();
 
 				return;
 			}
@@ -232,17 +226,17 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Modificando Contraseña...");
 
-				await Task.Run(() =>
-				{
-					new Comando_ModificarUsuarioContrasena(usuarioPulsado.NombreUsuario, nuevaContrasena).Enviar(Global.IPGestor);
-				});
-
 				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
 					Global.UsuarioActual.Contrasena = nuevaContrasena;
 
-				UserDialogs.Instance.HideLoading();
+				var comandoRespuesta = await Task.Run(() =>
+				{
+					string respuestaGestor = new Comando_ModificarUsuarioContrasena(usuarioPulsado.NombreUsuario, nuevaContrasena).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarUsuarios);
 
-				RefrescarUsuarios();
+				UserDialogs.Instance.HideLoading();
 
 				return;
 			}
@@ -264,17 +258,17 @@ namespace PFG.Aplicacion
 
 				UserDialogs.Instance.ShowLoading("Modificando Rol...");
 
-				await Task.Run(() =>
-				{
-					new Comando_ModificarUsuarioRol(usuarioPulsado.NombreUsuario, nuevoRol).Enviar(Global.IPGestor);
-				});
-
 				if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario)
 					Global.UsuarioActual.Rol = nuevoRol;
 
-				UserDialogs.Instance.HideLoading();
+				var comandoRespuesta = await Task.Run(() =>
+				{
+					string respuestaGestor = new Comando_ModificarUsuarioRol(usuarioPulsado.NombreUsuario, nuevoRol).Enviar(Global.IPGestor);
+					return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+				});
+				Global.Procesar_ResultadoGenerico(comandoRespuesta, RefrescarUsuarios);
 
-				RefrescarUsuarios();
+				UserDialogs.Instance.HideLoading();
 
 				return;
 			}
