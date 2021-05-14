@@ -1,7 +1,6 @@
 
     Mejoras:
                 
-        - Y quitar tanto "RefrescarX" en las pantallas de configuración
         - Poner bien "RefrescarX" en las pantallas de trabajo
         
         - Revisar mayúsculas/minúsculas

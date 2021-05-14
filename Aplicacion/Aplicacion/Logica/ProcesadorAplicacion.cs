@@ -26,7 +26,7 @@ namespace PFG.Aplicacion
 		{
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
-			string comandoRespuesta = "OK";
+			string comandoRespuesta = new Comando_ResultadoGenerico(true, "Correcto").ToString();
 
 			switch(tipoComando)
 			{
