@@ -15,6 +15,10 @@ namespace PFG.Gestor
 {
 	public partial class Principal : Form
 	{
+	// ============================================================================================== //
+
+		// Constantes
+
 		private const string COMENZAR_JORNADA_TEXT = "Comenzar Jornada";
 		private static readonly Color COMENZAR_JORNADA_FORECOLOR = Color.FromArgb(  0,   0,   0);
 		private static readonly Color COMENZAR_JORNADA_BACKCOLOR = Color.FromArgb(  0, 200,   0);
@@ -23,8 +27,16 @@ namespace PFG.Gestor
 		private static readonly Color TERMINAR_JORNADA_FORECOLOR = Color.FromArgb(255, 255, 255);
 		private static readonly Color TERMINAR_JORNADA_BACKCOLOR = Color.FromArgb(255,   0,   0);
 
+	// ============================================================================================== //
+
+		// Variables
+
 		private ControladorRed Servidor;
 		private ProcesadorGestor ProcesadorMensajesRecibidos;
+
+	// ============================================================================================== //
+
+		// Inicialización
 
 		public Principal()
 		{
@@ -45,26 +57,27 @@ namespace PFG.Gestor
 			IPGestor.Text = servidorIP;
 		}
 
+	// ============================================================================================== //
+
+		// Eventos UI
+
 		private void ComenzarTerminarJornada_Click(object sender, EventArgs e)
 		{
 			if(Global.JornadaEnCurso) // Terminar Jornada
 			{
 				Global.JornadaEnCurso = false;
 
-				ComenzarTerminarJornada.Text = COMENZAR_JORNADA_TEXT;
-				ComenzarTerminarJornada.ForeColor = COMENZAR_JORNADA_FORECOLOR;
-				ComenzarTerminarJornada.BackColor = COMENZAR_JORNADA_BACKCOLOR;
+				ActualizarEstiloBotonComenzarTerminarJornada();
 
-				GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia);
-				GestionTareas.Tareas.Clear();
+				CerrarTodasLasSesiones();
+				VaciarMesas();
+				EliminarTareas();
 			}
 			else // Comenzar Jornada
 			{
 				Global.JornadaEnCurso = true;
 
-				ComenzarTerminarJornada.Text = TERMINAR_JORNADA_TEXT;
-				ComenzarTerminarJornada.ForeColor = TERMINAR_JORNADA_FORECOLOR;
-				ComenzarTerminarJornada.BackColor = TERMINAR_JORNADA_BACKCOLOR;
+				ActualizarEstiloBotonComenzarTerminarJornada();
 			}
 		}
 
@@ -74,7 +87,7 @@ namespace PFG.Gestor
 			{
 				MessageBox.Show
 				(
-					"No se puede cerrar el Gestor mientras la Jornada está en curso",
+					"No se puede cerrar el Gestor\nmientras la Jornada está en curso",
 					"Alerta",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -83,24 +96,63 @@ namespace PFG.Gestor
 			else
 			{
 				Servidor.Cerrar();
-				CerrarTodasLasSesiones();
+				CerrarSesionAdmin();
 				GuardarDatos();
 				/*Form*/ Close();
 			}
 		}
 
-		private void CerrarTodasLasSesiones()
+	// ============================================================================================== //
+
+		// Métodos privados
+
+		private void ActualizarEstiloBotonComenzarTerminarJornada()
 		{
-			GestionUsuarios.Usuarios
-				.ForEach(u => 
-					u.Conectado = false);
+			ComenzarTerminarJornada.Text = Global.JornadaEnCurso ? TERMINAR_JORNADA_TEXT : COMENZAR_JORNADA_TEXT;
+			ComenzarTerminarJornada.ForeColor = Global.JornadaEnCurso ? TERMINAR_JORNADA_FORECOLOR : COMENZAR_JORNADA_FORECOLOR;
+			ComenzarTerminarJornada.BackColor = Global.JornadaEnCurso ? TERMINAR_JORNADA_BACKCOLOR : COMENZAR_JORNADA_BACKCOLOR;
 		}
 
-		private void GuardarDatos()
+		private void CerrarTodasLasSesiones()
+		{
+			GestionUsuarios.Usuarios.ForEach(async (u) =>
+			{
+				if(u.Conectado)
+				{
+					await Task.Run(() => {
+						new Comando_JornadaTerminada().Enviar(u.IP); });
+
+					u.Conectado = false;
+				}
+			});
+		}
+
+		private static void VaciarMesas() { GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia); }
+
+		private static void EliminarTareas() { GestionTareas.Tareas.Clear(); }
+
+		private static async void CerrarSesionAdmin()
+		{
+			var admin =
+				GestionUsuarios.Usuarios
+					.First(u => u.Rol == Roles.Administrador);
+
+			if(admin.Conectado)
+			{
+				await Task.Run(() => {
+					new Comando_JornadaTerminada().Enviar(admin.IP); });
+
+				admin.Conectado = false;
+			}
+		}
+
+		private static void GuardarDatos()
 		{
 			GestionUsuarios.Guardar();
 			GestionMesas.Guardar();
 			GestionArticulos.Guardar();
 		}
+
+		// ============================================================================================== //
 	}
 }

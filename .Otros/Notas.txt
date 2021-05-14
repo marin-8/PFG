@@ -47,10 +47,16 @@
 
         - Notificaciones al recibir tareas
         
+        - Eliminar el parámetro Comando de los métodos Procesar que no lo usen (Pedir)
+        
+        - No poder acceder como admin si la jornada ha empezado
+        
         - Hacer lo popups super reutilizables
         
         - Todos los artículos empiezan como disponibles
         
+        - Mejorar los ifs de Gestor.Procesar_IniciarSesion
+        
         - Quitar usings innecesarios
         
-        - Cambiar ResultadoIniciarSesion por ResultadoGenerico
+        - Cambiar de ResultadoIniciarSesion la enum por mensaje y meter un bool de correcto

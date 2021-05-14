@@ -107,6 +107,7 @@ namespace PFG.Gestor
 			this.ComenzarTerminarJornada.TabIndex = 3;
 			this.ComenzarTerminarJornada.Text = "Comenzar Jornada";
 			this.ComenzarTerminarJornada.UseVisualStyleBackColor = false;
+			this.ComenzarTerminarJornada.Click += new System.EventHandler(this.ComenzarTerminarJornada_Click);
 			// 
 			// Principal
 			// 

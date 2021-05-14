@@ -353,9 +353,9 @@ namespace PFG.Gestor
 
 				if(usuario.Contrasena == Comando.Contrasena)
 				{
-					if(Global.JornadaEnCurso || usuario.Rol == Roles.Administrador || usuario.Rol == Roles.Desarrollador)
+					if(!usuario.Conectado)
 					{
-						if(!usuario.Conectado)
+						if(Global.JornadaEnCurso ^ usuario.Rol == Roles.Administrador) // Qué guay el operador ^ (xor)
 						{
 							usuario.IP = IP;
 							usuario.Conectado = true;
@@ -364,12 +364,12 @@ namespace PFG.Gestor
 						}
 						else
 						{
-							resultado = ResultadosIniciarSesion.UsuarioYaConectado;
+							resultado = ResultadosIniciarSesion.JornadaEnEstadoNoPermitido;
 						}
 					}
 					else
 					{
-						resultado = ResultadosIniciarSesion.JornadaNoComenzada;
+						resultado = ResultadosIniciarSesion.UsuarioYaConectado;
 					}
 				}
 				else

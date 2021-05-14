@@ -6,7 +6,7 @@ namespace PFG.Comun
 		Correcto,
 		UsuarioNoExiste,
 		ContrasenaIncorrecta,
-		JornadaNoComenzada,
+		JornadaEnEstadoNoPermitido,
 		UsuarioYaConectado
 	}
 }

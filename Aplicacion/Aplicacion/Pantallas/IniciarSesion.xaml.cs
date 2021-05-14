@@ -98,9 +98,15 @@ namespace PFG.Aplicacion
 
 					break;
 				}
-				case ResultadosIniciarSesion.JornadaNoComenzada:
+				case ResultadosIniciarSesion.JornadaEnEstadoNoPermitido:
 				{
-					await UserDialogs.Instance.AlertAsync("La Jornada no ha comenzado", "Alerta", "Aceptar");
+					await UserDialogs.Instance.AlertAsync
+					(
+						"Estado de la Jornada no permitido.\n\n" +
+							"Los trabajadores no pueden iniciar sesión si la Jornada no ha comenzado.\n\n" +
+							"El Administrador no puede iniciar sesión si la Jornada ha comenzado.",
+						"Alerta",
+						"Aceptar");
 
 					break;
 				}

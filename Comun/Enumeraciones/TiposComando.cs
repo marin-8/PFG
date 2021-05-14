@@ -8,6 +8,7 @@ namespace PFG.Comun
 		IniciarSesion,
 		ResultadoIniciarSesion,
 		CerrarSesion,
+		JornadaTerminada,
 
 		PedirUsuarios,
 		MandarUsuarios,

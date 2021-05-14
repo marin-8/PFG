@@ -30,6 +30,16 @@ namespace PFG.Aplicacion
 
 			switch(tipoComando)
 			{
+				case TiposComando.JornadaTerminada:
+				{
+					Procesar_JornadaTerminada(
+						Comando.DeJson
+							<Comando_JornadaTerminada>
+								(ComandoJson));
+
+					break;
+				}
+
 				case TiposComando.EnviarTarea:
 				{
 					Procesar_EnviarTarea(
@@ -70,6 +80,21 @@ namespace PFG.Aplicacion
 			}
 
 			return comandoRespuesta;
+		}
+
+		private async void Procesar_JornadaTerminada(Comando_JornadaTerminada Comando)
+		{
+			UserDialogs.Instance.ShowLoading("Cerrando sesión...");
+
+			Shell.Current.FlyoutIsPresented = false;
+
+			Global.UsuarioActual = null;
+
+			await Shell.Current.GoToAsync("//IniciarSesion");
+
+			await Task.Delay(200);
+
+			UserDialogs.Instance.HideLoading();
 		}
 
 		private void Procesar_EnviarTarea(Comando_EnviarTarea Comando)

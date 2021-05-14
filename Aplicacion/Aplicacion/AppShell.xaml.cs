@@ -30,9 +30,7 @@ namespace PFG.Aplicacion
 
 		public static void ConfigurarPantallasAMostrar(Roles Rol)
 		{
-			bool mostrarOno =
-				Rol == Roles.Administrador ||
-				Rol == Roles.Desarrollador;
+			bool mostrarOno = Rol == Roles.Administrador;
 
 			Instancia.PantallaCarta.FlyoutItemIsVisible = mostrarOno;
 			Instancia.PantallaMesas.FlyoutItemIsVisible = mostrarOno;
