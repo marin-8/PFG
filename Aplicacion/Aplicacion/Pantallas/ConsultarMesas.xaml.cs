@@ -101,9 +101,7 @@ namespace PFG.Aplicacion
 				{
 					var mesaMapaGrid = (Label)
 							MapaGrid.Children
-								.Where(c =>
-									((Frame)c).Content.BindingContext
-									.Equals($"{mesa.SitioX}.{mesa.SitioY}"))
+								.Where(c => ((Frame)c).Content.BindingContext.ToString() == $"{mesa.SitioX}.{mesa.SitioY}")
 								.Select(c => ((Frame)c).Content)
 								.First();
 

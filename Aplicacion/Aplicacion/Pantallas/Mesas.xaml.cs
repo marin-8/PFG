@@ -63,7 +63,7 @@ namespace PFG.Aplicacion
 		private async void EditarMapa(object sender, EventArgs e)
 		{
 			string opcion = await UserDialogs.Instance.ActionSheetAsync("Editar Mapa", "Cancelar", null, null, OpcionesEditarMapa);
-			if(opcion.Equals("Cancelar")) return;
+			if(opcion == "Cancelar") return;
 
 			if(opcion == OpcionesEditarMapa[0]) { AnadirColumna(); return; }
 			if(opcion == OpcionesEditarMapa[1]) { QuitarColumna(); return; }
@@ -105,7 +105,7 @@ namespace PFG.Aplicacion
 				var mesaSeleccionada = Global.Mesas.Where(condicionMesaSeleccionada).First();
 
 				string opcion = await UserDialogs.Instance.ActionSheetAsync($"Mesa {mesaSeleccionada.Numero}", "Cancelar", null, null, OpcionesMesaExistente);
-				if(opcion.Equals("Cancelar")) return;
+				if(opcion == "Cancelar") return;
 
 				if(opcion == OpcionesMesaExistente[0]) // Cambiar número
 				{
@@ -132,7 +132,7 @@ namespace PFG.Aplicacion
 						var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
 						if(!resultado.Ok) return;
 
-						if(resultado.Text.Equals("") || resultado.Text.Equals("0") || resultado.Text.Equals("00")) {
+						if(resultado.Text == "" || resultado.Text == "0" || resultado.Text == "00") {
 							await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
 
 						numeroNuevaMesa = byte.Parse(resultado.Text);
@@ -247,7 +247,7 @@ namespace PFG.Aplicacion
 				var resultado = await UserDialogs.Instance.PromptAsync(configuracionPrompt);
 				if(!resultado.Ok) return;
 
-				if(resultado.Text.Equals("") || resultado.Text.Equals("0") || resultado.Text.Equals("00")) {
+				if(resultado.Text == "" || resultado.Text == "0" || resultado.Text == "00") {
 					await UserDialogs.Instance.AlertAsync("El número introducido no es válido", "Alerta", "Aceptar"); continue; }
 
 				numeroNuevaMesa = byte.Parse(resultado.Text);
@@ -328,9 +328,7 @@ namespace PFG.Aplicacion
 				{
 					var mesaMapaGrid = (Button)
 							MapaGrid.Children
-								.Where(c =>
-									c.BindingContext
-									.Equals($"{mesa.SitioX}.{mesa.SitioY}"))
+								.Where(c => c.BindingContext.ToString() == $"{mesa.SitioX}.{mesa.SitioY}")
 								.First();
 
 					mesaMapaGrid.Text = mesa.Numero.ToString();

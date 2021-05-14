@@ -5,7 +5,7 @@ namespace PFG.Comun
 {
 	public class Tarea
 	{
-		public int ID { get; private set; }
+		public uint ID { get; private set; }
 
 		public bool Completada { get; private set; }
 
@@ -17,7 +17,7 @@ namespace PFG.Comun
 		public Articulo[] Articulos { get; private set; }
 		public byte NumeroMesa { get; private set; }
 
-		public Tarea(int ID, DateTime FechaHoraCreacion, TiposTareas TipoTarea, string NombreUsuario, Articulo[] Articulos = null, byte NumeroMesa = 0)
+		public Tarea(uint ID, DateTime FechaHoraCreacion, TiposTareas TipoTarea, string NombreUsuario, Articulo[] Articulos = null, byte NumeroMesa = 0)
 		{
 			this.ID = ID;
 

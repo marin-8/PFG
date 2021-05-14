@@ -19,38 +19,42 @@ namespace PFG.Comun
 		public const float MINIMO_PRECIO_ARTICULO = 0.01f;
 		public const float MAXIMO_PRECIO_ARTICULO = 999.99f;
 
-		public static readonly List<KeyValuePair<Roles,TiposTareas>> RolesTareas = new()
+		public static readonly ReadOnlyCollection<KeyValuePair<Roles,TiposTareas>> RolesTareas =
+			new( new KeyValuePair<Roles,TiposTareas>[]
 		{
 			new KeyValuePair<Roles,TiposTareas>( Roles.Camarero , TiposTareas.ServirArticulos ),
 			new KeyValuePair<Roles,TiposTareas>( Roles.Camarero , TiposTareas.LimpiarMesa ),
 			new KeyValuePair<Roles,TiposTareas>( Roles.Barista  , TiposTareas.PrepararArticulos ),
 			new KeyValuePair<Roles,TiposTareas>( Roles.Cocinero , TiposTareas.PrepararArticulos ),
-		};
+		});
 
-		public static readonly List<KeyValuePair<Roles,TiposAcciones>> RolesAcciones = new()
+		public static readonly ReadOnlyCollection<KeyValuePair<Roles,TiposAcciones>> RolesAcciones =
+			new( new KeyValuePair<Roles,TiposAcciones>[]
 		{
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Camarero , TiposAcciones.TomarNota ),
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Camarero , TiposAcciones.Cobrar ),
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.Cobrar ),
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Barista  , TiposAcciones.CambiarDisponibilidadArticulo ),
 			new KeyValuePair<Roles,TiposAcciones>( Roles.Cocinero , TiposAcciones.CambiarDisponibilidadArticulo ),
-		};
-
-		public static readonly Dictionary<TiposTareas, string> TareasTitulos = new()
+		});
+		
+		public static readonly ReadOnlyDictionary<TiposTareas, string> TareasTitulos
+			= new( new Dictionary<TiposTareas, string>
 		{
 			{ TiposTareas.ServirArticulos, "Servir artículos" },
 			{ TiposTareas.LimpiarMesa, "Limpiar mesa" },
 			{ TiposTareas.PrepararArticulos, "Preparar artículos" },
-		};
+		});
 
-		public static readonly Dictionary<TiposAcciones, string> AccionesTitulos = new()
+		public static readonly ReadOnlyDictionary<TiposAcciones, string> AccionesTitulos
+			= new( new Dictionary<TiposAcciones, string>
 		{
 			{ TiposAcciones.TomarNota, "Tomar nota" },
 			{ TiposAcciones.Cobrar, "Cobrar" },
 			{ TiposAcciones.CambiarDisponibilidadArticulo, "Cambiar estado\nde artículo\n(acabado/disponible)" },
-		};
+		});
 
-		public static List<AdaptadorDeRed> Get_AdaptadoresDeRedDisponibles()
+		public static AdaptadorDeRed[] Get_AdaptadoresDeRedDisponibles()
 		{
 			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new();
 
@@ -74,26 +78,25 @@ namespace PFG.Comun
 				}  
 			}
 
-			return adaptadoresDeRedDisponibles;
+			return adaptadoresDeRedDisponibles.ToArray();
 		}
 
 		public static string Get_MiIP_Windows()
 		{
 			return
-			(
-				from ip in Get_AdaptadoresDeRedDisponibles()
-				where ip.IPs[0].ToString().Contains("192")
-				select ip.IPs[0]
-			)
-			.First();
+				Get_AdaptadoresDeRedDisponibles()
+					.Where(ar => ar.IPs[0].ToString().Contains("192"))
+					.Select(ar => ar.IPs[0])
+					.First();
 		}
 
 		public static string Get_MiIP_Xamarin()
 		{
-			return Dns.GetHostAddresses(Dns.GetHostName())
-				.Where(IP => IP.ToString().Contains("192.168"))
-				.First()
-				.ToString();
+			return 
+				Dns.GetHostAddresses(Dns.GetHostName())
+					.Where(IP => IP.ToString().Contains("192.168"))
+					.First()
+					.ToString();
 		}
 	}
 }

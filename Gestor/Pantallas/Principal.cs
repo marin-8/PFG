@@ -67,7 +67,7 @@ namespace PFG.Gestor
 			{
 				CerrarTodasLasSesiones();
 				VaciarMesas();
-				EliminarTareas();
+				EliminarTareasYResetearIDs();
 			}
 			else // Comenzar Jornada
 			{
@@ -125,9 +125,16 @@ namespace PFG.Gestor
 			});
 		}
 
-		private static void VaciarMesas() { GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia); }
+		private static void VaciarMesas()
+		{
+			GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia);
+		}
 
-		private static void EliminarTareas() { GestionTareas.Tareas.Clear(); }
+		private static void EliminarTareasYResetearIDs()
+		{
+			GestionTareas.Tareas.Clear(); 
+			GestionTareas.ResetearIDs();
+		}
 
 		private static async void CerrarSesionAdmin()
 		{

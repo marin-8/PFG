@@ -24,13 +24,13 @@ namespace PFG.Comun
 
 		public static void Ordenar(this ObservableCollection<Tarea> coleccion)
 		{
-			List<Tarea> listaOrdenable =
+			Tarea[] listaOrdenable =
 				coleccion
 					.OrderBy(t => t.TipoTarea)
 					.ThenBy(t => t.FechaHoraCreacion)
-					.ToList();
+					.ToArray();
 
-			for(int i = 0 ; i < listaOrdenable.Count; i++)
+			for(int i = 0 ; i < listaOrdenable.Length; i++)
 				coleccion.Move(coleccion.IndexOf(listaOrdenable[i]), i);
 		}
 	}

@@ -61,12 +61,12 @@ namespace PFG.Aplicacion
 				string nombre = await Global.PedirAlUsuarioStringCorrecto("Nombre", 100, true);
 				if(nombre == null) return;
 
-				List<Articulo> articulos;
+				Articulo[] articulos;
 
 				lock(Global.CategoriasLock)
-					articulos = Global.Categorias.SelectMany(cl => cl).ToList();
+					articulos = Global.Categorias.SelectMany(cl => cl).ToArray();
 
-				if(articulos.Any(a => a.Nombre.Equals(nombre)))
+				if(articulos.Any(a => a.Nombre == nombre))
 					await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
 				else
 					{ nuevoArticulo.Nombre = nombre; break; }
@@ -80,9 +80,9 @@ namespace PFG.Aplicacion
 			categoriasExistentesMasOpcionNueva.Add("+ Nueva");
 
 			string categoriaONueva = await UserDialogs.Instance.ActionSheetAsync("Categoría", "Cancelar", null, null, categoriasExistentesMasOpcionNueva.ToArray());
-			if(categoriaONueva.Equals("Cancelar")) return;
+			if(categoriaONueva == "Cancelar") return;
 			
-			if(!categoriaONueva.Equals("+ Nueva"))
+			if(categoriaONueva != "+ Nueva")
 				nuevoArticulo.Categoria = categoriaONueva;
 			else
 			{
@@ -123,7 +123,7 @@ namespace PFG.Aplicacion
 			}
 
 			string sitioPreparacionString = await UserDialogs.Instance.ActionSheetAsync("Se prepara en...", "Cancelar", null, null, SitiosPreparacionArticulo_ToStringArray());
-			if(sitioPreparacionString.Equals("Cancelar")) return;
+			if(sitioPreparacionString == "Cancelar") return;
 			nuevoArticulo.SitioPreparacionArticulo = (SitioPreparacionArticulo)Enum.Parse(typeof(SitioPreparacionArticulo), sitioPreparacionString);
 
 			UserDialogs.Instance.ShowLoading("Creando artículo...");
@@ -168,9 +168,9 @@ namespace PFG.Aplicacion
 			var articuloPulsado = (Articulo)e.Item;
 
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{articuloPulsado.Nombre}", "Cancelar", null, null, OpcionesArticulo);
-			if(opcion.Equals("Cancelar")) return;
+			if(opcion == "Cancelar") return;
 
-			if(opcion.Equals(OpcionesArticulo[0])) // Cambiar Nombre
+			if(opcion == OpcionesArticulo[0]) // Cambiar Nombre
 			{
 				string nuevoNombre = "";
 
@@ -179,12 +179,12 @@ namespace PFG.Aplicacion
 					nuevoNombre = await Global.PedirAlUsuarioStringCorrecto($"Nuevo Nombre\n(actual = {articuloPulsado.Nombre})", 100, true);
 					if(nuevoNombre == null) return;
 
-					List<Articulo> articulos;
+					Articulo[] articulos;
 
 					lock(Global.CategoriasLock)
-						articulos = Global.Categorias.SelectMany(cl => cl).ToList();
+						articulos = Global.Categorias.SelectMany(cl => cl).ToArray();
 
-					if(articulos.Any(a => a.Nombre.Equals(nuevoNombre)))
+					if(articulos.Any(a => a.Nombre == nuevoNombre))
 						await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
 					else
 						break;
@@ -204,7 +204,7 @@ namespace PFG.Aplicacion
 				return;
 			}
 
-			if(opcion.Equals(OpcionesArticulo[1])) // Cambiar Categoría
+			if(opcion == OpcionesArticulo[1]) // Cambiar Categoría
 			{
 				string nuevaCategoria = "";
 
@@ -216,9 +216,9 @@ namespace PFG.Aplicacion
 				categoriasExistentesMasOpcionNueva.Add("+ Nueva");
 
 				string categoriaONueva = await UserDialogs.Instance.ActionSheetAsync($"Nueva Categoría\n(actual = {articuloPulsado.Categoria})", "Cancelar", null, null, categoriasExistentesMasOpcionNueva.ToArray());
-				if(categoriaONueva.Equals("Cancelar")) return;
+				if(categoriaONueva == "Cancelar") return;
 			
-				if(!categoriaONueva.Equals("+ Nueva"))
+				if(categoriaONueva != "+ Nueva")
 					nuevaCategoria = categoriaONueva;
 				else
 				{
@@ -248,7 +248,7 @@ namespace PFG.Aplicacion
 				return;
 			}
 
-			if(opcion.Equals(OpcionesArticulo[2])) // Cambiar Precio
+			if(opcion == OpcionesArticulo[2]) // Cambiar Precio
 			{
 				float nuevoPrecio = 0f;
 
@@ -288,13 +288,13 @@ namespace PFG.Aplicacion
 				return;
 			}
 
-			if(opcion.Equals(OpcionesArticulo[3])) // Cambiar Sitio de Preparación
+			if(opcion == OpcionesArticulo[3]) // Cambiar Sitio de Preparación
 			{
 				SitioPreparacionArticulo nuevoSitioPreparacion;
 
 				var sitiosPreparacionArticulo_menosActual = 
 					SitiosPreparacionArticulo_ToStringArray()
-						.Where(s => !s.Equals(articuloPulsado.SitioPreparacionArticulo.ToString()))
+						.Where(s => s != articuloPulsado.SitioPreparacionArticulo.ToString())
 						.ToArray();
 
 				string nuevoSitioPreparacionString =
@@ -304,7 +304,7 @@ namespace PFG.Aplicacion
 						null, null, 
 						sitiosPreparacionArticulo_menosActual);
 
-				if(nuevoSitioPreparacionString.Equals("Cancelar"))
+				if(nuevoSitioPreparacionString == "Cancelar")
 					return;
 				
 				nuevoSitioPreparacion = (SitioPreparacionArticulo)Enum.Parse(typeof(SitioPreparacionArticulo), nuevoSitioPreparacionString);
@@ -323,7 +323,7 @@ namespace PFG.Aplicacion
 				return;
 			}
 
-			if(opcion.Equals(OpcionesArticulo[4])) // Eliminar
+			if(opcion == OpcionesArticulo[4]) // Eliminar
 			{
 				if(await UserDialogs.Instance.ConfirmAsync($"¿Eliminar el artículo '{articuloPulsado.Nombre}'?", "Confirmar eliminación", "Eliminar", "Cancelar"))
 				{

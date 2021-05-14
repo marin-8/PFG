@@ -1,55 +1,25 @@
-
     Mejoras:
-                
-        - Poner bien "RefrescarX" en las pantallas de trabajo
         
-        - Revisar mayúsculas/minúsculas
-        - Revisar tipos (listas, enteros...) (de comandos) (arrays en vez de listas)
-        - Revisar comparaciones de strings (usar Equals en vez de ==)
-        
-        - Revisar public/protected/private
-        
-        - Refrescar solo variables y actualizar solo si es necesario
-        
-        - Revisar responsabilidades de clase (Mesas/MoverMesa por ejemplo)
-        
-        - Al modificar algo, que se cargue el actual
-        
-        - Notificaciones al recibir tareas
-        
-        - Re-repartir tareas al cerrar sesión
-        - Pedir tareas de otro (por desconexión) (reasignar al conectarse uno nuevo)
-        
-        - MINIMIZAR CÓDIGO REPETIDO !!!
-        
-        - Custom value types? (IP...)
-        
-- AJUSTE para mandar tareas al primer conectado o esperar a que se conecte uno de su  rol
-        
-        - Guardar tareas en memoria cada vez que se reciben por si se cierra sin querer
-        
-        - Carta -> Modificar nombre categoría
-        
-        - Gestionar tareas no enviadads porque no hay usuarios conectado
-        
-        - Mejorar espacios de nombres (?) (No reduce runtime performance pero si compilation time)
-
-        - Ajuste para empezar jonada con todos los artículos disponibles o como se dejaron
-
-        - Notificaciones al recibir tareas
-        
-        - Eliminar el parámetro Comando de los métodos Procesar que no lo usen (Pedir)
-        
-        - No poder acceder como admin si la jornada ha empezado
-        
-        - Hacer lo popups super reutilizables
-        
-        - Poner comentarios // ===== // en todas las clases grandes
-        
-        - Todos los artículos empiezan como disponibles
-        
-        - Mejorar los ifs de Gestor.Procesar_IniciarSesion
-        
-        - Quitar usings innecesarios
-        
-        - Cambiar de ResultadoIniciarSesion la enum por mensaje y meter un bool de correcto
+                                - Revisar tipos (enteros...) (de comandos)
+                                - Revisar comparaciones de strings (usar Equals en vez de ==)
+                                - Revisar public/protected/private
+                                - Revisar responsabilidades de clase (Mesas/MoverMesa por ejemplo)
+                                - MINIMIZAR CÓDIGO REPETIDO !!!
+                                - Mejorar espacios de nombres
+                                - Eliminar el parámetro Comando de los métodos Procesar que no lo usen (Pedir)
+                                - Hacer lo popups super reutilizables    
+                                - Poner comentarios // ===== // en todas las clases grandes
+                                - Mejorar los ifs de Gestor.Procesar_IniciarSesion
+                                - Quitar usings innecesarios
+                                - Cambiar de ResultadoIniciarSesion la enum por mensaje y meter un bool de correcto
+                                - Dividir cosas de las clases Global
+                                
+                                - Pedir tareas de otro (por desconexión) (reasignar al conectarse uno nuevo)
+                                - Re-repartir tareas al cerrar sesión y/o conectarse
+                                - Guardar tareas en memoria cada vez que se reciben por si se cierra sin querer
+                                - Ajuste para empezar jonada con todos los artículos disponibles o como se dejaron
+                                - Carta -> Modificar nombre categoría
+                                    
+                                - Revisar mayúsculas/minúsculas
+                                - Custom value types? (IP...)
+                                - Notificaciones al recibir tareas

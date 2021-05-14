@@ -71,7 +71,7 @@ namespace PFG.Aplicacion
 				lock(Global.UsuariosLock)
 					algunUsuarioConMismoNombre =
 						Global.Usuarios
-							.Any(u => u.NombreUsuario.Equals(nombreUsuario));
+							.Any(u => u.NombreUsuario == nombreUsuario);
 
 				if(algunUsuarioConMismoNombre)
 					await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
@@ -84,7 +84,7 @@ namespace PFG.Aplicacion
 			nuevoUsuario.Contrasena = contrasena;	
 
 			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, RolesBaseToStringArray());
-			if(rolString.Equals("Cancelar")) return;
+			if(rolString == "Cancelar") return;
 			nuevoUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
 
 			UserDialogs.Instance.ShowLoading("Creando usuario...");
@@ -136,7 +136,7 @@ namespace PFG.Aplicacion
 				opcionesUsuario = OpcionesUsuario;
 
 			string opcion = await UserDialogs.Instance.ActionSheetAsync($"{usuarioPulsado.Nombre}", "Cancelar", null, null, opcionesUsuario);
-			if(opcion.Equals("Cancelar")) return;
+			if(opcion == "Cancelar") return;
 
 			if(opcion == OpcionesUsuario[0]) // Cambiar Nombre
 			{
@@ -182,12 +182,12 @@ namespace PFG.Aplicacion
 					lock(Global.UsuariosLock)
 						algunUsuarioConMismoNombre =
 							Global.Usuarios
-								.Any(u => u.NombreUsuario.Equals(nuevoNombreUsuario));
+								.Any(u => u.NombreUsuario == nuevoNombreUsuario);
 
 					if(algunUsuarioConMismoNombre)
 						await DisplayAlert("Alerta", "Ya existe un usuario con este Nombre de Usuario", "Aceptar");
 
-					else if(nuevoNombreUsuario.Equals(usuarioPulsado.NombreUsuario))
+					else if(nuevoNombreUsuario == usuarioPulsado.NombreUsuario)
 						await DisplayAlert("Alerta", $"El nuevo Nombre de Usuario no puede ser igual que el anterior", "Aceptar");
 				
 					else
@@ -248,7 +248,7 @@ namespace PFG.Aplicacion
 				while(true)
 				{
 					string rolString = await UserDialogs.Instance.ActionSheetAsync($"Nuevo Rol (actual = {usuarioPulsado.Rol})", "Cancelar", null, null, RolesBaseToStringArray());
-					if(rolString.Equals("Cancelar")) return;
+					if(rolString == "Cancelar") return;
 					nuevoRol = (Roles)(byte.Parse(rolString[0].ToString())-1);
 
 					if(nuevoRol != usuarioPulsado.Rol) break;

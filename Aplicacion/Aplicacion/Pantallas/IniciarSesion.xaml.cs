@@ -47,9 +47,9 @@ namespace PFG.Aplicacion
 			string usuario = Usuario.Text;
 			string contrasena = Contrasena.Text;
 
-			if(         ipGestor.Equals("")) { await DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
-			if(          usuario.Equals("")) { await DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
-			if(       contrasena.Equals("")) { await DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio",       "Aceptar"); return; }
+			if(         ipGestor == "") { await DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
+			if(          usuario == "") { await DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }
+			if(       contrasena == "") { await DisplayAlert("Alerta", "Contraseña vacía. Este campo es obligatorio",       "Aceptar"); return; }
 
 			if(								  !FormatoIP.IsMatch(ipGestor)) { await DisplayAlert("Alerta", "La IP introducida no es válida",                                "Aceptar"); return; }
 			if(         usuario.Length > Comun.Global.MAX_CARACTERES_LOGIN) { await DisplayAlert("Alerta", "El Usuario no puede estar formado por más de 20 caracteres",    "Aceptar"); return; }

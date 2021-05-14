@@ -71,7 +71,7 @@ namespace PFG.Aplicacion
 
 				stringCorrecto = resultado.Text;
 
-				if(stringCorrecto.Equals("")) {
+				if(stringCorrecto == "") {
 					await UserDialogs.Instance.AlertAsync("No puede estar vacío", "Alerta", "Aceptar"); stringCorrecto = null; continue; }
 
 				string cp = Comun.Global.CARACTERES_PERMITIDOS_LOGIN;
@@ -171,7 +171,7 @@ namespace PFG.Aplicacion
 
 					nuevaCategoria.AddRange(
 						comandoRespuesta.Articulos
-							.Where(a => a.Categoria.Equals(categoria))
+							.Where(a => a.Categoria == categoria)
 							.OrderBy(a => a.Nombre));
 
 					Categorias.Add(nuevaCategoria);

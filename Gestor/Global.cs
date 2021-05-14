@@ -9,13 +9,6 @@ namespace PFG.Gestor
 	{
 		public static bool JornadaEnCurso = false;
 
-		private static int _nuevoIDTarea = 1;
-		public static int NuevoIDTarea
-		{
-			get => _nuevoIDTarea++;
-			private set { _nuevoIDTarea = value; }
-		}
-
 		public static Usuario Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles rol)
 		{
 			return 

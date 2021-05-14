@@ -347,7 +347,7 @@ namespace PFG.Gestor
 			{
 				usuario =
 					GestionUsuarios.Usuarios
-						.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+						.Where(u => u.NombreUsuario == Comando.Usuario)
 						.Select(u => u)
 						.First();
 
@@ -394,7 +394,7 @@ namespace PFG.Gestor
 		{
 			var usuario =
 				GestionUsuarios.Usuarios
-					.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+					.Where(u => u.NombreUsuario == Comando.Usuario)
 					.First();
 
 			usuario.Conectado = false;
@@ -434,7 +434,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando)
 		{
 			GestionUsuarios.Usuarios
-				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.First()
 					.Nombre = Comando.NuevoNombre;
 		}
@@ -442,7 +442,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarUsuarioNombreUsuario(Comando_ModificarUsuarioNombreUsuario Comando)
 		{
 			GestionUsuarios.Usuarios
-				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.First()
 					.NombreUsuario = Comando.NuevoNombreUsuario;
 		}
@@ -450,7 +450,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarUsuarioContrasena(Comando_ModificarUsuarioContrasena Comando)
 		{
 			GestionUsuarios.Usuarios
-				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.First()
 					.Contrasena = Comando.NuevaContrasena;
 		}
@@ -458,7 +458,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarUsuarioRol(Comando_ModificarUsuarioRol Comando)
 		{
 			GestionUsuarios.Usuarios
-				.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.First()
 					.Rol = Comando.NuevoRol;
 		}
@@ -470,7 +470,7 @@ namespace PFG.Gestor
 
 			var usuarioAEliminar =
 				GestionUsuarios.Usuarios
-					.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+					.Where(u => u.NombreUsuario == Comando.Usuario)
 					.First();
 
 			if(usuarioAEliminar.Conectado)
@@ -682,7 +682,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarArticuloNombre(Comando_ModificarArticuloNombre Comando)
 		{
 			GestionArticulos.Articulos
-				.Where(a => a.Nombre.Equals(Comando.NombreActual))
+				.Where(a => a.Nombre == Comando.NombreActual)
 				.First()
 					.Nombre = Comando.NombreNuevo;
 		}
@@ -690,7 +690,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarArticuloCategoria(Comando_ModificarArticuloCategoria Comando)
 		{
 			GestionArticulos.Articulos
-				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.First()
 					.Categoria = Comando.NuevaCategoria;
 		}
@@ -698,7 +698,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarArticuloPrecio(Comando_ModificarArticuloPrecio Comando)
 		{
 			GestionArticulos.Articulos
-				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.First()
 					.Precio = Comando.NuevoPrecio;
 		}
@@ -706,7 +706,7 @@ namespace PFG.Gestor
 		private static void Procesar_ModificarArticuloSitioDePreparacion(Comando_ModificarArticuloSitioDePreparacion Comando)
 		{
 			GestionArticulos.Articulos
-				.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.First()
 					.SitioPreparacionArticulo = Comando.NuevoSitioPreparacion;
 		}
@@ -715,7 +715,7 @@ namespace PFG.Gestor
 		{
 			var articuloAEliminar =
 				GestionArticulos.Articulos
-					.Where(a => a.Nombre.Equals(Comando.NombreArticulo))
+					.Where(a => a.Nombre == Comando.NombreArticulo)
 					.First();
 
 			GestionArticulos.Articulos.Remove(articuloAEliminar);
@@ -746,7 +746,7 @@ namespace PFG.Gestor
 					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 
 				var nuevaTareaBarra = new Tarea(
-					Global.NuevoIDTarea,
+					GestionTareas.NuevoIDTarea,
 					DateTime.Now,
 					TiposTareas.PrepararArticulos,
 					usuarioAsignarPreparacionBarra.NombreUsuario,
@@ -775,7 +775,7 @@ namespace PFG.Gestor
 					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
 
 				var nuevaTareaCocina = new Tarea(
-					Global.NuevoIDTarea,
+					GestionTareas.NuevoIDTarea,
 					DateTime.Now,
 					TiposTareas.PrepararArticulos,
 					usuarioAsignarPreparacionCocina.NombreUsuario,
@@ -798,7 +798,7 @@ namespace PFG.Gestor
 				GestionTareas.Tareas
 					.Where(
 						t => !t.Completada && 
-						t.NombreUsuario.Equals(Comando.NombreUsuario))
+						t.NombreUsuario == Comando.NombreUsuario)
 					.ToArray()
 			)
 			.ToString();
@@ -885,7 +885,7 @@ namespace PFG.Gestor
 						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 
 					var nuevaTareaServirArticulos = new Tarea(
-						Global.NuevoIDTarea,
+						GestionTareas.NuevoIDTarea,
 						DateTime.Now,
 						TiposTareas.ServirArticulos,
 						usuarioAsignarServirArticulos.NombreUsuario,
@@ -920,7 +920,7 @@ namespace PFG.Gestor
 				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
 		
 			var nuevaTareaLimpiarMesa = new Tarea(
-				Global.NuevoIDTarea,
+				GestionTareas.NuevoIDTarea,
 				DateTime.Now,
 				TiposTareas.LimpiarMesa,
 				usuarioAsignarLimpiarMesa.NombreUsuario,

@@ -107,7 +107,7 @@ namespace PFG.Aplicacion
 		{
 			var nombreArticulo = (string)((Button)sender).BindingContext;
 
-			bool articuloYaSeleccionado(Articulo a) => a.Nombre.Equals(nombreArticulo);
+			bool articuloYaSeleccionado(Articulo a) => a.Nombre == nombreArticulo;
 
 			lock(ArticulosSeleccionadosLock)
 			{
@@ -130,7 +130,7 @@ namespace PFG.Aplicacion
 		{
 			var nombreArticulo = (string)((Button)sender).BindingContext;
 
-			bool articuloYaSeleccionado(Articulo a) => a.Nombre.Equals(nombreArticulo);
+			bool articuloYaSeleccionado(Articulo a) => a.Nombre == nombreArticulo;
 
 			lock(ArticulosSeleccionadosLock)
 			{

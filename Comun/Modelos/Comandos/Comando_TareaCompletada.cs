@@ -19,14 +19,14 @@ namespace PFG.Comun
 	{
 		private const TiposComando TipoComandoInit = TiposComando.TareaCompletada;
 
-		[JsonProperty("1")] public int ID { get; private set; }
+		[JsonProperty("1")] public uint ID { get; private set; }
 
-		private void InicializarPropiedades(int ID)
+		private void InicializarPropiedades(uint ID)
 		{
 			this.ID = ID;
 		}
 
-		public Comando_TareaCompletada(int ID)
+		public Comando_TareaCompletada(uint ID)
 			: base(TipoComandoInit)
 		{
 			InicializarPropiedades(ID);
@@ -34,7 +34,7 @@ namespace PFG.Comun
 
 		[JsonConstructor]
 		#pragma warning disable IDE0051
-		private Comando_TareaCompletada(TiposComando TipoComandoJson, int ID)
+		private Comando_TareaCompletada(TiposComando TipoComandoJson, uint ID)
 		#pragma warning restore IDE0051
 			: base(TipoComandoJson)
 		{
