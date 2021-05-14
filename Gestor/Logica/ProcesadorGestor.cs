@@ -12,23 +12,10 @@ namespace PFG.Gestor
 {
 	public class ProcesadorGestor
 	{
-		private readonly ListBox RegistroIPs;
-		private readonly ListBox RegistroComandos;
-
-		public ProcesadorGestor(ListBox RegistroIPs, ListBox RegistroComandos)
-		{
-			this.RegistroIPs = RegistroIPs;
-			this.RegistroComandos = RegistroComandos;
-		}
+		public ProcesadorGestor() { }
 
 		public string Procesar(string IP, string ComandoJson)
 		{
-			RegistroIPs.Invoke(new Action(() =>
-			{ 
-				RegistroIPs.Items.Add(IP);
-				RegistroComandos.Items.Add(ComandoJson);
-			}));
-
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 
 			string comandoRespuesta = new Comando_ResultadoGenerico(true, "Correcto").ToString();
@@ -352,34 +339,43 @@ namespace PFG.Gestor
 			ResultadosIniciarSesion resultado;
 			Usuario usuario = null;
 
-			var nombresUsuarios = GestionUsuarios.Usuarios
-								  .Select(u => u.NombreUsuario);
+			var nombresUsuarios =
+				GestionUsuarios.Usuarios
+					.Select(u => u.NombreUsuario);
 
 			if(nombresUsuarios.Contains(Comando.Usuario))
 			{
-				usuario = GestionUsuarios.Usuarios
-						   	  .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
-							  .Select(u => u)
-							  .First();
+				usuario =
+					GestionUsuarios.Usuarios
+						.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+						.Select(u => u)
+						.First();
 
-				if(!usuario.Conectado)
+				if(usuario.Contrasena == Comando.Contrasena)
 				{
-					if(usuario.Contrasena.Equals(Comando.Contrasena))
+					if(Global.JornadaEnCurso || usuario.Rol == Roles.Administrador || usuario.Rol == Roles.Desarrollador)
 					{
-						usuario.IP = IP;
-						usuario.Conectado = true;
+						if(!usuario.Conectado)
+						{
+							usuario.IP = IP;
+							usuario.Conectado = true;
 
-						resultado = ResultadosIniciarSesion.Correcto;
+							resultado = ResultadosIniciarSesion.Correcto;
+						}
+						else
+						{
+							resultado = ResultadosIniciarSesion.UsuarioYaConectado;
+						}
 					}
 					else
 					{
-						resultado = ResultadosIniciarSesion.ContrasenaIncorrecta;
+						resultado = ResultadosIniciarSesion.JornadaNoComenzada;
 					}
 				}
 				else
 				{
-					resultado = ResultadosIniciarSesion.UsuarioYaConectado;
-				}	
+					resultado = ResultadosIniciarSesion.ContrasenaIncorrecta;
+				}
 			}
 			else
 			{
@@ -396,9 +392,10 @@ namespace PFG.Gestor
 
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
 		{
-			var usuario = GestionUsuarios.Usuarios
-							 .Where(u => u.NombreUsuario.Equals(Comando.Usuario))
-							 .First();
+			var usuario =
+				GestionUsuarios.Usuarios
+					.Where(u => u.NombreUsuario.Equals(Comando.Usuario))
+					.First();
 
 			usuario.Conectado = false;
 		}

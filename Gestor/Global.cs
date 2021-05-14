@@ -1,7 +1,5 @@
 ﻿
-using System;
 using System.Linq;
-using System.Collections.Generic;
 
 using PFG.Comun;
 
@@ -9,6 +7,8 @@ namespace PFG.Gestor
 {
 	public static class Global
 	{
+		public static bool JornadaEnCurso = false;
+
 		private static int _nuevoIDTarea = 1;
 		public static int NuevoIDTarea
 		{

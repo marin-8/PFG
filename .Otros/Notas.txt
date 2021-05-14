@@ -24,7 +24,16 @@
         
         - Al modificar algo, que se cargue el actual
         
+        - Notificaciones al recibir tareas
+        
+        - Re-repartir tareas al cerrar sesión
+        - Pedir tareas de otro (por desconexión) (reasignar al conectarse uno nuevo)
+        
         - MINIMIZAR CÓDIGO REPETIDO !!!
+        
+        - Custom value types? (IP...)
+        
+- AJUSTE para mandar tareas al primer conectado o esperar a que se conecte uno de su  rol
         
         - Guardar tareas en memoria cada vez que se reciben por si se cierra sin querer
         
@@ -34,6 +43,8 @@
         
         - Mejorar espacios de nombres (?) (No reduce runtime performance pero si compilation time)
 
+        - Ajuste para empezar jonada con todos los artículos disponibles o como se dejaron
+
         - Notificaciones al recibir tareas
         
         - Hacer lo popups super reutilizables
@@ -41,3 +52,5 @@
         - Todos los artículos empiezan como disponibles
         
         - Quitar usings innecesarios
+        
+        - Cambiar ResultadoIniciarSesion por ResultadoGenerico

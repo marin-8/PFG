@@ -98,6 +98,12 @@ namespace PFG.Aplicacion
 
 					break;
 				}
+				case ResultadosIniciarSesion.JornadaNoComenzada:
+				{
+					await UserDialogs.Instance.AlertAsync("La Jornada no ha comenzado", "Alerta", "Aceptar");
+
+					break;
+				}
 				case ResultadosIniciarSesion.UsuarioYaConectado:
 				{
 					await UserDialogs.Instance.AlertAsync("Usuario ya conectado", "Alerta", "Aceptar");
