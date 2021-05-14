@@ -27,6 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pantallas\ConsultarMesas.xaml.cs">
+      <DependentUpon>ConsultarMesas.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pantallas\ConsultarCarta.xaml.cs">
+      <DependentUpon>ConsultarCarta.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pantallas\Desarrollo.xaml.cs">
       <DependentUpon>Desarrollo.xaml</DependentUpon>
     </Compile>

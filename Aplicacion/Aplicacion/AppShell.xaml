@@ -20,6 +20,12 @@
             <ShellContent
                 Title="Acciones"
                 ContentTemplate="{DataTemplate pantallas:Acciones}" />
+            <ShellContent
+                Title="Carta"
+                ContentTemplate="{DataTemplate pantallas:ConsultarCarta}" />
+            <ShellContent
+                Title="Mesas"
+                ContentTemplate="{DataTemplate pantallas:ConsultarMesas}" />
         </Tab>
     </FlyoutItem>
 

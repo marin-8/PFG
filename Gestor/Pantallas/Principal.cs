@@ -65,20 +65,18 @@ namespace PFG.Gestor
 		{
 			if(Global.JornadaEnCurso) // Terminar Jornada
 			{
-				Global.JornadaEnCurso = false;
-
-				ActualizarEstiloBotonComenzarTerminarJornada();
-
 				CerrarTodasLasSesiones();
 				VaciarMesas();
 				EliminarTareas();
 			}
 			else // Comenzar Jornada
 			{
-				Global.JornadaEnCurso = true;
-
-				ActualizarEstiloBotonComenzarTerminarJornada();
+				// (?)
 			}
+
+			Global.JornadaEnCurso = !Global.JornadaEnCurso;
+
+			ActualizarEstiloBotonComenzarTerminarJornada();
 		}
 
 		private void Salir_Click(object sender, EventArgs e)
