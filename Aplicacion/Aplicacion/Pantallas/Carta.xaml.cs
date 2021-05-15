@@ -337,7 +337,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 		private static string[] SitiosPreparacionArticulo_ToStringArray()
 		{

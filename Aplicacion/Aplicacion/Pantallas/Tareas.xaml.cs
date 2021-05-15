@@ -93,7 +93,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 		private async void RefrescarTareasPersonales()
 		{

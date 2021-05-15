@@ -7,7 +7,9 @@ namespace PFG.Gestor
 {
 	public static class Global
 	{
+		#pragma warning disable CA2211
 		public static bool JornadaEnCurso = false;
+		#pragma warning restore CA2211
 
 		public static Usuario Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles rol)
 		{

@@ -138,7 +138,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 		private Button GenerarBotonAccion(string TituloAccion, TiposAcciones TipoAccion, EventHandler EventoMesaPulsada)
 		{

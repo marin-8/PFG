@@ -1,10 +1,7 @@
 ﻿
 using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -20,11 +17,11 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CobrarTicket : PopupPage
 	{
-		// ============================================================================================== //
+	// ============================================================================================== //
 
 		// Variables y constantes
 
-		private byte NumeroMesa;
+		private readonly byte NumeroMesa;
 		private ItemTicket[] ItemsTicket;
 
 	// ============================================================================================== //
@@ -39,6 +36,10 @@ namespace PFG.Aplicacion
 
 			this.NumeroMesa = NumeroMesa;
 		}
+
+    // ============================================================================================== //
+
+        // Eventos UI -> Barra navegación
 
 	// ============================================================================================== //
 
@@ -65,7 +66,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 		private async void InicializarInterfaz(byte NumeroMesa)
 		{

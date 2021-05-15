@@ -19,10 +19,9 @@ namespace PFG.Aplicacion
 		{
 			try
 			{
-				Global.ProcesadorMensajesRecibidos = new();
 				Global.Servidor = new(
 					Comun.Global.Get_MiIP_Xamarin(),
-					Global.ProcesadorMensajesRecibidos.Procesar,
+					ProcesadorAplicacion.ProcesarComandosRecibidos,
 					true);
 			}
 			catch { }

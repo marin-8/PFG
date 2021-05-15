@@ -1,13 +1,9 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 using PFG.Comun;
 
@@ -32,7 +28,6 @@ namespace PFG.Gestor
 		// Variables
 
 		private ControladorRed Servidor;
-		private ProcesadorGestor ProcesadorMensajesRecibidos;
 
 	// ============================================================================================== //
 
@@ -51,8 +46,7 @@ namespace PFG.Gestor
 
 			string servidorIP = Comun.Global.Get_MiIP_Windows();
 
-			ProcesadorMensajesRecibidos = new();
-			Servidor = new(servidorIP, ProcesadorMensajesRecibidos.Procesar, true);
+			Servidor = new(servidorIP, ProcesadorGestor.ProcesarComandosRecibidos, true);
 
 			IPGestor.Text = servidorIP;
 		}
@@ -102,7 +96,7 @@ namespace PFG.Gestor
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 		private void ActualizarEstiloBotonComenzarTerminarJornada()
 		{
@@ -111,7 +105,7 @@ namespace PFG.Gestor
 			ComenzarTerminarJornada.BackColor = Global.JornadaEnCurso ? TERMINAR_JORNADA_BACKCOLOR : COMENZAR_JORNADA_BACKCOLOR;
 		}
 
-		private void CerrarTodasLasSesiones()
+		private static void CerrarTodasLasSesiones()
 		{
 			GestionUsuarios.Usuarios.ForEach(async (u) =>
 			{

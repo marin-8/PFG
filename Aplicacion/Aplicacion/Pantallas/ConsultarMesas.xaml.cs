@@ -1,18 +1,8 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Threading;
-using System.Text.RegularExpressions;
 
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 using Acr.UserDialogs;
 
@@ -37,7 +27,7 @@ namespace PFG.Aplicacion
 			InitializeComponent();
 		}
 
-		protected override async void OnAppearing()
+		protected override void OnAppearing()
 		{
 			ActualizarMapaMesas();
 		}
@@ -57,11 +47,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
-
-	// ============================================================================================== //
-
-		// Métodos Procesar
+		// Métodos Helper
 
 		private async void ActualizarMapaMesas()
 		{
@@ -139,6 +125,10 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 		}
+
+	// ============================================================================================== //
+
+		// Métodos Procesar
 
 	// ============================================================================================== //
 	}

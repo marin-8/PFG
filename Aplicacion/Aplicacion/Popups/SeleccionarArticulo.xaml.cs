@@ -1,14 +1,10 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-using Acr.UserDialogs;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Extensions;
 
@@ -19,11 +15,19 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SeleccionarArticulo : PopupPage
 	{
+    // ============================================================================================== //
+
+        // Variables y constantes
+
 		private TaskCompletionSource<(bool Correcto, Articulo Articulo)> _taskCompletionSource;
 		public Task<(bool Correcto, Articulo Articulo)> Resultado => _taskCompletionSource.Task;
 
-		bool PermitirSeleccionarAcabados;
+		private readonly bool PermitirSeleccionarAcabados;
 		private Articulo ResultadoArticulo;
+
+    // ============================================================================================== //
+
+        // Inicialización
 
 		public SeleccionarArticulo(bool PermitirSeleccionarAcabados = false)
 		{
@@ -34,7 +38,6 @@ namespace PFG.Aplicacion
 
 			this.PermitirSeleccionarAcabados = PermitirSeleccionarAcabados;
 		}
-
 
 		protected override async void OnAppearing()
 		{
@@ -59,6 +62,14 @@ namespace PFG.Aplicacion
 			}
         }
 
+    // ============================================================================================== //
+
+        // Eventos UI -> Barra navegación
+
+    // ============================================================================================== //
+
+        // Eventos UI -> Contenido
+
 		private async void ListaArticulos_Refresh(object sender, EventArgs e)
 		{
 			await Global.Get_Articulos();
@@ -77,5 +88,15 @@ namespace PFG.Aplicacion
 				await Navigation.PopPopupAsync();
 			}
 		}
+
+    // ============================================================================================== //
+
+        // Métodos Helper
+
+    // ============================================================================================== //
+
+        // Métodos Procesar
+
+    // ==============================================================================================
 	}
 }

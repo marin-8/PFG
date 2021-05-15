@@ -1,20 +1,16 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 using PFG.Comun;
 
 namespace PFG.Gestor
 {
-	public class ProcesadorGestor
+	public static class ProcesadorGestor
 	{
-		public ProcesadorGestor() { }
-
-		public string Procesar(string IP, string ComandoJson)
+		public static string ProcesarComandosRecibidos(string IP, string ComandoJson)
 		{
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
 

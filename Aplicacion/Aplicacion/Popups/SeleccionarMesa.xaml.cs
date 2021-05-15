@@ -1,8 +1,6 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -16,20 +14,21 @@ using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
-	public enum FiltrarArticulos : byte
-	{
-		Todos,
-		Disponibles,
-		Acabados
-	}
-
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SeleccionarMesa : PopupPage
 	{
+    // ============================================================================================== //
+
+        // Variables y constantes
+
 		private TaskCompletionSource<(bool Correcto, byte NumeroMesaSeleccionada)> _taskCompletionSource;
 		public Task<(bool Correcto, byte NumeroMesaSeleccionada)> Resultado => _taskCompletionSource.Task;
 
 		private byte? ResultadoNumeroMesaSeleccionada;
+
+    // ============================================================================================== //
+
+        // Inicialización
 
 		public SeleccionarMesa()
 		{
@@ -59,6 +58,14 @@ namespace PFG.Aplicacion
 			}
         }
 
+    // ============================================================================================== //
+
+        // Eventos UI -> Barra navegación
+
+    // ============================================================================================== //
+
+        // Eventos UI -> Contenido
+
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
 			var botonPulsado = (Button)sender;
@@ -69,6 +76,10 @@ namespace PFG.Aplicacion
 				await Navigation.PopPopupAsync();
 			}
 		}
+
+    // ============================================================================================== //
+
+        // Métodos Helper
 
 		private async void InicializarMapaGrid()
 		{
@@ -145,5 +156,11 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 		}
+
+    // ============================================================================================== //
+
+        // Métodos Procesar
+
+    // ============================================================================================== //
 	}
 }

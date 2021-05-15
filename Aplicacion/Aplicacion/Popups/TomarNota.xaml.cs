@@ -1,9 +1,7 @@
 ﻿
 using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using Xamarin.Forms;
@@ -20,7 +18,7 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TomarNota : PopupPage
 	{
-		// ============================================================================================== //
+	// ============================================================================================== //
 
 		// Variables y constantes
 
@@ -38,6 +36,10 @@ namespace PFG.Aplicacion
 			lock(ArticulosSeleccionadosLock)
 				ListaArticulos.ItemsSource = ArticulosSeleccionados;
 		}
+
+    // ============================================================================================== //
+
+        // Eventos UI -> Barra navegación
 
 	// ============================================================================================== //
 
@@ -191,7 +193,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 	// ============================================================================================== //
 

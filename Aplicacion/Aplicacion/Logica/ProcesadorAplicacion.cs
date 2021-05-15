@@ -1,8 +1,4 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -13,15 +9,10 @@ using PFG.Comun;
 
 namespace PFG.Aplicacion
 {
-	public class ProcesadorAplicacion
+	public static class ProcesadorAplicacion
 	{
-		public ProcesadorAplicacion()
-		{
-
-		}
-
 		#pragma warning disable IDE0060
-		public string Procesar(string IP, string ComandoJson)
+		public static string ProcesarComandosRecibidos(string IP, string ComandoJson)
 		#pragma warning restore IDE0060
 		{
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
@@ -32,10 +23,7 @@ namespace PFG.Aplicacion
 			{
 				case TiposComando.JornadaTerminada:
 				{
-					Procesar_JornadaTerminada(
-						Comando.DeJson
-							<Comando_JornadaTerminada>
-								(ComandoJson));
+					Procesar_JornadaTerminada();
 
 					break;
 				}
@@ -52,10 +40,7 @@ namespace PFG.Aplicacion
 
 				case TiposComando.RefrescarDisponibilidadArticulos:
 				{
-					Procesar_RefrescarDisponibilidadArticulos(
-						Comando.DeJson
-							<Comando_RefrescarDisponibilidadArticulos>
-								(ComandoJson));
+					Procesar_RefrescarDisponibilidadArticulos();
 
 					break;
 				}
@@ -82,7 +67,7 @@ namespace PFG.Aplicacion
 			return comandoRespuesta;
 		}
 
-		private async void Procesar_JornadaTerminada(Comando_JornadaTerminada Comando)
+		private static async void Procesar_JornadaTerminada()
 		{
 			UserDialogs.Instance.ShowLoading("Cerrando sesión...");
 
@@ -97,7 +82,7 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-		private void Procesar_EnviarTarea(Comando_EnviarTarea Comando)
+		private static void Procesar_EnviarTarea(Comando_EnviarTarea Comando)
 		{
 			lock(Global.TareasPersonalesLock)
 			{
@@ -107,7 +92,7 @@ namespace PFG.Aplicacion
 			}
 		}
 
-		private async void Procesar_RefrescarDisponibilidadArticulos(Comando_RefrescarDisponibilidadArticulos Comando)
+		private static async void Procesar_RefrescarDisponibilidadArticulos()
 		{
 			await Device.InvokeOnMainThreadAsync(async () => 
 				await Global.Get_Articulos() );

@@ -69,7 +69,7 @@ namespace PFG.Aplicacion
 
     // ============================================================================================== //
 
-        // Métodos helper
+        // Métodos Helper
 
 		private async void InicializarMapaGrid(byte NumeroMesaSeleccionada)
 		{

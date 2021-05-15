@@ -177,7 +177,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos helper
+		// Métodos Helper
 
 		private void AnadirColumna()
 		{

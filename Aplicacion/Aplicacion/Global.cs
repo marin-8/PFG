@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace PFG.Aplicacion
 		public static Usuario UsuarioActual;
 
 		public static ControladorRed Servidor;
-		public static ProcesadorAplicacion ProcesadorMensajesRecibidos;
 
 		public static ObservableCollection<Usuario> Usuarios = new();
 		public static readonly object UsuariosLock = new();
