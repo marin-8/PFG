@@ -122,7 +122,7 @@ namespace PFG.Comun
             Socket cliente;
 
             try { cliente = Servidor.EndAccept(AR); } catch (ObjectDisposedException) { return; }
-
+			
 			cliente.BeginReceive(Buffer, 0, MAX_BUFFER_SIZE, SocketFlags.None, Servidor_Recibir, cliente);
 
 			Servidor.BeginAccept(Servidor_NuevaConexion, null);

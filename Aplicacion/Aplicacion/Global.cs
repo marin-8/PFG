@@ -178,5 +178,28 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 		}
+
+		public static async void Get_TareasPersonales()
+		{
+			UserDialogs.Instance.ShowLoading("Actualizando lista de tareas...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_PedirTareas(UsuarioActual.NombreUsuario).Enviar(IPGestor);
+				return Comando.DeJson<Comando_MandarTareas>(respuestaGestor);
+			});
+
+			lock(TareasPersonalesLock)
+			{
+				TareasPersonales.Clear();
+			
+				foreach(var tarea in comandoRespuesta.Tareas)
+					TareasPersonales.Add(tarea);
+
+				TareasPersonales.Ordenar();
+			}
+
+			UserDialogs.Instance.HideLoading();
+		}
 	}
 }

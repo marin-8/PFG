@@ -97,36 +97,14 @@ namespace PFG.Aplicacion
 
 		private async void RefrescarTareasPersonales()
 		{
-			UserDialogs.Instance.ShowLoading("Actualizando lista de tareas...");
+			Global.Get_TareasPersonales();
 
-			var comandoRespuesta = await Task.Run(() =>
-			{
-				string respuestaGestor = new Comando_PedirTareas(Global.UsuarioActual.NombreUsuario).Enviar(Global.IPGestor);
-				return Comando.DeJson<Comando_MandarTareas>(respuestaGestor);
-			});
-			Procesar_RecibirTareas(comandoRespuesta); 
-
-			UserDialogs.Instance.HideLoading();
+			ListaTareas.EndRefresh();
 		}
 
 	// ============================================================================================== //
 
 		// Métodos Procesar
-
-		private void Procesar_RecibirTareas(Comando_MandarTareas Comando)
-		{
-			lock(Global.TareasPersonalesLock)
-			{
-				Global.TareasPersonales.Clear();
-			
-				foreach(var tarea in Comando.Tareas)
-					Global.TareasPersonales.Add(tarea);
-
-				Global.TareasPersonales.Ordenar();
-			}
-
-			ListaTareas.EndRefresh();
-		}
 
 	// ============================================================================================== //
 	}

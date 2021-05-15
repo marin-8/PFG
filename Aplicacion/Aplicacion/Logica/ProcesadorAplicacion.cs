@@ -15,12 +15,28 @@ namespace PFG.Aplicacion
 		public static string ProcesarComandosRecibidos(string IP, string ComandoJson)
 		#pragma warning restore IDE0060
 		{
-			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
+			TiposComando tipoComando;
+
+			try
+			{
+				tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
+			}
+			catch
+			{
+				tipoComando =  TiposComando.Error;
+			}
 
 			string comandoRespuesta = new Comando_ResultadoGenerico(true, "Correcto").ToString();
 
 			switch(tipoComando)
 			{
+				case TiposComando.Error:
+				{
+					Global.Get_TareasPersonales();
+
+					break;
+				}
+
 				case TiposComando.JornadaTerminada:
 				{
 					Procesar_JornadaTerminada();
