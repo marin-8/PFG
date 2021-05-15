@@ -4,7 +4,8 @@ namespace PFG.Comun
 	public enum TiposTareas : byte
 	{
 		ServirArticulos,
-		PrepararArticulos,
+		PrepararArticulosBarra,
+		PrepararArticulosCocina,
 		LimpiarMesa,
 	}
 }

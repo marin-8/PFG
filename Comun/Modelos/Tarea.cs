@@ -1,21 +1,22 @@
 ﻿
+using Newtonsoft.Json;
 using System;
 
 namespace PFG.Comun
 {
 	public class Tarea
 	{
-		public uint ID { get; private set; }
+		[JsonProperty("1")] public uint ID { get; private set; }
 
-		public bool Completada { get; private set; }
+		[JsonProperty("2")] public bool Completada { get; private set; }
 
-		public DateTime FechaHoraCreacion { get; private set; }
+		[JsonProperty("3")] public DateTime FechaHoraCreacion { get; private set; }
 
-		public TiposTareas TipoTarea { get; private set; }
-		public string NombreUsuario { get; private set; }
+		[JsonProperty("4")] public TiposTareas TipoTarea { get; private set; }
+		[JsonProperty("5")] public string NombreUsuario { get; private set; }
 
-		public Articulo[] Articulos { get; private set; }
-		public byte NumeroMesa { get; private set; }
+		[JsonProperty("6")] public Articulo[] Articulos { get; private set; }
+		[JsonProperty("7")] public byte NumeroMesa { get; private set; }
 
 		public Tarea(uint ID, DateTime FechaHoraCreacion, TiposTareas TipoTarea, string NombreUsuario, Articulo[] Articulos = null, byte NumeroMesa = 0)
 		{

@@ -40,15 +40,18 @@
                                 <StackLayout Spacing="0" VerticalOptions="EndAndExpand">
                                     <Label FontSize="20" Text="{Binding TipoTarea}" TextColor="White" FontAttributes="Bold">
                                         <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="PrepararArticulosBarra">
+                                                <Setter Property="Text" Value="Preparar artículos de Barra" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="PrepararArticulosCocina">
+                                                <Setter Property="Text" Value="Preparar artículos de Cocina" />
+                                            </DataTrigger>
                                             <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="ServirArticulos">
                                                 <Setter Property="Text" Value="Servir artículos" />
                                             </DataTrigger>
                                             <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
                                                 <Setter Property="Text" Value="Limpiar mesa" />
                                                 <Setter Property="TextColor" Value="Black" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="PrepararArticulos">
-                                                <Setter Property="Text" Value="Preparar artículos" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>
@@ -63,6 +66,7 @@
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
                                                 <Setter Property="TextColor" Value="Black" />
+                                                <Setter Property="Text" Value="" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>
@@ -99,7 +103,10 @@
                                     <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="LimpiarMesa">
                                         <Setter Property="BackgroundColor" Value="orange" />
                                     </DataTrigger>
-                                    <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="PrepararArticulos">
+                                    <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="PrepararArticulosBarra">
+                                        <Setter Property="BackgroundColor" Value="DarkMagenta" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding TipoTarea}" Value="PrepararArticulosCocina">
                                         <Setter Property="BackgroundColor" Value="DarkMagenta" />
                                     </DataTrigger>
                                 </Frame.Triggers>

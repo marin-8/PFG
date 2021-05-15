@@ -92,6 +92,8 @@ namespace PFG.Aplicacion
 
 					if(Global.UsuarioActual.Rol != Roles.Administrador)
 					{
+						Tareas.RefrescarTareasPersonalesDesdeFuera();
+
 						await Device.InvokeOnMainThreadAsync(async () => 
 							await Shell.Current.GoToAsync("//Principal") );
 					}
@@ -100,8 +102,6 @@ namespace PFG.Aplicacion
 						await Device.InvokeOnMainThreadAsync(async () => 
 							await Shell.Current.GoToAsync("//Carta") );
 					}
-
-					Tareas.RefrescarTareasPersonalesDesdeFuera();
 
 					break;
 				}

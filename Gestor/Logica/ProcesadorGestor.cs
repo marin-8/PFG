@@ -391,6 +391,15 @@ namespace PFG.Gestor
 					.First();
 
 			usuario.Conectado = false;
+
+			var tareasARepartir = 
+				GestionTareas.Tareas
+					.Where(t => t.NombreUsuario == Comando.Usuario);
+
+			foreach(var tarea in tareasARepartir)
+			{
+				// TODO - tareasARepartir
+			}
 		}
 
 		private static string Procesar_PedirUsuarios()
@@ -729,7 +738,7 @@ namespace PFG.Gestor
 				Global.EnviarGuardarNuevaTareaAsync
 				(
 					new Roles[] { Roles.Barista, Roles.Camarero, Roles.Cocinero },
-					TiposTareas.PrepararArticulos,
+					TiposTareas.PrepararArticulosBarra,
 					Comando.NumeroMesa,
 					articulosPreparacionBarra
 				);
@@ -744,7 +753,7 @@ namespace PFG.Gestor
 				Global.EnviarGuardarNuevaTareaAsync
 				(
 					new Roles[] { Roles.Cocinero, Roles.Barista, Roles.Camarero },
-					TiposTareas.PrepararArticulos,
+					TiposTareas.PrepararArticulosCocina,
 					Comando.NumeroMesa,
 					articulosPreparacionCocina
 				);
@@ -815,7 +824,9 @@ namespace PFG.Gestor
 				{
 					if(!GestionTareas.Tareas
 						.Any(t => !t.Completada
-						       && (t.TipoTarea == TiposTareas.PrepararArticulos || t.TipoTarea == TiposTareas.ServirArticulos)
+						       && (t.TipoTarea == TiposTareas.PrepararArticulosBarra
+							      || t.TipoTarea == TiposTareas.PrepararArticulosCocina
+							      || t.TipoTarea == TiposTareas.ServirArticulos)
 							   && t.NumeroMesa == tareaCompletada.NumeroMesa))
 					{
 						GestionMesas.Mesas
@@ -833,7 +844,8 @@ namespace PFG.Gestor
 
 					break;
 				}
-				case TiposTareas.PrepararArticulos:
+				case TiposTareas.PrepararArticulosBarra:
+				case TiposTareas.PrepararArticulosCocina:
 				{
 					Global.EnviarGuardarNuevaTareaAsync
 					(

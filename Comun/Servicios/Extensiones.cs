@@ -36,8 +36,8 @@ namespace PFG.Comun
 		{
 			Tarea[] listaOrdenable =
 				coleccion
-					.OrderBy(t => t.TipoTarea)
-					.ThenBy(t => t.FechaHoraCreacion)
+					.OrderBy(t => t.FechaHoraCreacion)
+					.ThenBy(t => t.TipoTarea)
 					.ToArray();
 
 			for(int i = 0 ; i < listaOrdenable.Length; i++)

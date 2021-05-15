@@ -24,8 +24,8 @@ namespace PFG.Comun
 		{
 			new KeyValuePair<Roles,TiposTareas>( Roles.Camarero , TiposTareas.ServirArticulos ),
 			new KeyValuePair<Roles,TiposTareas>( Roles.Camarero , TiposTareas.LimpiarMesa ),
-			new KeyValuePair<Roles,TiposTareas>( Roles.Barista  , TiposTareas.PrepararArticulos ),
-			new KeyValuePair<Roles,TiposTareas>( Roles.Cocinero , TiposTareas.PrepararArticulos ),
+			new KeyValuePair<Roles,TiposTareas>( Roles.Barista  , TiposTareas.PrepararArticulosBarra ),
+			new KeyValuePair<Roles,TiposTareas>( Roles.Cocinero , TiposTareas.PrepararArticulosCocina ),
 		});
 
 		public static readonly ReadOnlyCollection<KeyValuePair<Roles,TiposAcciones>> RolesAcciones =
@@ -43,7 +43,8 @@ namespace PFG.Comun
 		{
 			{ TiposTareas.ServirArticulos, "Servir artículos" },
 			{ TiposTareas.LimpiarMesa, "Limpiar mesa" },
-			{ TiposTareas.PrepararArticulos, "Preparar artículos" },
+			{ TiposTareas.PrepararArticulosBarra, "Preparar artículos de Barra" },
+			{ TiposTareas.PrepararArticulosCocina, "Preparar artículos de Cocina" },
 		});
 
 		public static readonly ReadOnlyDictionary<TiposAcciones, string> AccionesTitulos
