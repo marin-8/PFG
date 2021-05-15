@@ -40,6 +40,10 @@ namespace PFG.Gestor
 
 			NuevoIDTarea = (uint)Tareas.Count + 1;
 
+			if(Tareas.Count > 0)
+				foreach(var tarea in Tareas)
+					tarea.Reasignar(null);
+
 			return NuevoIDTarea == 1;
 		}
 
