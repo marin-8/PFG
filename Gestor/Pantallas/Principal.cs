@@ -90,7 +90,7 @@ namespace PFG.Gestor
 			else
 			{
 				ProcesadorGestor.PararDeComprobarConectados();
-				Servidor.Cerrar();
+				Servidor.PararEscucha();
 				CerrarSesionAdmin();
 				GuardarDatos();
 				/*Form*/ Close();

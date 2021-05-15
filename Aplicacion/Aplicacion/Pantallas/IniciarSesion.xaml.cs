@@ -86,6 +86,8 @@ namespace PFG.Aplicacion
 			{
 				case ResultadosIniciarSesion.Correcto:
 				{
+					Global.Servidor.EmpezarEscucha();
+
 					Global.UsuarioActual = Comando.UsuarioActual;
 
 					AppShell.ConfigurarPantallasAMostrar(Global.UsuarioActual.Rol);

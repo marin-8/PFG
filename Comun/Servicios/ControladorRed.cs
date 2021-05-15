@@ -37,17 +37,17 @@ namespace PFG.Comun
 			return respuestaDelServidor;
 		}
 
-		public ControladorRed(string IP, Func<string, string,string> FuncionAlRecibir, bool EmpezarRecibir, ushort Puerto = PUERTO)
+		public ControladorRed(string IP, Func<string, string,string> FuncionAlRecibir, bool EmpezarEscucha = false, ushort Puerto = PUERTO)
 		{
 			Servidor = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			Servidor.Bind(new IPEndPoint(IPAddress.Parse(IP), Puerto));
 
 			this.FuncionAlRecibir = FuncionAlRecibir;
 			
-			if(EmpezarRecibir) this.EmpezarRecibir();
+			if(EmpezarEscucha) this.EmpezarEscucha();
 		}
 
-		public void EmpezarRecibir()
+		public void EmpezarEscucha()
 		{
 			Servidor.Listen((int)SocketOptionName.MaxConnections);
             Servidor.BeginAccept(Servidor_NuevaConexion, null);
@@ -55,12 +55,13 @@ namespace PFG.Comun
 			Recibiendo = true;
 		}
 
-		public void Cerrar()
+		public void PararEscucha()
 		{
 			Recibiendo = false;
 
 			if(Servidor.Connected) Servidor.Shutdown(SocketShutdown.Both);
-			Servidor.Close();
+
+			// Servidor.Close();
 		}
 
 		#region Enviar (Funciones Privadas)

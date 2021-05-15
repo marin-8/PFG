@@ -1,6 +1,4 @@
 ﻿
-using System.Diagnostics;
-
 using Xamarin.Forms;
 
 namespace PFG.Aplicacion
@@ -16,14 +14,9 @@ namespace PFG.Aplicacion
 
 		protected override void OnStart()
 		{
-			try
-			{
-				Global.Servidor = new(
-					Comun.Global.Get_MiIP_Xamarin(),
-					ProcesadorAplicacion.ProcesarComandosRecibidos,
-					true);
-			}
-			catch { }
+			Global.Servidor = new(
+				Comun.Global.Get_MiIP_Xamarin(),
+				ProcesadorAplicacion.ProcesarComandosRecibidos);
 		}
 
 		protected override void OnSleep()

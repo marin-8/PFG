@@ -45,6 +45,8 @@ namespace PFG.Aplicacion
 
 			Current.FlyoutIsPresented = false;
 
+			Global.Servidor.PararEscucha();
+
 			await Task.Run(() =>
 			{
 				new Comando_CerrarSesion
