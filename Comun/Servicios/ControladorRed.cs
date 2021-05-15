@@ -12,7 +12,7 @@ namespace PFG.Comun
 		public const ushort PUERTO = 1600;
 		private const ushort MAX_BUFFER_SIZE = 10000;
 		// TODO - Ajustar esto
-		private const byte MAX_INTENTOS_CONEXION = 1; // ~ 6s/intento
+		private const byte MAX_INTENTOS_CONEXION = 2; // ~ 6s/intento
 
 		public bool Recibiendo { get; private set; } = false;
 

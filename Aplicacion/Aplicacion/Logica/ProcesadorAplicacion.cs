@@ -37,6 +37,13 @@ namespace PFG.Aplicacion
 					break;
 				}
 
+				case TiposComando.ComprobarConectado:
+				{
+					// No hacer nada
+
+					break;
+				}
+
 				case TiposComando.JornadaTerminada:
 				{
 					Procesar_JornadaTerminada();

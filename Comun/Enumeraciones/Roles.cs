@@ -9,8 +9,6 @@ namespace PFG.Comun
 			  Barista,
 			 Cocinero,
 
-		Administrador,
-
-		Desarrollador
+		Administrador
 	}
 }

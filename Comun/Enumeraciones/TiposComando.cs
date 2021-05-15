@@ -4,6 +4,7 @@ namespace PFG.Comun
 	public enum TiposComando : byte
 	{
 		Error,
+		ComprobarConectado,
 
 		ResultadoGenerico,
 

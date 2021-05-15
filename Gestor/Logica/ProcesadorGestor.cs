@@ -37,9 +37,33 @@ namespace PFG.Gestor
 			Timer.Enabled = true;
 		}
 
-		private static void ComprobarConectados(Object source, ElapsedEventArgs e)
+		private static void ComprobarConectados(object source, ElapsedEventArgs e)
 		{
+			var usuariosSupuestamenteConectados =
+				GestionUsuarios.Usuarios
+					.Where(u => u.Conectado && u.Rol != Roles.Administrador);
 
+			foreach(var usuarioSupuestamenteConectado in usuariosSupuestamenteConectados)
+			{
+				bool estaConectado = null !=
+					new Comando_ComprobarConectado().Enviar(usuarioSupuestamenteConectado.IP, true);
+
+				if(!estaConectado)
+				{
+					usuarioSupuestamenteConectado.Conectado = false;
+
+					var tareasAReasignar = 
+						GestionTareas.Tareas
+							.Where(t => !t.Completada && t.NombreUsuario == usuarioSupuestamenteConectado.NombreUsuario);
+
+					foreach(var tarea in tareasAReasignar)
+					{
+						Global.ReasignarEIntentarEnviarTarea(
+							Comun.Global.TareasPrioridadesRoles[tarea.TipoTarea].ToArray(),
+							tarea);
+					}
+				}
+			}
 		}
 
 		public static void PararDeComprobarConectados()
@@ -474,7 +498,6 @@ namespace PFG.Gestor
 			return new Comando_MandarUsuarios
 			(
 				GestionUsuarios.Usuarios
-					.Where(u => u.Rol != Roles.Desarrollador)
 					.OrderByDescending(u => (byte)u.Rol)
 					.ThenBy(u => u.Nombre)
 					.ToArray()
