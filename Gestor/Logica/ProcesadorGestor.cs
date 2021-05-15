@@ -394,12 +394,13 @@ namespace PFG.Gestor
 
 			var tareasARepartir = 
 				GestionTareas.Tareas
-					.Where(t => t.NombreUsuario == Comando.Usuario);
+					.Where(t => t.NombreUsuario == Comando.Usuario)
+					.ToArray();
 
-			foreach(var tarea in tareasARepartir)
-			{
-				// TODO - tareasARepartir
-			}
+			//foreach(var tarea in tareasARepartir)
+			//{
+			//	// TODO - tareasARepartir
+			//}
 		}
 
 		private static string Procesar_PedirUsuarios()
@@ -891,7 +892,7 @@ namespace PFG.Gestor
 			{
 				await Task.Run(() =>
 				{
-					if(new Comando_RefrescarDisponibilidadArticulos().Enviar(usuarioConectado.IP) == null)
+					if(new Comando_RefrescarDisponibilidadArticulos().Enviar(usuarioConectado.IP, true) == null)
 						usuarioConectado.Conectado = false;
 				});
 			}

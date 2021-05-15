@@ -56,7 +56,7 @@ namespace PFG.Gestor
 						NumeroMesa);
 
 					tareaEnviada = null !=
-						new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignar.IP);
+						new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignar.IP, true);
 
 					if(!tareaEnviada)
 						usuarioAsignar.Conectado = false;

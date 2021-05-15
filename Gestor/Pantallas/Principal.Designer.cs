@@ -115,6 +115,7 @@ namespace PFG.Gestor
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Silver;
 			this.ClientSize = new System.Drawing.Size(529, 217);
+			this.ControlBox = false;
 			this.Controls.Add(this.ComenzarTerminarJornada);
 			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel1);

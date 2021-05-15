@@ -20,11 +20,11 @@ namespace PFG.Comun
 		private readonly Func<string, string,string> FuncionAlRecibir;
 		private readonly byte[] Buffer = new byte[MAX_BUFFER_SIZE];
 
-		public static string Enviar(string IP, string Mensaje)
+		public static string Enviar(string IP, string Mensaje, bool LimitarIntentos)
 		{
 			Socket socketDestino = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-			if(!Enviar_ConectarConDestino(socketDestino, IP))
+			if(!Enviar_ConectarConDestino(socketDestino, IP, LimitarIntentos))
 				return null;
 
 			Enviar_EnviarMensaje(socketDestino, Mensaje);
@@ -37,7 +37,7 @@ namespace PFG.Comun
 			return respuestaDelServidor;
 		}
 
-		public ControladorRed(string IP, Func<string, string,string> FuncionAlRecibir, bool EmpezarRecibir, ushort Puerto=PUERTO)
+		public ControladorRed(string IP, Func<string, string,string> FuncionAlRecibir, bool EmpezarRecibir, ushort Puerto = PUERTO)
 		{
 			Servidor = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			Servidor.Bind(new IPEndPoint(IPAddress.Parse(IP), Puerto));
@@ -65,13 +65,13 @@ namespace PFG.Comun
 
 		#region Enviar (Funciones Privadas)
 
-		private static bool Enviar_ConectarConDestino(Socket Destino, string IP)
+		private static bool Enviar_ConectarConDestino(Socket Destino, string IP, bool LimitarIntentos)
 		{
-			byte intentossDeConexion = 0;
+			byte intentosDeConexion = 0;
 
-			while(!Destino.Connected && intentossDeConexion < MAX_INTENTOS_CONEXION)
+			while(!Destino.Connected && (!LimitarIntentos || intentosDeConexion < MAX_INTENTOS_CONEXION))
 			{
-				intentossDeConexion++;
+				intentosDeConexion++;
 
 				try
 				{

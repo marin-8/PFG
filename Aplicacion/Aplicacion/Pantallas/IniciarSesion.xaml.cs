@@ -99,6 +99,8 @@ namespace PFG.Aplicacion
 					}
 					else
 					{
+						await Global.Get_Articulos();
+
 						await Device.InvokeOnMainThreadAsync(async () => 
 							await Shell.Current.GoToAsync("//Carta") );
 					}
