@@ -287,6 +287,17 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.ReasignarTarea:
+				{
+					comandoRespuesta =
+						Procesar_ReasignarTarea(
+							Comando.DeJson
+								<Comando_ReasignarTarea>
+									(ComandoJson));
+
+					break;
+				}
+
 				case TiposComando.CobrarMesa:
 				{
 					Procesar_CobrarMesa(
@@ -378,6 +389,21 @@ namespace PFG.Gestor
 				usuario.Conectado = true;
 
 				resultado = ResultadosIniciarSesion.Correcto;
+
+				// ===== //
+
+				var tareasSinAsignar =
+					GestionTareas.Tareas
+						.Where(t => !t.Completada && t.NombreUsuario == null)
+						.ToArray();
+
+				if(tareasSinAsignar.Length > 0)
+				{
+					foreach(var tareaSinAsignar in tareasSinAsignar)
+					{
+						tareaSinAsignar.Reasignar(usuario.NombreUsuario);
+					}
+				}
 			}
 
 			return new Comando_ResultadoIniciarSesion(resultado,usuario).ToString();
@@ -392,15 +418,23 @@ namespace PFG.Gestor
 
 			usuario.Conectado = false;
 
+			// ===== //
+
 			var tareasARepartir = 
 				GestionTareas.Tareas
-					.Where(t => t.NombreUsuario == Comando.Usuario)
+					.Where(t => !t.Completada && t.NombreUsuario == Comando.Usuario);
+
+			var usuariosConectados =
+				GestionUsuarios.Usuarios
+					.Where(u => u.Conectado)
 					.ToArray();
 
-			//foreach(var tarea in tareasARepartir)
-			//{
-			//	// TODO - tareasARepartir
-			//}
+			foreach(var tarea in tareasARepartir)
+			{
+				Global.ReasignarEIntentarEnviarTarea(
+					Comun.Global.TareasPrioridadesRoles[tarea.TipoTarea].ToArray(),
+					tarea);
+			}
 		}
 
 		private static string Procesar_PedirUsuarios()
@@ -736,10 +770,12 @@ namespace PFG.Gestor
 			
 			if(articulosPreparacionBarra.Any())
 			{
+				TiposTareas tipoTarea = TiposTareas.PrepararArticulosBarra;
+
 				Global.EnviarGuardarNuevaTareaAsync
 				(
-					new Roles[] { Roles.Barista, Roles.Camarero, Roles.Cocinero },
-					TiposTareas.PrepararArticulosBarra,
+					Comun.Global.TareasPrioridadesRoles[tipoTarea].ToArray(),
+					tipoTarea,
 					Comando.NumeroMesa,
 					articulosPreparacionBarra
 				);
@@ -751,10 +787,12 @@ namespace PFG.Gestor
 			
 			if(articulosPreparacionCocina.Any())
 			{
+				TiposTareas tipoTarea = TiposTareas.PrepararArticulosCocina;
+
 				Global.EnviarGuardarNuevaTareaAsync
 				(
-					new Roles[] { Roles.Cocinero, Roles.Barista, Roles.Camarero },
-					TiposTareas.PrepararArticulosCocina,
+				    Comun.Global.TareasPrioridadesRoles[tipoTarea].ToArray(),
+					tipoTarea,
 					Comando.NumeroMesa,
 					articulosPreparacionCocina
 				);
@@ -848,10 +886,12 @@ namespace PFG.Gestor
 				case TiposTareas.PrepararArticulosBarra:
 				case TiposTareas.PrepararArticulosCocina:
 				{
+					TiposTareas tipoTarea = TiposTareas.ServirArticulos;
+
 					Global.EnviarGuardarNuevaTareaAsync
 					(
-						new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero },
-						TiposTareas.ServirArticulos,
+						Comun.Global.TareasPrioridadesRoles[tipoTarea].ToArray(),
+						tipoTarea,
 						tareaCompletada.NumeroMesa,
 						tareaCompletada.Articulos
 					);
@@ -861,16 +901,28 @@ namespace PFG.Gestor
 			}
 		}
 
+		private static string Procesar_ReasignarTarea(Comando_ReasignarTarea Comando)
+		{
+			bool correcto = true;
+			string mensaje = "";
+
+
+
+			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+		}
+
 		private static void Procesar_CobrarMesa(Comando_CobrarMesa Comando)
 		{
 			GestionMesas.Mesas
 				.First(m => m.Numero == Comando.NumeroMesa)
 					.EstadoMesa = EstadosMesa.Sucia;
 
+			TiposTareas tipoTarea = TiposTareas.LimpiarMesa;
+
 			Global.EnviarGuardarNuevaTareaAsync
 			(
-				new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero },
-				TiposTareas.LimpiarMesa,
+				Comun.Global.TareasPrioridadesRoles[tipoTarea].ToArray(),
+				tipoTarea,
 				Comando.NumeroMesa,
 				null
 			);

@@ -55,6 +55,15 @@ namespace PFG.Comun
 			{ TiposAcciones.CambiarDisponibilidadArticulo, "Cambiar estado\nde artículo\n(acabado/disponible)" },
 		});
 
+		public static readonly ReadOnlyDictionary<TiposTareas, ReadOnlyCollection<Roles>> TareasPrioridadesRoles
+			= new( new Dictionary<TiposTareas, ReadOnlyCollection<Roles>>
+		{
+			{ TiposTareas.PrepararArticulosBarra, new( new Roles[] { Roles.Barista, Roles.Camarero, Roles.Cocinero }) },
+			{ TiposTareas.PrepararArticulosCocina, new( new Roles[] { Roles.Cocinero, Roles.Barista, Roles.Camarero }) },
+			{ TiposTareas.ServirArticulos, new( new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero }) },
+			{ TiposTareas.LimpiarMesa, new( new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero }) },
+		});
+
 		public static AdaptadorDeRed[] Get_AdaptadoresDeRedDisponibles()
 		{
 			List<AdaptadorDeRed> adaptadoresDeRedDisponibles = new();

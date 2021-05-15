@@ -72,22 +72,59 @@ namespace PFG.Aplicacion
 
 		// Eventos UI -> Contenido
 
+		private static readonly string[] OpcionesTarea = new string[]
+		{
+			"Completada",
+			"Reasignar",
+		};
+
 		private async void ListaTareas_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
 			var tareaPulsada = (Tarea)e.Item;
 
-			if(await UserDialogs.Instance.ConfirmAsync("¿Tarea completada?", "Confirmar", "Si", "Cancelar"))
-			{
-				await Task.Run(() =>
-				{
-					new Comando_TareaCompletada(tareaPulsada.ID).Enviar(Global.IPGestor);
-				});
+			string opcion = await UserDialogs.Instance.ActionSheetAsync("Opciones tarea", "Cancelar", null, null, OpcionesTarea);
+			if(opcion == "Cancelar") return;
 
-				lock(Global.TareasPersonalesLock)
+			if(opcion == OpcionesTarea[0]) // Completada
+			{
+				if(await UserDialogs.Instance.ConfirmAsync("Confirmar tarea completada", "¿Tarea completada?", "Completada", "Cancelar"))
 				{
-					Global.TareasPersonales.Remove(tareaPulsada);
-					Global.TareasPersonales.Ordenar();
+					await Task.Run(() =>
+					{
+						new Comando_TareaCompletada(tareaPulsada.ID).Enviar(Global.IPGestor);
+					});
+
+					lock(Global.TareasPersonalesLock)
+					{
+						Global.TareasPersonales.Remove(tareaPulsada);
+						Global.TareasPersonales.Ordenar();
+					}
 				}
+
+				return;
+			}
+
+			if(opcion == OpcionesTarea[1]) // Reasignar
+			{
+				if(await UserDialogs.Instance.ConfirmAsync("Confirmar reasignación de tarea", "¿Reasignar tarea?", "Reasignar", "Cancelar"))
+				{
+					var comandoRespuesta = await Task.Run(() =>
+					{
+						string respuestaGestor = new Comando_ReasignarTarea(tareaPulsada.ID).Enviar(Global.IPGestor);
+						return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+					});
+
+					Global.Procesar_ResultadoGenerico(comandoRespuesta, () =>
+					{
+						lock(Global.TareasPersonalesLock)
+						{
+							Global.TareasPersonales.Remove(tareaPulsada);
+							Global.TareasPersonales.Ordenar();
+						}
+					});
+				}
+
+				return;
 			}
 		}
 
@@ -95,7 +132,7 @@ namespace PFG.Aplicacion
 
 		// Métodos Helper
 
-		private async void RefrescarTareasPersonales()
+		private void RefrescarTareasPersonales()
 		{
 			Global.Get_TareasPersonales();
 

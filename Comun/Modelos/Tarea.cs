@@ -37,5 +37,10 @@ namespace PFG.Comun
 		{
 			Completada = true;
 		}
+
+		public void Reasignar(string NuevoNombreUsuario)
+		{
+			NombreUsuario = NuevoNombreUsuario;
+		}
 	}
 }

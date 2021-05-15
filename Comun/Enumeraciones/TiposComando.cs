@@ -42,6 +42,7 @@ namespace PFG.Comun
 		PedirTareas,
 		MandarTareas,
 		TareaCompletada,
+		ReasignarTarea,
 
 		TomarNota,
 		CobrarMesa,

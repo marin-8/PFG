@@ -35,11 +35,11 @@ namespace PFG.Aplicacion
 		public static ObservableCollection<Tarea> TareasPersonales = new();
 		public static readonly object TareasPersonalesLock = new();
 
-		public static async void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto, Action FuncionCuandoErroneo=null)
+		public static async void Procesar_ResultadoGenerico(Comando_ResultadoGenerico Comando, Action FuncionCuandoCorrecto = null, Action FuncionCuandoErroneo = null)
 		{
 			if(Comando.Correcto)
 			{
-				FuncionCuandoCorrecto();
+				FuncionCuandoCorrecto?.Invoke();
 			}
 			else
 			{

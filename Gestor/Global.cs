@@ -13,7 +13,7 @@ namespace PFG.Gestor
 		public static bool JornadaEnCurso = false;
 		#pragma warning restore CA2211
 
-		public static Usuario Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles rol)
+		public static Usuario Get_UsuarioConectadoConMenosTareas(Roles rol)
 		{
 			return 
 				GestionUsuarios.Usuarios
@@ -29,6 +29,40 @@ namespace PFG.Gestor
 					.FirstOrDefault();
 		}
 
+		public static async void ReasignarEIntentarEnviarTarea(Roles[] PrioridadRoles, Tarea Tarea)
+		{
+			await Task.Run(() =>
+			{
+				Usuario usuarioAsignar;
+
+				bool tareaEnviadaONull = false;
+
+				do
+				{
+					usuarioAsignar =
+						Get_UsuarioConectadoConMenosTareas_PorPrioridadRoles(PrioridadRoles);
+
+					if(usuarioAsignar != null)
+					{
+						Tarea.Reasignar(usuarioAsignar.NombreUsuario);
+
+						tareaEnviadaONull = null !=
+							new Comando_EnviarTarea(Tarea).Enviar(usuarioAsignar.IP, true);
+
+						if(!tareaEnviadaONull)
+							usuarioAsignar.Conectado = false;
+					}
+					else
+					{
+						Tarea.Reasignar(null);
+
+						tareaEnviadaONull = true;
+					}
+				}
+				while(!tareaEnviadaONull);
+			});
+		}
+
 		public static async void EnviarGuardarNuevaTareaAsync(Roles[] PrioridadRoles, TiposTareas TipoTarea, byte NumeroMesa, Articulo[] Articulos = null, bool Guardar = true)
 		{
 			await Task.Run(() =>
@@ -40,12 +74,8 @@ namespace PFG.Gestor
 
 				do
 				{
-					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[0]))
-						usuarioAsignar = Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[0]);
-					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[1]))
-						usuarioAsignar = Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[1]);
-					else
-						usuarioAsignar = Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[2]);
+					usuarioAsignar =
+						Get_UsuarioConectadoConMenosTareas_PorPrioridadRoles(PrioridadRoles);
 		
 					nuevaTarea = new Tarea(
 						GestionTareas.NuevoIDTarea,
@@ -66,6 +96,17 @@ namespace PFG.Gestor
 				if(Guardar)
 					GestionTareas.Tareas.Add(nuevaTarea);
 			});
+		}
+
+		public static Usuario Get_UsuarioConectadoConMenosTareas_PorPrioridadRoles(Roles[] PrioridadRoles)
+		{
+			for(int r = 0 ; r < PrioridadRoles.Length ; r++)
+			{
+				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[r]))
+					return Get_UsuarioConectadoConMenosTareas(PrioridadRoles[r]);
+			}
+
+			return null;				
 		}
 	}
 }
