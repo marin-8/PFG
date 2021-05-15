@@ -65,7 +65,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos privados
+		// Métodos helper
 
 		private async void InicializarInterfaz(byte NumeroMesa)
 		{

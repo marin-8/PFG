@@ -1,21 +1,11 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Threading;
-using System.Text.RegularExpressions;
 
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 using Acr.UserDialogs;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Extensions;
 
 using PFG.Comun;
@@ -35,8 +25,6 @@ namespace PFG.Aplicacion
 		public Acciones()
 		{
 			InitializeComponent();
-
-			// TODO - Ajuste para acciones por rol o siempre todas
 
 			var accionesRolActual =
 				Comun.Global.RolesAcciones
@@ -64,14 +52,6 @@ namespace PFG.Aplicacion
 				AccionesGrid.RowDefinitions.RemoveAt(
 					AccionesGrid.RowDefinitions.Count - 1);
 		}
-
-		//private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
-		//{
-		//	if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
-		//	{
-		//		RefrescarArticulos();
-		//	}
-		//}
 
 	// ============================================================================================== //
 
@@ -158,7 +138,7 @@ namespace PFG.Aplicacion
 
 	// ============================================================================================== //
 
-		// Métodos privados
+		// Métodos helper
 
 		private Button GenerarBotonAccion(string TituloAccion, TiposAcciones TipoAccion, EventHandler EventoMesaPulsada)
 		{

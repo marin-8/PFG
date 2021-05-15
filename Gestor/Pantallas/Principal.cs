@@ -102,7 +102,7 @@ namespace PFG.Gestor
 
 	// ============================================================================================== //
 
-		// Métodos privados
+		// Métodos helper
 
 		private void ActualizarEstiloBotonComenzarTerminarJornada()
 		{

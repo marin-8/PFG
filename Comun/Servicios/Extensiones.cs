@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace PFG.Comun
 {
@@ -11,6 +12,15 @@ namespace PFG.Comun
 		public static string  Enviar(this Comando comando, string IP)
 		{
 			return ControladorRed.Enviar(IP, comando.ToString());
+		}
+
+		public static bool EsIPValida(this string str)
+		{
+			return Regex.IsMatch
+			(
+				str, 
+				@"\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"
+			);
 		}
 
 		public static void Ordenar<T>(this ObservableCollection<T> coleccion, Comparison<T> comparacion)

@@ -1,8 +1,5 @@
     Mejoras:
         
-                                - Revisar tipos (enteros...) (de comandos)
-                                - Revisar comparaciones de strings (usar Equals en vez de ==)
-                                - Revisar public/protected/private
                                 - Revisar responsabilidades de clase (Mesas/MoverMesa por ejemplo)
                                 - MINIMIZAR CÓDIGO REPETIDO !!!
                                 - Mejorar espacios de nombres
@@ -13,12 +10,14 @@
                                 - Quitar usings innecesarios
                                 - Cambiar de ResultadoIniciarSesion la enum por mensaje y meter un bool de correcto
                                 - Dividir cosas de las clases Global
+                                - Revisar public/protected/private
                                 
                                 - Pedir tareas de otro (por desconexión) (reasignar al conectarse uno nuevo)
                                 - Re-repartir tareas al cerrar sesión y/o conectarse
                                 - Guardar tareas en memoria cada vez que se reciben por si se cierra sin querer
                                 - Ajuste para empezar jonada con todos los artículos disponibles o como se dejaron
                                 - Carta -> Modificar nombre categoría
+                                - Ajuste para acciones por rol o siempre todas
                                     
                                 - Revisar mayúsculas/minúsculas
                                 - Custom value types? (IP...)

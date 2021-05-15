@@ -1,9 +1,6 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -19,8 +16,16 @@ namespace PFG.Aplicacion
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MoverMesa : PopupPage
 	{
+    // ============================================================================================== //
+
+        // Variables y constantes
+
 		private readonly byte NumeroMesaSeleccionada;
 		private readonly Action<byte,byte,byte> EventoNuevoSitioSeleccionado;
+
+    // ============================================================================================== //
+
+        // Inicialización
 
 		public MoverMesa(byte NumeroMesaSeleccionada, Action<byte,byte,byte> EventoNuevoSitioSeleccionado)
 		{
@@ -31,6 +36,14 @@ namespace PFG.Aplicacion
 
 			InicializarMapaGrid(NumeroMesaSeleccionada);
 		}
+
+    // ============================================================================================== //
+
+        // Eventos UI -> Barra navegación
+
+    // ============================================================================================== //
+
+        // Eventos UI -> Contenido
 
 		private async void MesaPulsada(object sender, EventArgs e)
 		{
@@ -53,6 +66,10 @@ namespace PFG.Aplicacion
 				EventoNuevoSitioSeleccionado.Invoke(NumeroMesaSeleccionada, sitioPulsadoX, sitioPulsadoY);
 			}
 		}
+
+    // ============================================================================================== //
+
+        // Métodos helper
 
 		private async void InicializarMapaGrid(byte NumeroMesaSeleccionada)
 		{
@@ -137,5 +154,11 @@ namespace PFG.Aplicacion
 
 			UserDialogs.Instance.HideLoading();
 		}
+
+	// ============================================================================================== //
+
+        // Métodos Procesar
+
+	// ============================================================================================== 
 	}
 }
