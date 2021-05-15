@@ -48,6 +48,8 @@ namespace PFG.Gestor
 
 			Servidor = new(servidorIP, ProcesadorGestor.ProcesarComandosRecibidos, true);
 
+			ProcesadorGestor.EmpezarAComprobarConectados();
+
 			IPGestor.Text = servidorIP;
 		}
 
@@ -87,6 +89,7 @@ namespace PFG.Gestor
 			}
 			else
 			{
+				ProcesadorGestor.PararDeComprobarConectados();
 				Servidor.Cerrar();
 				CerrarSesionAdmin();
 				GuardarDatos();

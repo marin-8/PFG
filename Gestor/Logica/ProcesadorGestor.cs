@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Linq;
+using System.Timers;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
@@ -12,7 +13,43 @@ namespace PFG.Gestor
 	{
 	// ============================================================================================== //
 
-        // Método Principal
+		// Variables y constantes
+
+		private const double INTERVALO_COMPROBACION_CONECTADOS = 1000 * 5; // 5 segundos
+
+		private static bool TimerInicializado = false;
+		private static readonly System.Timers.Timer Timer = new(INTERVALO_COMPROBACION_CONECTADOS);
+
+	// ============================================================================================== //
+
+        // Métodos de comprobación de conectados
+
+		public static void EmpezarAComprobarConectados()
+		{
+			if(!TimerInicializado)
+			{
+				Timer.Elapsed += ComprobarConectados;
+				Timer.AutoReset = true;
+
+				TimerInicializado = true;
+			}
+
+			Timer.Enabled = true;
+		}
+
+		private static void ComprobarConectados(Object source, ElapsedEventArgs e)
+		{
+
+		}
+
+		public static void PararDeComprobarConectados()
+		{
+			Timer.Enabled = false;
+		}
+
+	// ============================================================================================== //
+
+        // Método distribuidor de comandos a los procesadores
 
 		public static string ProcesarComandosRecibidos(string IP, string ComandoJson)
 		{
