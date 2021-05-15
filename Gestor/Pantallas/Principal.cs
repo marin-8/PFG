@@ -63,9 +63,9 @@ namespace PFG.Gestor
 				MessageBox.Show
 				(
 					"La última vez que se cerró el Gestor no se hizo correctamente.\n\n" +
-					"Se han cargado y desasignado las tareas guardadas y se ha reanudado la jornada.\n" +
-					"Cuando se conecte el primer usuario, se le asignarán todas las tareas.\n" +
-					"Éste tendrá que reasignarlas manualmente (recomendable hacerlo una vez\n" +
+					"Se han cargado y desasignado las tareas guardadas y se ha reanudado la jornada. " +
+					"Cuando se conecte el primer usuario, se le asignarán todas las tareas. " +
+					"Éste tendrá que reasignarlas manualmente (recomendable hacerlo una vez " +
 					"se hayan conectado el resto de usuarios).",
 					"Alerta",
 					MessageBoxButtons.OK,

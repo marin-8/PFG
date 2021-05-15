@@ -1,9 +1,6 @@
 
     Mejoras:
       
-    - Guardar tareas en memoria cada vez que
-      se reciben por si se cierra sin querer
-      
             - Ajustes varios
                 - empezar jonada con todos los
                   artículos disponibles o como se dejaron
@@ -12,9 +9,8 @@
                 - Intentos conexion gestor->app
       
             - Carta -> Modificar nombre categoría
-    
-            - Interfaz del flyoutmenu
 
+            - Interfaz del flyoutmenu
 
     - MINIMIZAR CÓDIGO REPETIDO !!!
     - Dividir cosas de las clases Global
