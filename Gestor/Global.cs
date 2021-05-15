@@ -1,5 +1,7 @@
 ﻿
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using PFG.Comun;
 
@@ -25,6 +27,44 @@ namespace PFG.Gestor
 							.Where(t => t.NombreUsuario == u.NombreUsuario && t.Completada)
 							.Count())
 					.FirstOrDefault();
+		}
+
+		public static async void EnviarGuardarNuevaTareaAsync(Roles[] PrioridadRoles, TiposTareas TipoTarea, byte NumeroMesa, Articulo[] Articulos = null)
+		{
+			await Task.Run(() =>
+			{
+				Usuario usuarioAsignar;
+				Tarea nuevaTarea;
+
+				bool tareaEnviada = false;
+
+				do
+				{
+					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[0]))
+						usuarioAsignar = Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[0]);
+					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[1]))
+						usuarioAsignar = Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[1]);
+					else
+						usuarioAsignar = Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[2]);
+		
+					nuevaTarea = new Tarea(
+						GestionTareas.NuevoIDTarea,
+						DateTime.Now,
+						TipoTarea,
+						usuarioAsignar.NombreUsuario,
+						Articulos,
+						NumeroMesa);
+
+					tareaEnviada = null !=
+						new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignar.IP);
+
+					if(!tareaEnviada)
+						usuarioAsignar.Conectado = false;
+				}
+				while(!tareaEnviada);
+
+				GestionTareas.Tareas.Add(nuevaTarea);
+			});
 		}
 	}
 }

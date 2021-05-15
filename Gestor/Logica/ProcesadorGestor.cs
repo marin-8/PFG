@@ -726,7 +726,7 @@ namespace PFG.Gestor
 			
 			if(articulosPreparacionBarra.Any())
 			{
-				EnviarGuardarNuevaTareaAsync
+				Global.EnviarGuardarNuevaTareaAsync
 				(
 					new Roles[] { Roles.Barista, Roles.Camarero, Roles.Cocinero },
 					TiposTareas.PrepararArticulos,
@@ -741,7 +741,7 @@ namespace PFG.Gestor
 			
 			if(articulosPreparacionCocina.Any())
 			{
-				EnviarGuardarNuevaTareaAsync
+				Global.EnviarGuardarNuevaTareaAsync
 				(
 					new Roles[] { Roles.Cocinero, Roles.Barista, Roles.Camarero },
 					TiposTareas.PrepararArticulos,
@@ -835,7 +835,7 @@ namespace PFG.Gestor
 				}
 				case TiposTareas.PrepararArticulos:
 				{
-					EnviarGuardarNuevaTareaAsync
+					Global.EnviarGuardarNuevaTareaAsync
 					(
 						new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero },
 						TiposTareas.ServirArticulos,
@@ -854,7 +854,7 @@ namespace PFG.Gestor
 				.First(m => m.Numero == Comando.NumeroMesa)
 					.EstadoMesa = EstadosMesa.Sucia;
 
-			EnviarGuardarNuevaTareaAsync
+			Global.EnviarGuardarNuevaTareaAsync
 			(
 				new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero },
 				TiposTareas.LimpiarMesa,
@@ -890,48 +890,6 @@ namespace PFG.Gestor
 		//{
 		//	//
 		//}
-
-	// ============================================================================================== //
-
-        // Métodos Helper
-
-		private static async void EnviarGuardarNuevaTareaAsync(Roles[] PrioridadRoles, TiposTareas TipoTarea, byte NumeroMesa, Articulo[] Articulos = null)
-		{
-			await Task.Run(() =>
-			{
-				Usuario usuarioAsignar;
-				Tarea nuevaTarea;
-
-				bool tareaEnviada = false;
-
-				do
-				{
-					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[0]))
-						usuarioAsignar = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[0]);
-					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[1]))
-						usuarioAsignar = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[1]);
-					else
-						usuarioAsignar = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[2]);
-		
-					nuevaTarea = new Tarea(
-						GestionTareas.NuevoIDTarea,
-						DateTime.Now,
-						TipoTarea,
-						usuarioAsignar.NombreUsuario,
-						Articulos,
-						NumeroMesa);
-
-					tareaEnviada = null !=
-						new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignar.IP);
-
-					if(!tareaEnviada)
-						usuarioAsignar.Conectado = false;
-				}
-				while(!tareaEnviada);
-
-				GestionTareas.Tareas.Add(nuevaTarea);
-			});
-		}
 
 	// ============================================================================================== //
 	}
