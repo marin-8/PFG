@@ -10,6 +10,10 @@ namespace PFG.Gestor
 {
 	public static class ProcesadorGestor
 	{
+	// ============================================================================================== //
+
+        // Método Principal
+
 		public static string ProcesarComandosRecibidos(string IP, string ComandoJson)
 		{
 			var tipoComando = Comando.Get_TipoComando_De_Json(ComandoJson);
@@ -330,6 +334,10 @@ namespace PFG.Gestor
 			return comandoRespuesta;
 		}
 
+	// ============================================================================================== //
+
+        // Métodos Procesar
+
 		private static string Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
 		{
 			ResultadosIniciarSesion resultado;
@@ -339,51 +347,40 @@ namespace PFG.Gestor
 				GestionUsuarios.Usuarios
 					.Select(u => u.NombreUsuario);
 
-			if(nombresUsuarios.Contains(Comando.Usuario))
+
+			if(!nombresUsuarios.Contains(Comando.Usuario))
 			{
-				usuario =
-					GestionUsuarios.Usuarios
-						.Where(u => u.NombreUsuario == Comando.Usuario)
-						.Select(u => u)
-						.First();
-
-				if(usuario.Contrasena == Comando.Contrasena)
-				{
-					if(!usuario.Conectado)
-					{
-						if(Global.JornadaEnCurso ^ usuario.Rol == Roles.Administrador) // Qué guay el operador ^ (xor)
-						{
-							usuario.IP = IP;
-							usuario.Conectado = true;
-
-							resultado = ResultadosIniciarSesion.Correcto;
-						}
-						else
-						{
-							resultado = ResultadosIniciarSesion.JornadaEnEstadoNoPermitido;
-						}
-					}
-					else
-					{
-						resultado = ResultadosIniciarSesion.UsuarioYaConectado;
-					}
-				}
-				else
-				{
-					resultado = ResultadosIniciarSesion.ContrasenaIncorrecta;
-				}
+				resultado = ResultadosIniciarSesion.UsuarioNoExiste;
+				return new Comando_ResultadoIniciarSesion(resultado,usuario).ToString();
+			}
+			
+			usuario =
+				GestionUsuarios.Usuarios
+					.Where(u => u.NombreUsuario == Comando.Usuario)
+					.Select(u => u)
+					.First();
+			
+			if(usuario.Contrasena != Comando.Contrasena)
+			{
+				resultado = ResultadosIniciarSesion.ContrasenaIncorrecta;
+			}
+			else if(usuario.Conectado)
+			{
+				resultado = ResultadosIniciarSesion.UsuarioYaConectado;
+			}
+			else if(!(Global.JornadaEnCurso ^ usuario.Rol == Roles.Administrador)) // Qué guay el operador ^ (xor)
+			{
+				resultado = ResultadosIniciarSesion.JornadaEnEstadoNoPermitido;
 			}
 			else
 			{
-				resultado = ResultadosIniciarSesion.UsuarioNoExiste;
+				usuario.IP = IP;
+				usuario.Conectado = true;
+
+				resultado = ResultadosIniciarSesion.Correcto;
 			}
 
-			return new Comando_ResultadoIniciarSesion
-			(
-				resultado,
-				usuario
-			)
-			.ToString();
+			return new Comando_ResultadoIniciarSesion(resultado,usuario).ToString();
 		}
 
 		private static void Procesar_CerrarSesion(Comando_CerrarSesion Comando)
@@ -717,7 +714,7 @@ namespace PFG.Gestor
 			GestionArticulos.Articulos.Remove(articuloAEliminar);
 		}		
 
-		private static async void Procesar_TomarNota(Comando_TomarNota Comando)
+		private static void Procesar_TomarNota(Comando_TomarNota Comando)
 		{
 			GestionMesas.Mesas
 				.First(m => m.Numero == Comando.NumeroMesa)
@@ -725,36 +722,17 @@ namespace PFG.Gestor
 
 			// ===== //
 
-			Usuario usuarioAsignarPreparacionBarra;
-			Usuario usuarioAsignarPreparacionCocina;
-
-			// ===== //
-
 			var articulosPreparacionBarra = Comando.Articulos.Where(a => a.SitioPreparacionArticulo == SitioPreparacionArticulo.Barra).ToArray();			
 			
 			if(articulosPreparacionBarra.Any())
 			{
-				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
-					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
-				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
-				else
-					usuarioAsignarPreparacionBarra = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
-
-				var nuevaTareaBarra = new Tarea(
-					GestionTareas.NuevoIDTarea,
-					DateTime.Now,
+				EnviarGuardarNuevaTareaAsync
+				(
+					new Roles[] { Roles.Barista, Roles.Camarero, Roles.Cocinero },
 					TiposTareas.PrepararArticulos,
-					usuarioAsignarPreparacionBarra.NombreUsuario,
-					articulosPreparacionBarra,
-					Comando.NumeroMesa);
-
-				GestionTareas.Tareas.Add(nuevaTareaBarra);
-
-				await Task.Run(() =>
-				{
-					new Comando_EnviarTarea(nuevaTareaBarra).Enviar(usuarioAsignarPreparacionBarra.IP);
-				});
+					Comando.NumeroMesa,
+					articulosPreparacionBarra
+				);
 			}
 
 			// ===== //
@@ -763,27 +741,13 @@ namespace PFG.Gestor
 			
 			if(articulosPreparacionCocina.Any())
 			{
-				if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Cocinero))
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
-				else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
-				else
-					usuarioAsignarPreparacionCocina = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
-
-				var nuevaTareaCocina = new Tarea(
-					GestionTareas.NuevoIDTarea,
-					DateTime.Now,
+				EnviarGuardarNuevaTareaAsync
+				(
+					new Roles[] { Roles.Cocinero, Roles.Barista, Roles.Camarero },
 					TiposTareas.PrepararArticulos,
-					usuarioAsignarPreparacionCocina.NombreUsuario,
-					articulosPreparacionCocina,
-					Comando.NumeroMesa);
-
-				GestionTareas.Tareas.Add(nuevaTareaCocina);
-
-				await Task.Run(() =>
-				{
-					new Comando_EnviarTarea(nuevaTareaCocina).Enviar(usuarioAsignarPreparacionCocina.IP);
-				});
+					Comando.NumeroMesa,
+					articulosPreparacionCocina
+				);
 			}
 		}
 
@@ -837,7 +801,7 @@ namespace PFG.Gestor
 			.ToString();
 		}
 
-		private static async void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
+		private static void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
 		{
 			var tareaCompletada =
 				GestionTareas.Tareas
@@ -871,64 +835,32 @@ namespace PFG.Gestor
 				}
 				case TiposTareas.PrepararArticulos:
 				{
-					Usuario usuarioAsignarServirArticulos;
-
-					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
-					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
-						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
-					else
-						usuarioAsignarServirArticulos = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
-
-					var nuevaTareaServirArticulos = new Tarea(
-						GestionTareas.NuevoIDTarea,
-						DateTime.Now,
+					EnviarGuardarNuevaTareaAsync
+					(
+						new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero },
 						TiposTareas.ServirArticulos,
-						usuarioAsignarServirArticulos.NombreUsuario,
-						tareaCompletada.Articulos,
-						tareaCompletada.NumeroMesa);
-
-					GestionTareas.Tareas.Add(nuevaTareaServirArticulos);
-
-					await Task.Run(() =>
-					{
-						new Comando_EnviarTarea(nuevaTareaServirArticulos).Enviar(usuarioAsignarServirArticulos.IP);
-					});
+						tareaCompletada.NumeroMesa,
+						tareaCompletada.Articulos
+					);
 
 					break;
 				}
 			}
 		}
 
-		private static async void Procesar_CobrarMesa(Comando_CobrarMesa Comando)
+		private static void Procesar_CobrarMesa(Comando_CobrarMesa Comando)
 		{
 			GestionMesas.Mesas
 				.First(m => m.Numero == Comando.NumeroMesa)
 					.EstadoMesa = EstadosMesa.Sucia;
 
-			Usuario usuarioAsignarLimpiarMesa;
-
-			if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Camarero))
-				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Camarero);
-			else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == Roles.Barista))
-				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Barista);
-			else
-				usuarioAsignarLimpiarMesa = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(Roles.Cocinero);
-		
-			var nuevaTareaLimpiarMesa = new Tarea(
-				GestionTareas.NuevoIDTarea,
-				DateTime.Now,
+			EnviarGuardarNuevaTareaAsync
+			(
+				new Roles[] { Roles.Camarero, Roles.Barista, Roles.Cocinero },
 				TiposTareas.LimpiarMesa,
-				usuarioAsignarLimpiarMesa.NombreUsuario,
-				null,
-				Comando.NumeroMesa);
-
-			GestionTareas.Tareas.Add(nuevaTareaLimpiarMesa);
-
-			await Task.Run(() =>
-			{
-				new Comando_EnviarTarea(nuevaTareaLimpiarMesa).Enviar(usuarioAsignarLimpiarMesa.IP);
-			});
+				Comando.NumeroMesa,
+				null
+			);
 		}
 
 		private static async void Procesar_CambiarDisponibilidadArticulo(Comando_CambiarDisponibilidadArticulo Comando)
@@ -947,7 +879,8 @@ namespace PFG.Gestor
 			{
 				await Task.Run(() =>
 				{
-					new Comando_RefrescarDisponibilidadArticulos().Enviar(usuarioConectado.IP);
+					if(new Comando_RefrescarDisponibilidadArticulos().Enviar(usuarioConectado.IP) == null)
+						usuarioConectado.Conectado = false;
 				});
 			}
 			
@@ -957,5 +890,49 @@ namespace PFG.Gestor
 		//{
 		//	//
 		//}
+
+	// ============================================================================================== //
+
+        // Métodos Helper
+
+		private static async void EnviarGuardarNuevaTareaAsync(Roles[] PrioridadRoles, TiposTareas TipoTarea, byte NumeroMesa, Articulo[] Articulos = null)
+		{
+			await Task.Run(() =>
+			{
+				Usuario usuarioAsignar;
+				Tarea nuevaTarea;
+
+				bool tareaEnviada = false;
+
+				do
+				{
+					if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[0]))
+						usuarioAsignar = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[0]);
+					else if(GestionUsuarios.Usuarios.Any(u => u.Conectado && u.Rol == PrioridadRoles[1]))
+						usuarioAsignar = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[1]);
+					else
+						usuarioAsignar = Global.Get_UsuarioConectadoConMenosTareasPendientesYMenosTareasCompletadas(PrioridadRoles[2]);
+		
+					nuevaTarea = new Tarea(
+						GestionTareas.NuevoIDTarea,
+						DateTime.Now,
+						TipoTarea,
+						usuarioAsignar.NombreUsuario,
+						Articulos,
+						NumeroMesa);
+
+					tareaEnviada = null !=
+						new Comando_EnviarTarea(nuevaTarea).Enviar(usuarioAsignar.IP);
+
+					if(!tareaEnviada)
+						usuarioAsignar.Conectado = false;
+				}
+				while(!tareaEnviada);
+
+				GestionTareas.Tareas.Add(nuevaTarea);
+			});
+		}
+
+	// ============================================================================================== //
 	}
 }

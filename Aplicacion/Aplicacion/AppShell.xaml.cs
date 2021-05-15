@@ -37,8 +37,6 @@ namespace PFG.Aplicacion
 			Instancia.PantallaMesas.FlyoutItemIsVisible = mostrarOno;
 			Instancia.PantallaUsuarios.FlyoutItemIsVisible = mostrarOno;
 			Instancia.PantallaAjustes.FlyoutItemIsVisible = mostrarOno;
-
-			Instancia.PantallaDesarrollo.FlyoutItemIsVisible = Rol == Roles.Desarrollador;
 		}
 
 		private async void CerrarSesion(object sender, EventArgs e)

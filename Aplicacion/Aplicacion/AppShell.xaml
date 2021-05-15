@@ -45,10 +45,6 @@
         <ShellContent ContentTemplate="{DataTemplate pantallas:Ajustes}" />
     </FlyoutItem>
 
-    <FlyoutItem x:Name="PantallaDesarrollo" Title="=====  Desarrollo">
-        <ShellContent ContentTemplate="{DataTemplate pantallas:Desarrollo}" />
-    </FlyoutItem>
-    
     <MenuItem
         Text="=====  Cerrar sesión"
         Clicked="CerrarSesion" />

@@ -1,19 +1,27 @@
+
     Mejoras:
-        
-                                - Revisar responsabilidades de clase (Mesas/MoverMesa por ejemplo)
-                                - MINIMIZAR CÓDIGO REPETIDO !!!
-                                - Hacer lo popups super reutilizables
-                                - Mejorar los ifs de Gestor.Procesar_IniciarSesion
-                                - Dividir cosas de las clases Global
-                                - Revisar public/protected/private
-                                
-                                - Pedir tareas de otro (por desconexión) (reasignar al conectarse uno nuevo)
-                                - Re-repartir tareas al cerrar sesión y/o conectarse
-                                - Guardar tareas en memoria cada vez que se reciben por si se cierra sin querer
-                                - Ajuste para empezar jonada con todos los artículos disponibles o como se dejaron
-                                - Carta -> Modificar nombre categoría
-                                - Ajuste para acciones por rol o siempre todas
-                                    
-                                - Revisar mayúsculas/minúsculas
-                                - Custom value types? (IP...)
-                                - Notificaciones al recibir tareas
+
+    - Re-repartir tareas al cerrar sesión y/o conectarse
+    - Juntar las tareas de servir que van a la misma mesa
+    - Guardar tareas en memoria cada vez que
+      se reciben por si se cierra sin querer
+    - Preguntar a todos los conectados a ver si lo están
+      y repartir las tareas de los que no
+    - Carta -> Modificar nombre categoría
+    - Ajuste para empezar jonada con todos los
+      artículos disponibles o como se dejaron
+    - Ajuste para acciones por rol o siempre todas
+    - Quitar "Artículos:" de las tareas que no tienen
+    - Interfaz del flyoutmenu
+
+
+    - MINIMIZAR CÓDIGO REPETIDO !!!
+    - Dividir cosas de las clases Global
+    - Hacer lo popups super reutilizables
+    - Revisar responsabilidades de clase (Mesas/MoverMesa...)
+    - Revisar public/protected/private
+
+
+    - Revisar mayúsculas/minúsculas
+    - Custom value types? (IP...)
+    - Notificaciones al recibir tareas

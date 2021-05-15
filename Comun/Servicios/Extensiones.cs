@@ -9,7 +9,7 @@ namespace PFG.Comun
 {
 	public static class Extensiones
 	{
-		public static string  Enviar(this Comando comando, string IP)
+		public static string Enviar(this Comando comando, string IP)
 		{
 			return ControladorRed.Enviar(IP, comando.ToString());
 		}

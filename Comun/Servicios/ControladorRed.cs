@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
+using System.Diagnostics;
 
 namespace PFG.Comun
 {
@@ -11,6 +11,8 @@ namespace PFG.Comun
 	{
 		public const ushort PUERTO = 1600;
 		private const ushort MAX_BUFFER_SIZE = 10000;
+		// TODO - Ajustar esto
+		private const byte MAX_INTENTOS_CONEXION = 1; // ~ 6s/intento
 
 		public bool Recibiendo { get; private set; } = false;
 
@@ -22,9 +24,14 @@ namespace PFG.Comun
 		{
 			Socket socketDestino = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-			/*int sDeConexion =*/ Enviar_ConectarConDestino(socketDestino, IP);
+			if(!Enviar_ConectarConDestino(socketDestino, IP))
+				return null;
+
 			Enviar_EnviarMensaje(socketDestino, Mensaje);
-			string respuestaDelServidor = Enviar_RecibirRespuesta(socketDestino);
+
+			string respuestaDelServidor =
+				Enviar_RecibirRespuesta(socketDestino);
+
 			Enviar_CerrarSockets(socketDestino);
 
 			return respuestaDelServidor;
@@ -58,13 +65,13 @@ namespace PFG.Comun
 
 		#region Enviar (Funciones Privadas)
 
-		private static /*int*/ void Enviar_ConectarConDestino(Socket Destino, string IP)
+		private static bool Enviar_ConectarConDestino(Socket Destino, string IP)
 		{
-			// int sDeConexion = 0;
+			byte intentossDeConexion = 0;
 
-			while(!Destino.Connected)
+			while(!Destino.Connected && intentossDeConexion < MAX_INTENTOS_CONEXION)
 			{
-				// sDeConexion++;
+				intentossDeConexion++;
 
 				try
 				{
@@ -73,7 +80,7 @@ namespace PFG.Comun
 				catch(SocketException) { }
 			}
 
-			// return sDeConexion;
+			return Destino.Connected;
 		}
 
 		private static void Enviar_EnviarMensaje(Socket Destino, string Mensaje)
