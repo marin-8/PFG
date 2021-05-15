@@ -424,11 +424,6 @@ namespace PFG.Gestor
 				GestionTareas.Tareas
 					.Where(t => !t.Completada && t.NombreUsuario == Comando.Usuario);
 
-			var usuariosConectados =
-				GestionUsuarios.Usuarios
-					.Where(u => u.Conectado)
-					.ToArray();
-
 			foreach(var tarea in tareasARepartir)
 			{
 				Global.ReasignarEIntentarEnviarTarea(
@@ -906,7 +901,18 @@ namespace PFG.Gestor
 			bool correcto = true;
 			string mensaje = "";
 
+			// Detectar si el nuevo usuario es el mismo
+			// que el anterior, notificar al reasignante
+			// y no realizar el envío (ya que sería innecesario)
 
+			var tareaAReasignar =
+				GestionTareas.Tareas
+					.Where(t => t.ID == Comando.ID)
+					.First();
+
+			Global.ReasignarEIntentarEnviarTarea(
+					Comun.Global.TareasPrioridadesRoles[tareaAReasignar.TipoTarea].ToArray(),
+					tareaAReasignar);
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}

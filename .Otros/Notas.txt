@@ -1,7 +1,5 @@
 
     Mejoras:
-
-    - Re-repartir tareas al cerrar sesión y/o conectarse
     
     - Preguntar a todos los conectados a ver si lo están
       y repartir las tareas de los que no
