@@ -1,18 +1,17 @@
 
     Mejoras:
-    
-    - Preguntar a todos los conectados a ver si lo están
-      y repartir las tareas de los que no
       
     - Guardar tareas en memoria cada vez que
       se reciben por si se cierra sin querer
       
-            - Carta -> Modificar nombre categoría
-    
-            - Ajuste para empezar jonada con todos los
-              artículos disponibles o como se dejaron
+            - Ajustes varios
+                - empezar jonada con todos los
+                  artículos disponibles o como se dejaron
+                - Intervalo guardado automatico
+                - Intervalo comprobacion desconectados
+                - Intentos conexion gestor->app
       
-            - Ajuste para acciones por rol o siempre todas
+            - Carta -> Modificar nombre categoría
     
             - Interfaz del flyoutmenu
 

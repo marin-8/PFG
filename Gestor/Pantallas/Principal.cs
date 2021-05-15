@@ -40,9 +40,13 @@ namespace PFG.Gestor
 
 		private void Principal_Load(object sender, EventArgs e)
 		{
+			bool ultimoCierreCorrecto;
+
 			GestionUsuarios.Cargar();
 			GestionMesas.Cargar();
 			GestionArticulos.Cargar();
+			ultimoCierreCorrecto = GestionTareas.Cargar();
+			GestionTareas.ComenzarGuardadoAutomatico();
 
 			string servidorIP = Comun.Global.Get_MiIP_Windows();
 
@@ -51,6 +55,20 @@ namespace PFG.Gestor
 			ProcesadorGestor.EmpezarAComprobarConectados();
 
 			IPGestor.Text = servidorIP;
+
+			if(!ultimoCierreCorrecto)
+			{
+				ComenzarTerminarJornada.PerformClick();
+
+				MessageBox.Show
+				(
+					"La última vez que se cerró el Gestor no se hizo correctamente.\n\n" + 
+					"Se han cargado las tareas guardadas y se ha reanudado la jornada.",
+					"Alerta",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+				);
+			}
 		}
 
 	// ============================================================================================== //
@@ -63,7 +81,7 @@ namespace PFG.Gestor
 			{
 				CerrarTodasLasSesiones();
 				VaciarMesas();
-				EliminarTareasYResetearIDs();
+				GestionTareas.ResetearTareas();
 			}
 			else // Comenzar Jornada
 			{
@@ -127,12 +145,6 @@ namespace PFG.Gestor
 			GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia);
 		}
 
-		private static void EliminarTareasYResetearIDs()
-		{
-			GestionTareas.Tareas.Clear(); 
-			GestionTareas.ResetearIDs();
-		}
-
 		private static async void CerrarSesionAdmin()
 		{
 			var admin =
@@ -153,6 +165,8 @@ namespace PFG.Gestor
 			GestionUsuarios.Guardar();
 			GestionMesas.Guardar();
 			GestionArticulos.Guardar();
+			GestionTareas.PararGuardadoAutomatico();
+			GestionTareas.Guardar();
 		}
 
 		// ============================================================================================== //
