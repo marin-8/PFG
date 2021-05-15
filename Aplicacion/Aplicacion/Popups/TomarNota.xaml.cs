@@ -51,9 +51,12 @@ namespace PFG.Aplicacion
 			{
 				var popupSeleccionarMesa = new SeleccionarMesa();
 				await Navigation.PushPopupAsync(popupSeleccionarMesa);
-				var resultado = await popupSeleccionarMesa.Resultado;
 
-				if(resultado.Correcto)
+				#pragma warning disable IDE0042
+				var resultado = await popupSeleccionarMesa.Resultado;
+				#pragma warning restore IDE0042
+
+				if (resultado.Correcto)
 				{
 					var estadoMesaSeleccionada =
 						Global.Mesas

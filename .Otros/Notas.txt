@@ -2,13 +2,8 @@
         
                                 - Revisar responsabilidades de clase (Mesas/MoverMesa por ejemplo)
                                 - MINIMIZAR CÓDIGO REPETIDO !!!
-                                - Mejorar espacios de nombres
-                                - Eliminar el parámetro Comando de los métodos Procesar que no lo usen (Pedir)
-                                - Hacer lo popups super reutilizables    
-                                - Poner comentarios // ===== // en todas las clases grandes
+                                - Hacer lo popups super reutilizables
                                 - Mejorar los ifs de Gestor.Procesar_IniciarSesion
-                                - Quitar usings innecesarios
-                                - Cambiar de ResultadoIniciarSesion la enum por mensaje y meter un bool de correcto
                                 - Dividir cosas de las clases Global
                                 - Revisar public/protected/private
                                 
