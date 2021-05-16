@@ -37,6 +37,7 @@ namespace PFG.Comun
 		ModificarArticuloCategoria,
 		ModificarArticuloPrecio,
 		ModificarArticuloSitioDePreparacion,
+		ModificarCategoriaNombre,
 		EliminarArticulo,
 
 		EnviarTarea,

@@ -19,6 +19,11 @@
             Order="Primary"
             Priority="1"
             Clicked="Refrescar_Clicked"/>
+        <ToolbarItem
+            Text="Renombrar categoría"
+            Order="Secondary"
+            Priority="1"
+            Clicked="RenombrarCategoria_Clicked"/>
     </ContentPage.ToolbarItems>
 
     <StackLayout

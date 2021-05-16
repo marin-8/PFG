@@ -297,6 +297,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.ModificarCategoriaNombre:
+				{
+					Procesar_ModificarCategoriaNombre(
+						Comando.DeJson
+							<Comando_ModificarCategoriaNombre>
+								(ComandoJson));
+
+					break;
+				}
+
 				case TiposComando.EliminarArticulo:
 				{
 					Procesar_EliminarArticulo(
@@ -814,6 +824,19 @@ namespace PFG.Gestor
 				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.First()
 					.SitioPreparacionArticulo = Comando.NuevoSitioPreparacion;
+		}
+
+		private static void Procesar_ModificarCategoriaNombre(Comando_ModificarCategoriaNombre Comando)
+		{
+			var articulosDeEsaCategoria =
+				GestionArticulos.Articulos
+					.Where(a => a.Categoria == Comando.NombreActual)
+					.ToArray();
+
+			foreach(var articulo in articulosDeEsaCategoria)
+			{
+				articulo.Categoria = Comando.NuevoNombre;
+			}
 		}
 
 		private static void Procesar_EliminarArticulo(Comando_EliminarArticulo Comando)

@@ -135,6 +135,32 @@ namespace PFG.Aplicacion
 			await Global.Get_Articulos();
 		}
 
+		private async void RenombrarCategoria_Clicked(object sender, EventArgs e)
+		{
+			string nuevoNombreCategoria;
+
+			string[] categorias;
+
+			lock(Global.CategoriasLock)
+				categorias = Global.Categorias.Select(cl => ((GrupoArticuloCategoria)cl).Categoria).ToArray();
+
+			string categoriaSeleccionada = await UserDialogs.Instance.ActionSheetAsync($"Renombrar categoría", "Cancelar", null, null, categorias);
+			if(categoriaSeleccionada == "Cancelar") return;
+			
+			while(true)
+			{
+				nuevoNombreCategoria = await Global.PedirAlUsuarioStringCorrecto("Nuevo nombre para categoría", 100, true);
+				if(nuevoNombreCategoria == null) return;
+
+				if(categorias.Contains(nuevoNombreCategoria))
+					await UserDialogs.Instance.AlertAsync("Ya existe una Categoría con este nombre", "Alerta", "Aceptar");
+				else
+					break;
+			}
+
+			RenombrarCategoria(categoriaSeleccionada, nuevoNombreCategoria);
+		}
+
 	// ============================================================================================== //
 
 		// Eventos UI -> Contenido
@@ -346,6 +372,20 @@ namespace PFG.Aplicacion
 					.Cast<SitioPreparacionArticulo>()
 						.Select(s => s.ToString())
 						.ToArray();
+		}
+
+		public static async void RenombrarCategoria(string NombreActual, string NuevoNombre)
+		{
+			UserDialogs.Instance.ShowLoading("Cambiando nombre a categoría...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_ModificarCategoriaNombre(NombreActual, NuevoNombre).Enviar(Global.IPGestor);
+				return Comando.DeJson<Comando_ResultadoGenerico>(respuestaGestor);
+			});
+			Global.Procesar_ResultadoGenerico(comandoRespuesta, async () => await Global.Get_Articulos() );
+
+			UserDialogs.Instance.HideLoading();
 		}
 
 	// ============================================================================================== //
