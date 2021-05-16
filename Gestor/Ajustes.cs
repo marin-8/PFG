@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
@@ -25,13 +26,16 @@ namespace PFG.Gestor
 
 		public static void Guardar()
 		{
-			lock(GuardadoLock)
+			Task.Run(() =>
 			{
-				var ajustesGuardado = MapearClaseEstaticaAObjeto();
+				lock(GuardadoLock)
+				{
+					var ajustesGuardado = MapearClaseEstaticaAObjeto();
 
-				using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON);
-				new JsonSerializer().Serialize(archivo, ajustesGuardado);
-			}
+					using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON);
+					new JsonSerializer().Serialize(archivo, ajustesGuardado);
+				}
+			});
 		}
 
 		private class AjustesCargaGuardado

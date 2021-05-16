@@ -296,13 +296,11 @@ namespace PFG.Aplicacion
 
 		private static string[] RolesBaseToStringArray()
 		{
-			int i = 0;
 			var roles =
 				Enum.GetValues(typeof(Roles))
 					.Cast<Roles>()
-						.Where(r => (byte)r < (byte)Roles.Administrador)
-						.Select(r => $"{++i} - {r}")
-						.Reverse();
+						.Where(r => (byte)r > (byte)Roles.Administrador)
+						.Select(r => r.ToString());
 
 			return roles.ToArray();
 		}

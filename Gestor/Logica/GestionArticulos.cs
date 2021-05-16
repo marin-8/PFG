@@ -1,10 +1,7 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
@@ -28,11 +25,14 @@ namespace PFG.Gestor
 
 		public static void Guardar()
 		{
-			lock(GuardadoLock)
+			Task.Run(() =>
 			{
-				using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON_ARTICULOS);
-				new JsonSerializer().Serialize(archivo, Articulos);
-			}
+				lock(GuardadoLock)
+				{
+					using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON_ARTICULOS);
+					new JsonSerializer().Serialize(archivo, Articulos);
+				}
+			});
 		}
 	}
 }

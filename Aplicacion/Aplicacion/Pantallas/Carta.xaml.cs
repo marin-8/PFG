@@ -59,7 +59,7 @@ namespace PFG.Aplicacion
 					articulos = Global.Categorias.SelectMany(cl => cl).ToArray();
 
 				if(articulos.Any(a => a.Nombre == nombre))
-					await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
+					await UserDialogs.Instance.AlertAsync("Ya existe un artículo con este Nombre", "Alerta", "Aceptar");
 				else
 					{ nuevoArticulo.Nombre = nombre; break; }
 			}
@@ -203,7 +203,7 @@ namespace PFG.Aplicacion
 						articulos = Global.Categorias.SelectMany(cl => cl).ToArray();
 
 					if(articulos.Any(a => a.Nombre == nuevoNombre))
-						await UserDialogs.Instance.AlertAsync("Ya existe un usuario con este Nombre de Usuario", "Alerta", "Aceptar");
+						await UserDialogs.Instance.AlertAsync("Ya existe un artículo con este Nombre", "Alerta", "Aceptar");
 					else
 						break;
 				}

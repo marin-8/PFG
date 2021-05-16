@@ -512,7 +512,7 @@ namespace PFG.Gestor
 			return new Comando_MandarUsuarios
 			(
 				GestionUsuarios.Usuarios
-					.OrderByDescending(u => (byte)u.Rol)
+					.OrderBy(u => (byte)u.Rol)
 					.ThenBy(u => u.Nombre)
 					.ToArray()
 			)

@@ -17,18 +17,23 @@ namespace PFG.Aplicacion
 			InitializeComponent();
 		}
 
+		// TODO - CARGAR AJUSTES
+
 		private async void ComenzarJornadaConArticulosDisponibles_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
-
-			bool estaActivado = ((SwitchCell)sender).On;
-
-			await Task.Run(() =>
+			if(e.PropertyName == "On")
 			{
-				new Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles(estaActivado).Enviar(Global.IPGestor);
-			});
+				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
 
-			UserDialogs.Instance.HideLoading();
+				bool estaActivado = ((AiForms.Renderers.SwitchCell)sender).On;
+
+				await Task.Run(() =>
+				{
+					new Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles(estaActivado).Enviar(Global.IPGestor);
+				});
+
+				UserDialogs.Instance.HideLoading();
+			}
 		}
 	}
 }

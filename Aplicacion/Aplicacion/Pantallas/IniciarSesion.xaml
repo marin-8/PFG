@@ -38,7 +38,6 @@
 
         <Entry
             x:Name="Usuario"
-            Text="cam"
             Placeholder="Usuario"
             FontSize="22"
             TextColor="Black"
@@ -50,7 +49,6 @@
 
         <Entry
             x:Name="Contrasena"
-            Text="cam"
             Placeholder="Contraseña"
             FontSize="22"
             TextColor="Black"
