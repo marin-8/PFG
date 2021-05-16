@@ -51,15 +51,17 @@ namespace PFG.Aplicacion
 
 		public static async Task<string> PedirAlUsuarioStringCorrecto(string Titulo, int NumeroCaracteresMaximo, bool PermitirEspacios)
 		{
-			string stringCorrecto = null;
+			string stringCorrecto = "";
+			bool esCorrecto = false;
 
-			while(stringCorrecto == null)
+			while(!esCorrecto)
 			{
 				var configuracionPrompt = new PromptConfig
 				{
 					InputType = InputType.Name,
 					IsCancellable = true,
 					Message = Titulo,
+					Text=stringCorrecto,
 					MaxLength = NumeroCaracteresMaximo
 				};
 
@@ -70,12 +72,12 @@ namespace PFG.Aplicacion
 				stringCorrecto = resultado.Text;
 
 				if(stringCorrecto == "") {
-					await UserDialogs.Instance.AlertAsync("No puede estar vacío", "Alerta", "Aceptar"); stringCorrecto = null; continue; }
+					await UserDialogs.Instance.AlertAsync("No puede estar vacío", "Alerta", "Aceptar"); continue; }
 
 				string cp = Comun.Global.CARACTERES_PERMITIDOS_LOGIN;
 
 				if(!stringCorrecto.All(PermitirEspacios ? (cp+" ").Contains : cp.Contains)) {
-					await UserDialogs.Instance.AlertAsync($"Solo se pueden usar letras y números", "Alerta", "Aceptar"); stringCorrecto = null; continue; }
+					await UserDialogs.Instance.AlertAsync($"Solo se pueden usar letras y números", "Alerta", "Aceptar"); continue; }
 
 				return stringCorrecto;
 			}

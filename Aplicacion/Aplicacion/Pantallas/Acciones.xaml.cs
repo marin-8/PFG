@@ -26,14 +26,14 @@ namespace PFG.Aplicacion
 		{
 			InitializeComponent();
 
-			var accionesRolActual =
+			var accionesAMostrar =
 				Comun.Global.RolesAcciones
-					//.Where(ra => ra.Key == Global.UsuarioActual.Rol) // o esto
+					//.Where(ra => ra.Key == Global.UsuarioActual.Rol) // esto para filtrar acciones por rol
 					.Select(ra => ra.Value)
-					.Distinct();									   // o esto
+					.Distinct();									   // esto para todas
 
 			int row = 0;
-			foreach (var accion in accionesRolActual)
+			foreach (var accion in accionesAMostrar)
 			{
 				AccionesGrid.RowDefinitions.Add(new());
 
