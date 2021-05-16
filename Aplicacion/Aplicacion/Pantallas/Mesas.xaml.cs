@@ -93,7 +93,7 @@ namespace PFG.Aplicacion
 			}
 			else
 			{
-				var mesaSeleccionada = Global.Mesas.Where(condicionMesaSeleccionada).First();
+				var mesaSeleccionada = Global.Mesas.Where(condicionMesaSeleccionada).Single();
 
 				string opcion = await UserDialogs.Instance.ActionSheetAsync($"Mesa {mesaSeleccionada.Numero}", "Cancelar", null, null, OpcionesMesaExistente);
 				if(opcion == "Cancelar") return;
@@ -320,7 +320,7 @@ namespace PFG.Aplicacion
 					var mesaMapaGrid = (Button)
 							MapaGrid.Children
 								.Where(c => c.BindingContext.ToString() == $"{mesa.SitioX}.{mesa.SitioY}")
-								.First();
+								.Single();
 
 					mesaMapaGrid.Text = mesa.Numero.ToString();
 

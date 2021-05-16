@@ -89,7 +89,7 @@ namespace PFG.Aplicacion
 							MapaGrid.Children
 								.Where(c => ((Frame)c).Content.BindingContext.ToString() == $"{mesa.SitioX}.{mesa.SitioY}")
 								.Select(c => ((Frame)c).Content)
-								.First();
+								.Single();
 
 					mesaMapaGrid.Text = mesa.Numero.ToString();
 

@@ -167,7 +167,7 @@ namespace PFG.Gestor
 		{
 			var admin =
 				GestionUsuarios.Usuarios
-					.First(u => u.Rol == Roles.Administrador);
+					.Single(u => u.Rol == Roles.Administrador);
 
 			if(admin.Conectado)
 			{

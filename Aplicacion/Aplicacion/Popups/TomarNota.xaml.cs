@@ -60,7 +60,7 @@ namespace PFG.Aplicacion
 				{
 					var estadoMesaSeleccionada =
 						Global.Mesas
-							.First(m => m.Numero == resultado.NumeroMesaSeleccionada)
+							.Single(m => m.Numero == resultado.NumeroMesaSeleccionada)
 								.EstadoMesa;
 
 					if(estadoMesaSeleccionada == EstadosMesa.Sucia)
@@ -91,7 +91,7 @@ namespace PFG.Aplicacion
 					if(ArticulosSeleccionados.Any(articuloYaSeleccionado))
 					{
 						ArticulosSeleccionados
-							.First(articuloYaSeleccionado)
+							.Single(articuloYaSeleccionado)
 								.Unidades += 1;
 
 						// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
@@ -116,7 +116,7 @@ namespace PFG.Aplicacion
 
 			lock(ArticulosSeleccionadosLock)
 			{
-				var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
+				var articuloAModificar = ArticulosSeleccionados.Single(articuloYaSeleccionado);
 
 				if(articuloAModificar.Unidades == 1)
 					ArticulosSeleccionados.Remove(articuloAModificar);
@@ -139,7 +139,7 @@ namespace PFG.Aplicacion
 
 			lock(ArticulosSeleccionadosLock)
 			{
-				var articuloAModificar = ArticulosSeleccionados.First(articuloYaSeleccionado);
+				var articuloAModificar = ArticulosSeleccionados.Single(articuloYaSeleccionado);
 
 				if(articuloAModificar.Unidades < 255)
 				{

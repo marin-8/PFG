@@ -2,13 +2,3 @@
     Mejoras:
 
     - Cambiar First por Single
-    - MINIMIZAR CÓDIGO REPETIDO !!!
-    - Dividir cosas de las clases Global
-    - Hacer lo popups super reutilizables
-    - Revisar responsabilidades de clase (Mesas/MoverMesa...)
-    - Revisar public/protected/private
-
-
-    - Revisar mayúsculas/minúsculas
-    - Custom value types? (IP...)
-    - Notificaciones al recibir tareas

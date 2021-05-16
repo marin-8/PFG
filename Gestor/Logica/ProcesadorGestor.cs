@@ -451,7 +451,7 @@ namespace PFG.Gestor
 				GestionUsuarios.Usuarios
 					.Where(u => u.NombreUsuario == Comando.Usuario)
 					.Select(u => u)
-					.First();
+					.Single();
 			
 			if(usuario.Contrasena != Comando.Contrasena)
 			{
@@ -498,7 +498,7 @@ namespace PFG.Gestor
 			var usuario =
 				GestionUsuarios.Usuarios
 					.Where(u => u.NombreUsuario == Comando.Usuario)
-					.First();
+					.Single();
 
 			usuario.Conectado = false;
 
@@ -550,7 +550,7 @@ namespace PFG.Gestor
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario == Comando.Usuario)
-				.First()
+				.Single()
 					.Nombre = Comando.NuevoNombre;
 		}
 
@@ -558,7 +558,7 @@ namespace PFG.Gestor
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario == Comando.Usuario)
-				.First()
+				.Single()
 					.NombreUsuario = Comando.NuevoNombreUsuario;
 		}
 
@@ -566,7 +566,7 @@ namespace PFG.Gestor
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario == Comando.Usuario)
-				.First()
+				.Single()
 					.Contrasena = Comando.NuevaContrasena;
 		}
 
@@ -574,7 +574,7 @@ namespace PFG.Gestor
 		{
 			GestionUsuarios.Usuarios
 				.Where(u => u.NombreUsuario == Comando.Usuario)
-				.First()
+				.Single()
 					.Rol = Comando.NuevoRol;
 		}
 
@@ -586,7 +586,7 @@ namespace PFG.Gestor
 			var usuarioAEliminar =
 				GestionUsuarios.Usuarios
 					.Where(u => u.NombreUsuario == Comando.Usuario)
-					.First();
+					.Single();
 
 			if(usuarioAEliminar.Conectado)
 			{
@@ -717,7 +717,7 @@ namespace PFG.Gestor
 			{
 				GestionMesas.Mesas
 					.Where(m => m.Numero == Comando.NumeroMesa)
-					.First()
+					.Single()
 						.Numero = Comando.NuevoNumeroMesa;
 			}
 
@@ -731,11 +731,11 @@ namespace PFG.Gestor
 
 			bool consultaMesaEnSitioDestino(Mesa m) => m.SitioX == Comando.NuevoSitioX && m.SitioY == Comando.NuevoSitioY;
 
-			var mesaOrigen = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).First();
+			var mesaOrigen = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).Single();
 
 			if(GestionMesas.Mesas.Any(consultaMesaEnSitioDestino))
 			{
-				var mesaDestino = GestionMesas.Mesas.Where(consultaMesaEnSitioDestino).First();
+				var mesaDestino = GestionMesas.Mesas.Where(consultaMesaEnSitioDestino).Single();
 			
 				mesaDestino.SitioX = mesaOrigen.SitioX;
 				mesaDestino.SitioY = mesaOrigen.SitioY;
@@ -752,7 +752,7 @@ namespace PFG.Gestor
 			bool correcto = true;
 			string mensaje = "";
 
-			var mesaAEliminar = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).First();
+			var mesaAEliminar = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).Single();
 
 			if(mesaAEliminar.EstadoMesa == EstadosMesa.Vacia)
 			{
@@ -798,7 +798,7 @@ namespace PFG.Gestor
 		{
 			GestionArticulos.Articulos
 				.Where(a => a.Nombre == Comando.NombreActual)
-				.First()
+				.Single()
 					.Nombre = Comando.NombreNuevo;
 		}
 
@@ -806,7 +806,7 @@ namespace PFG.Gestor
 		{
 			GestionArticulos.Articulos
 				.Where(a => a.Nombre == Comando.NombreArticulo)
-				.First()
+				.Single()
 					.Categoria = Comando.NuevaCategoria;
 		}
 
@@ -814,7 +814,7 @@ namespace PFG.Gestor
 		{
 			GestionArticulos.Articulos
 				.Where(a => a.Nombre == Comando.NombreArticulo)
-				.First()
+				.Single()
 					.Precio = Comando.NuevoPrecio;
 		}
 
@@ -822,7 +822,7 @@ namespace PFG.Gestor
 		{
 			GestionArticulos.Articulos
 				.Where(a => a.Nombre == Comando.NombreArticulo)
-				.First()
+				.Single()
 					.SitioPreparacionArticulo = Comando.NuevoSitioPreparacion;
 		}
 
@@ -844,7 +844,7 @@ namespace PFG.Gestor
 			var articuloAEliminar =
 				GestionArticulos.Articulos
 					.Where(a => a.Nombre == Comando.NombreArticulo)
-					.First();
+					.Single();
 
 			GestionArticulos.Articulos.Remove(articuloAEliminar);
 		}		
@@ -852,7 +852,7 @@ namespace PFG.Gestor
 		private static void Procesar_TomarNota(Comando_TomarNota Comando)
 		{
 			GestionMesas.Mesas
-				.First(m => m.Numero == Comando.NumeroMesa)
+				.Single(m => m.Numero == Comando.NumeroMesa)
 					.EstadoMesa = EstadosMesa.Esperando;
 
 			// ===== //
@@ -944,7 +944,7 @@ namespace PFG.Gestor
 		{
 			var tareaCompletada =
 				GestionTareas.Tareas
-					.First(t => t.ID == Comando.ID);
+					.Single(t => t.ID == Comando.ID);
 
 			tareaCompletada.CompletarTarea();
 
@@ -962,7 +962,7 @@ namespace PFG.Gestor
 							   && t.NumeroMesa == tareaCompletada.NumeroMesa))
 					{
 						GestionMesas.Mesas
-							.First(m => m.Numero == tareaCompletada.NumeroMesa)
+							.Single(m => m.Numero == tareaCompletada.NumeroMesa)
 								.EstadoMesa = EstadosMesa.Ocupada;
 					}
 
@@ -971,7 +971,7 @@ namespace PFG.Gestor
 				case TiposTareas.LimpiarMesa:
 				{
 					GestionMesas.Mesas
-						.First(m => m.Numero == tareaCompletada.NumeroMesa)
+						.Single(m => m.Numero == tareaCompletada.NumeroMesa)
 							.EstadoMesa = EstadosMesa.Vacia;
 
 					break;
@@ -1006,7 +1006,7 @@ namespace PFG.Gestor
 			var tareaAReasignar =
 				GestionTareas.Tareas
 					.Where(t => t.ID == Comando.ID)
-					.First();
+					.Single();
 
 			Global.ReasignarEIntentarEnviarTarea(
 					Comun.Global.TareasPrioridadesRoles[tareaAReasignar.TipoTarea].ToArray(),
@@ -1018,7 +1018,7 @@ namespace PFG.Gestor
 		private static void Procesar_CobrarMesa(Comando_CobrarMesa Comando)
 		{
 			GestionMesas.Mesas
-				.First(m => m.Numero == Comando.NumeroMesa)
+				.Single(m => m.Numero == Comando.NumeroMesa)
 					.EstadoMesa = EstadosMesa.Sucia;
 
 			TiposTareas tipoTarea = TiposTareas.LimpiarMesa;
@@ -1036,7 +1036,7 @@ namespace PFG.Gestor
 		{
 			var articuloAModificar = 
 				GestionArticulos.Articulos
-					.First(a => a.Nombre == Comando.NombreArticulo);
+					.Single(a => a.Nombre == Comando.NombreArticulo);
 					
 			articuloAModificar.Disponible = !articuloAModificar.Disponible;
 

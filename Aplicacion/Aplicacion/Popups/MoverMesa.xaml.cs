@@ -110,7 +110,7 @@ namespace PFG.Aplicacion
 					var mesaMapaGrid = (Button)
 							MapaGrid.Children
 								.Where(c => c.BindingContext.ToString() == $"{mesa.SitioX}.{mesa.SitioY}")
-								.First();
+								.Single();
 
 					mesaMapaGrid.Text = mesa.Numero.ToString();
 

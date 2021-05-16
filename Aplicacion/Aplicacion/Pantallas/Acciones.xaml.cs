@@ -88,7 +88,7 @@ namespace PFG.Aplicacion
 						{
 							var estadoMesaSeleccionada =
 								Global.Mesas
-									.First(m => m.Numero == resultado.NumeroMesaSeleccionada)
+									.Single(m => m.Numero == resultado.NumeroMesaSeleccionada)
 										.EstadoMesa;
 
 							if(estadoMesaSeleccionada == EstadosMesa.Vacia)
