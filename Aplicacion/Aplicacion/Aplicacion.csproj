@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Otros\CabeceraFlyoutMenu.xaml.cs">
+      <DependentUpon>CabeceraFlyoutMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pantallas\ConsultarMesas.xaml.cs">
       <DependentUpon>ConsultarMesas.xaml</DependentUpon>
     </Compile>

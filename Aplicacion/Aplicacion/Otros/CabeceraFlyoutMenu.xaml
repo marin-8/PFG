@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+    
+<StackLayout
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PFG.Aplicacion.CabeceraFlyoutMenu"
+    
+    Padding="20"
+    Margin="0"
+    Background="LightSkyBlue">
+
+    <Label
+        Text="PFG"
+        TextColor="Black"
+        FontSize="96"
+        FontAttributes="Bold"
+        HorizontalTextAlignment="Center"
+        VerticalTextAlignment="Center"/>
+
+    <Label
+        Text="Daniel Marín"
+        TextColor="Black"
+        FontSize="32"
+        HorizontalTextAlignment="Center"
+        VerticalTextAlignment="Center"/>
+
+</StackLayout>

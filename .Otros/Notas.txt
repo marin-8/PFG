@@ -1,14 +1,5 @@
 
     Mejoras:
-      
-            - Ajustes varios
-                - Intervalo comprobacion desconectados
-                
-                - Intentos conexion gestor->app
-      
-            - Carta -> Modificar nombre categoría
-
-            - Interfaz del flyoutmenu
 
     - Cambiar First por Single
     - MINIMIZAR CÓDIGO REPETIDO !!!
