@@ -89,7 +89,8 @@ namespace PFG.Gestor
 						Procesar_IniciarSesion(
 							Comando.DeJson
 								<Comando_IniciarSesion>
-									(ComandoJson), IP);
+									(ComandoJson), IP)
+										.Result;
 
 					break;
 				}
@@ -420,7 +421,7 @@ namespace PFG.Gestor
 
         // Métodos Procesar
 
-		private static string Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
+		private static async Task<string> Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
 		{
 			ResultadosIniciarSesion resultado;
 			Usuario usuario = null;
@@ -474,6 +475,8 @@ namespace PFG.Gestor
 					{
 						tareaSinAsignar.Reasignar(usuario.NombreUsuario);
 					}
+
+					await Task.Run(() => Global.GuardarEstado());
 				}
 			}
 
@@ -914,13 +917,15 @@ namespace PFG.Gestor
 			.ToString();
 		}
 
-		private static void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
+		private static async void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
 		{
 			var tareaCompletada =
 				GestionTareas.Tareas
 					.First(t => t.ID == Comando.ID);
 
 			tareaCompletada.CompletarTarea();
+
+			await Task.Run(() => Global.GuardarEstado());
 
 			switch(tareaCompletada.TipoTarea)
 			{
@@ -1025,11 +1030,14 @@ namespace PFG.Gestor
 				});
 			}
 			
+			await Task.Run(() => Global.GuardarEstado());
 		}
 
 		private static void Procesar_ModificarAjusteComenzarJornadaConArticulosDisponibles(Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles Comando)
 		{
+			Ajustes.ComenzarJornadaConArticulosDisponibles = Comando.EstaActivado;
 
+			Ajustes.Guardar();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

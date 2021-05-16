@@ -1,6 +1,5 @@
 ﻿
 using System.IO;
-using System.Timers;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
@@ -11,8 +10,6 @@ namespace PFG.Gestor
 {
 	public static class GestionTareas
 	{
-		private const double INTERVALO_GUARDADO_AUTOMATICO = 1000 * 10; // 10 segundos
-
 		const string RUTA_ARCHIVO_JSON = @".\Guardado\Tareas.json";
 
 		private static uint _nuevoIDTarea;
@@ -21,9 +18,6 @@ namespace PFG.Gestor
 			get => _nuevoIDTarea++;
 			private set { _nuevoIDTarea = value; }
 		}
-
-		private static bool TimerInicializado = false;
-		private static readonly Timer Timer = new(INTERVALO_GUARDADO_AUTOMATICO);
 
 		public static List<Tarea> Tareas { get; private set; } = new();
 
@@ -51,29 +45,6 @@ namespace PFG.Gestor
 		{
 			using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON);
 			new JsonSerializer().Serialize(archivo, Tareas);
-		}
-
-		public static void ComenzarGuardadoAutomatico()
-		{
-			if(!TimerInicializado)
-			{
-				Timer.Elapsed += GuardadoAutomatico;
-				Timer.AutoReset = true;
-
-				TimerInicializado = true;
-			}
-
-			Timer.Enabled = true;
-		}
-
-		private static void GuardadoAutomatico(object source, ElapsedEventArgs e)
-		{
-			Guardar();
-		}
-
-		public static void PararGuardadoAutomatico()
-		{
-			Timer.Enabled = false;
 		}
 	}
 }

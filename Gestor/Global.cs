@@ -60,10 +60,12 @@ namespace PFG.Gestor
 					}
 				}
 				while(!tareaEnviadaONull);
+
+				GuardarEstado();
 			});
 		}
 
-		public static async void EnviarGuardarNuevaTareaAsync(Roles[] PrioridadRoles, TiposTareas TipoTarea, byte NumeroMesa, Articulo[] Articulos = null, bool Guardar = true)
+		public static async void EnviarGuardarNuevaTareaAsync(Roles[] PrioridadRoles, TiposTareas TipoTarea, byte NumeroMesa, Articulo[] Articulos = null)
 		{
 			await Task.Run(() =>
 			{
@@ -93,8 +95,9 @@ namespace PFG.Gestor
 				}
 				while(!tareaEnviada);
 
-				if(Guardar)
-					GestionTareas.Tareas.Add(nuevaTarea);
+				GestionTareas.Tareas.Add(nuevaTarea);
+
+				GuardarEstado();
 			});
 		}
 
@@ -107,6 +110,13 @@ namespace PFG.Gestor
 			}
 
 			return null;				
+		}
+
+		public static void GuardarEstado()
+		{
+			GestionMesas.Guardar();
+			GestionArticulos.Guardar();
+			GestionTareas.Guardar();
 		}
 	}
 }

@@ -2,9 +2,6 @@
     Mejoras:
       
             - Ajustes varios
-                - empezar jonada con todos los
-                  artículos disponibles o como se dejaron
-                - Intervalo guardado automatico
                 - Intervalo comprobacion desconectados
                 
                 - Intentos conexion gestor->app

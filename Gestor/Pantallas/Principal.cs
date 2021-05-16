@@ -29,6 +29,8 @@ namespace PFG.Gestor
 
 		private ControladorRed Servidor;
 
+		private bool UltimoCierreCorrecto = true;
+
 	// ============================================================================================== //
 
 		// Inicialización
@@ -40,13 +42,11 @@ namespace PFG.Gestor
 
 		private void Principal_Load(object sender, EventArgs e)
 		{
-			bool ultimoCierreCorrecto;
-
+			Ajustes.Cargar();
 			GestionUsuarios.Cargar();
 			GestionMesas.Cargar();
 			GestionArticulos.Cargar();
-			ultimoCierreCorrecto = GestionTareas.Cargar();
-			GestionTareas.ComenzarGuardadoAutomatico();
+			UltimoCierreCorrecto = GestionTareas.Cargar();
 
 			string servidorIP = Comun.Global.Get_MiIP_Windows();
 
@@ -56,7 +56,7 @@ namespace PFG.Gestor
 
 			IPGestor.Text = servidorIP;
 
-			if(!ultimoCierreCorrecto)
+			if(!UltimoCierreCorrecto)
 			{
 				ComenzarTerminarJornada.PerformClick();
 
@@ -71,6 +71,12 @@ namespace PFG.Gestor
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
+			}
+			else
+			{
+				if(Ajustes.ComenzarJornadaConArticulosDisponibles)
+					foreach(var articulo in GestionArticulos.Articulos)
+						articulo.Disponible = true;
 			}
 		}
 
@@ -88,7 +94,16 @@ namespace PFG.Gestor
 			}
 			else // Comenzar Jornada
 			{
-				// (?)
+				if(UltimoCierreCorrecto)
+				{
+					if(Ajustes.ComenzarJornadaConArticulosDisponibles)
+						foreach(var articulo in GestionArticulos.Articulos)
+							articulo.Disponible = true;
+				}
+				else
+				{
+					UltimoCierreCorrecto = true;
+				}
 			}
 
 			Global.JornadaEnCurso = !Global.JornadaEnCurso;
@@ -166,10 +181,10 @@ namespace PFG.Gestor
 		private static void GuardarDatos()
 		{
 			GestionUsuarios.Guardar();
-			GestionMesas.Guardar();
-			GestionArticulos.Guardar();
-			GestionTareas.PararGuardadoAutomatico();
-			GestionTareas.Guardar();
+			
+			Global.GuardarEstado();
+
+			Ajustes.Guardar();
 		}
 
 		// ============================================================================================== //

@@ -33,8 +33,6 @@ namespace PFG.Gestor
 
 			string mesasJsonString = File.ReadAllText(RUTA_ARCHIVO_JSON_MESAS);
 			Mesas = JsonConvert.DeserializeObject<List<Mesa>>(mesasJsonString);
-
-			Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia);
 		}
 
 		public static void Guardar()
