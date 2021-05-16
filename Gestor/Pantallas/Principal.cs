@@ -181,8 +181,8 @@ namespace PFG.Gestor
 		private static void GuardarDatos()
 		{
 			GestionUsuarios.Guardar();
-			
-			Global.GuardarEstado();
+			GestionMesas.Guardar();
+			GestionArticulos.Guardar();
 
 			Ajustes.Guardar();
 		}

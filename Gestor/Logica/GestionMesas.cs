@@ -20,6 +20,8 @@ namespace PFG.Gestor
 		const string RUTA_ARCHIVO_JSON_MESAS_GRID = @".\Guardado\MesasGrid.json";
 		const string RUTA_ARCHIVO_JSON_MESAS = @".\Guardado\Mesas.json";
 
+		private static readonly object GuardadoLock = new();
+
 		private static byte[] _dimensionesGrid;
 		public static byte AnchoGrid { get => _dimensionesGrid[0]; set => _dimensionesGrid[0] = value; }
 		public static byte AltoGrid { get => _dimensionesGrid[1]; set => _dimensionesGrid[1] = value; }
@@ -37,11 +39,14 @@ namespace PFG.Gestor
 
 		public static void Guardar()
 		{
-			using StreamWriter archivo1 = File.CreateText(RUTA_ARCHIVO_JSON_MESAS_GRID);
-			new JsonSerializer().Serialize(archivo1, _dimensionesGrid);
+			lock(GuardadoLock)
+			{
+				using StreamWriter archivo1 = File.CreateText(RUTA_ARCHIVO_JSON_MESAS_GRID);
+				new JsonSerializer().Serialize(archivo1, _dimensionesGrid);
 
-			using StreamWriter archivo2 = File.CreateText(RUTA_ARCHIVO_JSON_MESAS);
-			new JsonSerializer().Serialize(archivo2, Mesas);
+				using StreamWriter archivo2 = File.CreateText(RUTA_ARCHIVO_JSON_MESAS);
+				new JsonSerializer().Serialize(archivo2, Mesas);
+			}
 		}
 	}
 }

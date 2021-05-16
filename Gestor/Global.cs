@@ -60,8 +60,6 @@ namespace PFG.Gestor
 					}
 				}
 				while(!tareaEnviadaONull);
-
-				GuardarEstado();
 			});
 		}
 
@@ -96,8 +94,6 @@ namespace PFG.Gestor
 				while(!tareaEnviada);
 
 				GestionTareas.Tareas.Add(nuevaTarea);
-
-				GuardarEstado();
 			});
 		}
 
@@ -110,13 +106,6 @@ namespace PFG.Gestor
 			}
 
 			return null;				
-		}
-
-		public static void GuardarEstado()
-		{
-			GestionMesas.Guardar();
-			GestionArticulos.Guardar();
-			GestionTareas.Guardar();
 		}
 	}
 }

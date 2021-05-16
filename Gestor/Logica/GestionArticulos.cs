@@ -16,6 +16,8 @@ namespace PFG.Gestor
 	{
 		const string RUTA_ARCHIVO_JSON_ARTICULOS = @".\Guardado\Articulos.json";
 
+		private static readonly object GuardadoLock = new();
+
 		public static List<Articulo> Articulos { get; private set; } = new();
 
 		public static void Cargar()
@@ -26,8 +28,11 @@ namespace PFG.Gestor
 
 		public static void Guardar()
 		{
-			using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON_ARTICULOS);
-			new JsonSerializer().Serialize(archivo, Articulos);
+			lock(GuardadoLock)
+			{
+				using StreamWriter archivo = File.CreateText(RUTA_ARCHIVO_JSON_ARTICULOS);
+				new JsonSerializer().Serialize(archivo, Articulos);
+			}
 		}
 	}
 }

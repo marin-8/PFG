@@ -89,8 +89,7 @@ namespace PFG.Gestor
 						Procesar_IniciarSesion(
 							Comando.DeJson
 								<Comando_IniciarSesion>
-									(ComandoJson), IP)
-										.Result;
+									(ComandoJson), IP);
 
 					break;
 				}
@@ -115,11 +114,10 @@ namespace PFG.Gestor
 
 				case TiposComando.CrearUsuario:
 				{
-					comandoRespuesta =
-						Procesar_CrearUsuario(
-							Comando.DeJson
-								<Comando_CrearUsuario>
-									(ComandoJson));
+					Procesar_CrearUsuario(
+						Comando.DeJson
+							<Comando_CrearUsuario>
+								(ComandoJson));
 
 					break;
 				}
@@ -196,44 +194,40 @@ namespace PFG.Gestor
 
 				case TiposComando.CrearMesa:
 				{
-					comandoRespuesta =
-						Procesar_CrearMesa(
-							Comando.DeJson
-								<Comando_CrearMesa>
-									(ComandoJson));
+					Procesar_CrearMesa(
+						Comando.DeJson
+							<Comando_CrearMesa>
+								(ComandoJson));
 
 					break;
 				}
 
 				case TiposComando.ModificarMesaNumero:
 				{
-					comandoRespuesta =
-						Procesar_ModificarMesaNumero(
-							Comando.DeJson
-								<Comando_ModificarMesaNumero>
-									(ComandoJson));
+					Procesar_ModificarMesaNumero(
+						Comando.DeJson
+							<Comando_ModificarMesaNumero>
+								(ComandoJson));
 
 					break;
 				}
 
 				case TiposComando.ModificarMesaSitio:
 				{
-					comandoRespuesta =
-						Procesar_ModificarMesaSitio(
-							Comando.DeJson
-								<Comando_ModificarMesaSitio>
-									(ComandoJson));
+					Procesar_ModificarMesaSitio(
+						Comando.DeJson
+							<Comando_ModificarMesaSitio>
+								(ComandoJson));
 
 					break;
 				}
 
 				case TiposComando.EliminarMesa:
 				{
-					comandoRespuesta =
-						Procesar_EliminarMesa(
-							Comando.DeJson
-								<Comando_EliminarMesa>
-									(ComandoJson));
+					Procesar_EliminarMesa(
+						Comando.DeJson
+							<Comando_EliminarMesa>
+								(ComandoJson));
 
 					break;
 				}
@@ -248,11 +242,10 @@ namespace PFG.Gestor
 
 				case TiposComando.CrearArticulo:
 				{
-					comandoRespuesta =
-						Procesar_CrearArticulo(
-							Comando.DeJson
-								<Comando_CrearArticulo>
-									(ComandoJson));
+					Procesar_CrearArticulo(
+						Comando.DeJson
+							<Comando_CrearArticulo>
+								(ComandoJson));
 
 					break;
 				}
@@ -431,7 +424,7 @@ namespace PFG.Gestor
 
         // Métodos Procesar
 
-		private static async Task<string> Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
+		private static string Procesar_IniciarSesion(Comando_IniciarSesion Comando, string IP)
 		{
 			ResultadosIniciarSesion resultado;
 			Usuario usuario = null;
@@ -485,8 +478,6 @@ namespace PFG.Gestor
 					{
 						tareaSinAsignar.Reasignar(usuario.NombreUsuario);
 					}
-
-					await Task.Run(() => Global.GuardarEstado());
 				}
 			}
 
@@ -528,22 +519,11 @@ namespace PFG.Gestor
 			.ToString();
 		}
 
-		private static string Procesar_CrearUsuario(Comando_CrearUsuario Comando)
+		private static void Procesar_CrearUsuario(Comando_CrearUsuario Comando)
 		{
-			bool correcto = true;
-			string mensaje = "";
+			GestionUsuarios.Usuarios.Add(Comando.NuevoUsuario);
 
-			if(GestionUsuarios.Usuarios.Select(u => u.NombreUsuario).Contains(Comando.NuevoUsuario.NombreUsuario))
-			{
-				correcto = false;
-				mensaje = "Alguien ha creado un usuario con el mismo Nombre de Usuario antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo";
-			}
-			else
-			{
-				GestionUsuarios.Usuarios.Add(Comando.NuevoUsuario);
-			}
-
-			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+			GestionUsuarios.Guardar();
 		}
 
 		private static void Procesar_ModificarUsuarioNombre(Comando_ModificarUsuarioNombre Comando)
@@ -552,6 +532,8 @@ namespace PFG.Gestor
 				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.Single()
 					.Nombre = Comando.NuevoNombre;
+
+			GestionUsuarios.Guardar();
 		}
 
 		private static void Procesar_ModificarUsuarioNombreUsuario(Comando_ModificarUsuarioNombreUsuario Comando)
@@ -560,6 +542,8 @@ namespace PFG.Gestor
 				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.Single()
 					.NombreUsuario = Comando.NuevoNombreUsuario;
+
+			GestionUsuarios.Guardar();
 		}
 
 		private static void Procesar_ModificarUsuarioContrasena(Comando_ModificarUsuarioContrasena Comando)
@@ -568,6 +552,8 @@ namespace PFG.Gestor
 				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.Single()
 					.Contrasena = Comando.NuevaContrasena;
+
+			GestionUsuarios.Guardar();
 		}
 
 		private static void Procesar_ModificarUsuarioRol(Comando_ModificarUsuarioRol Comando)
@@ -576,6 +562,8 @@ namespace PFG.Gestor
 				.Where(u => u.NombreUsuario == Comando.Usuario)
 				.Single()
 					.Rol = Comando.NuevoRol;
+
+			GestionUsuarios.Guardar();
 		}
 
 		private static string Procesar_EliminarUsuario(Comando_EliminarUsuario Comando)
@@ -596,6 +584,8 @@ namespace PFG.Gestor
 			else
 			{
 				GestionUsuarios.Usuarios.Remove(usuarioAEliminar);
+
+				GestionUsuarios.Guardar();
 			}
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
@@ -675,60 +665,30 @@ namespace PFG.Gestor
 				}
 			}
 
-			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
-		}
-
-		private static string Procesar_CrearMesa(Comando_CrearMesa Comando)
-		{
-			bool correcto = true;
-			string mensaje = "";
-
-			var nuevaMesa = Comando.NuevaMesa;
-
-			if(GestionMesas.Mesas.Any(m => m.Numero == nuevaMesa.Numero))
-			{
-				correcto = false;
-				mensaje = "Alguien ha creado una mesa con el mismo Número antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya";
-			}
-			else if(GestionMesas.Mesas.Any(m => m.SitioX == nuevaMesa.SitioX && m.SitioY == nuevaMesa.SitioY))
-			{
-				correcto = false;
-				mensaje = "Alguien ha creado una mesa en el mismo Sitio antes de que se haya introducido la que has creado, por lo que no se ha añadido la tuya";
-			}
-			else
-			{
-				GestionMesas.Mesas.Add(nuevaMesa);
-			}
+			if(correcto) GestionMesas.Guardar();
 
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
-		private static string Procesar_ModificarMesaNumero(Comando_ModificarMesaNumero Comando)
+		private static void Procesar_CrearMesa(Comando_CrearMesa Comando)
 		{
-			bool correcto = true;
-			string mensaje = "";
+			GestionMesas.Mesas.Add(Comando.NuevaMesa);
 
-			if(GestionMesas.Mesas.Any(m => m.Numero == Comando.NuevoNumeroMesa))
-			{
-				correcto = false;
-				mensaje = "Alguien ha creado una mesa con el mismo Número antes de que se haya cambiado el número de la tuya, por lo que no se ha modificado";
-			}
-			else
-			{
-				GestionMesas.Mesas
-					.Where(m => m.Numero == Comando.NumeroMesa)
-					.Single()
-						.Numero = Comando.NuevoNumeroMesa;
-			}
-
-			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+			GestionMesas.Guardar();
 		}
 
-		private static string Procesar_ModificarMesaSitio(Comando_ModificarMesaSitio Comando)
+		private static void Procesar_ModificarMesaNumero(Comando_ModificarMesaNumero Comando)
 		{
-			bool correcto = true;
-			string mensaje = "";
+			GestionMesas.Mesas
+				.Where(m => m.Numero == Comando.NumeroMesa)
+				.Single()
+					.Numero = Comando.NuevoNumeroMesa;
 
+			GestionMesas.Guardar();
+		}
+
+		private static void Procesar_ModificarMesaSitio(Comando_ModificarMesaSitio Comando)
+		{
 			bool consultaMesaEnSitioDestino(Mesa m) => m.SitioX == Comando.NuevoSitioX && m.SitioY == Comando.NuevoSitioY;
 
 			var mesaOrigen = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).Single();
@@ -744,27 +704,16 @@ namespace PFG.Gestor
 			mesaOrigen.SitioX = Comando.NuevoSitioX;
 			mesaOrigen.SitioY = Comando.NuevoSitioY;
 
-			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+			GestionMesas.Guardar();
 		}
 
-		private static string Procesar_EliminarMesa(Comando_EliminarMesa Comando)
+		private static void Procesar_EliminarMesa(Comando_EliminarMesa Comando)
 		{
-			bool correcto = true;
-			string mensaje = "";
-
 			var mesaAEliminar = GestionMesas.Mesas.Where(m => m.Numero == Comando.NumeroMesa).Single();
 
-			if(mesaAEliminar.EstadoMesa == EstadosMesa.Vacia)
-			{
-				GestionMesas.Mesas.Remove(mesaAEliminar);
-			}
-			else
-			{
-				correcto = false;
-				mensaje = "Solo se puede eliminar una mesa si está vacía y limpia";
-			}			
+			GestionMesas.Mesas.Remove(mesaAEliminar);
 
-			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+			GestionMesas.Guardar();			
 		}
 
 		private static string Procesar_PedirArticulos()
@@ -776,22 +725,11 @@ namespace PFG.Gestor
 			.ToString();
 		}
 
-		private static string Procesar_CrearArticulo(Comando_CrearArticulo Comando)
+		private static void Procesar_CrearArticulo(Comando_CrearArticulo Comando)
 		{
-			bool correcto = true;
-			string mensaje = "";
+			GestionArticulos.Articulos.Add(Comando.NuevoArticulo);
 
-			if(GestionArticulos.Articulos.Select(a => a.Nombre).Contains(Comando.NuevoArticulo.Nombre))
-			{
-				correcto = false;
-				mensaje = "Alguien ha creado un artículo con el mismo Nombre antes de que se haya introducido el que has creado, por lo que no se ha añadido el tuyo";
-			}
-			else
-			{
-				GestionArticulos.Articulos.Add(Comando.NuevoArticulo);
-			}
-
-			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_ModificarArticuloNombre(Comando_ModificarArticuloNombre Comando)
@@ -800,6 +738,8 @@ namespace PFG.Gestor
 				.Where(a => a.Nombre == Comando.NombreActual)
 				.Single()
 					.Nombre = Comando.NombreNuevo;
+
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_ModificarArticuloCategoria(Comando_ModificarArticuloCategoria Comando)
@@ -808,6 +748,8 @@ namespace PFG.Gestor
 				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.Single()
 					.Categoria = Comando.NuevaCategoria;
+
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_ModificarArticuloPrecio(Comando_ModificarArticuloPrecio Comando)
@@ -816,6 +758,8 @@ namespace PFG.Gestor
 				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.Single()
 					.Precio = Comando.NuevoPrecio;
+
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_ModificarArticuloSitioDePreparacion(Comando_ModificarArticuloSitioDePreparacion Comando)
@@ -824,6 +768,8 @@ namespace PFG.Gestor
 				.Where(a => a.Nombre == Comando.NombreArticulo)
 				.Single()
 					.SitioPreparacionArticulo = Comando.NuevoSitioPreparacion;
+
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_ModificarCategoriaNombre(Comando_ModificarCategoriaNombre Comando)
@@ -837,6 +783,8 @@ namespace PFG.Gestor
 			{
 				articulo.Categoria = Comando.NuevoNombre;
 			}
+
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_EliminarArticulo(Comando_EliminarArticulo Comando)
@@ -847,6 +795,8 @@ namespace PFG.Gestor
 					.Single();
 
 			GestionArticulos.Articulos.Remove(articuloAEliminar);
+
+			GestionArticulos.Guardar();
 		}		
 
 		private static void Procesar_TomarNota(Comando_TomarNota Comando)
@@ -888,6 +838,11 @@ namespace PFG.Gestor
 					articulosPreparacionCocina
 				);
 			}
+
+			// ===== //
+
+			GestionMesas.Guardar();
+			GestionTareas.Guardar();
 		}
 
 		private static string Procesar_PedirTareas(Comando_PedirTareas Comando)
@@ -940,15 +895,13 @@ namespace PFG.Gestor
 			.ToString();
 		}
 
-		private static async void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
+		private static void Procesar_TareaCompletada(Comando_TareaCompletada Comando)
 		{
 			var tareaCompletada =
 				GestionTareas.Tareas
 					.Single(t => t.ID == Comando.ID);
 
 			tareaCompletada.CompletarTarea();
-
-			await Task.Run(() => Global.GuardarEstado());
 
 			switch(tareaCompletada.TipoTarea)
 			{
@@ -992,6 +945,9 @@ namespace PFG.Gestor
 					break;
 				}
 			}
+
+			GestionMesas.Guardar();
+			GestionTareas.Guardar();
 		}
 
 		private static string Procesar_ReasignarTarea(Comando_ReasignarTarea Comando)
@@ -1012,6 +968,8 @@ namespace PFG.Gestor
 					Comun.Global.TareasPrioridadesRoles[tareaAReasignar.TipoTarea].ToArray(),
 					tareaAReasignar);
 
+			GestionTareas.Guardar();
+
 			return new Comando_ResultadoGenerico(correcto, mensaje).ToString();
 		}
 
@@ -1030,6 +988,9 @@ namespace PFG.Gestor
 				Comando.NumeroMesa,
 				null
 			);
+
+			GestionMesas.Guardar();
+			GestionTareas.Guardar();
 		}
 
 		private static async void Procesar_CambiarDisponibilidadArticulo(Comando_CambiarDisponibilidadArticulo Comando)
@@ -1052,8 +1013,8 @@ namespace PFG.Gestor
 						usuarioConectado.Conectado = false;
 				});
 			}
-			
-			await Task.Run(() => Global.GuardarEstado());
+
+			GestionArticulos.Guardar();
 		}
 
 		private static void Procesar_ModificarAjusteComenzarJornadaConArticulosDisponibles(Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles Comando)
