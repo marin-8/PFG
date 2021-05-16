@@ -17,8 +17,8 @@ namespace PFG.Gestor
 		public const byte MINIMO_COLUMNAS = 1;
 		public const byte MINIMO_FILAS = 1;
 
-		const string RUTA_ARCHIVO_JSON_MESAS_GRID = @".\Archivos\MesasGrid.json";
-		const string RUTA_ARCHIVO_JSON_MESAS = @".\Archivos\Mesas.json";
+		const string RUTA_ARCHIVO_JSON_MESAS_GRID = @".\Guardado\MesasGrid.json";
+		const string RUTA_ARCHIVO_JSON_MESAS = @".\Guardado\Mesas.json";
 
 		private static byte[] _dimensionesGrid;
 		public static byte AnchoGrid { get => _dimensionesGrid[0]; set => _dimensionesGrid[0] = value; }

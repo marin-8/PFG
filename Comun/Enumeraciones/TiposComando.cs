@@ -52,5 +52,7 @@ namespace PFG.Comun
 
 		PedirTicketMesa,
 		MandarTicketMesa,
+
+		ModificarAjusteComenzarJornadaConArticulosDisponibles
 	}
 }

@@ -114,15 +114,9 @@ namespace PFG.Aplicacion
 
 			string[] opcionesUsuario;
 
-			// Si el pulsado es el mismo que el actual => todo menos eliminar
-			if(usuarioPulsado.NombreUsuario == Global.UsuarioActual.NombreUsuario) {
-				opcionesUsuario = new string[4];
-				Array.Copy(OpcionesUsuario, opcionesUsuario, 4); }
-
 			// Si el pulsado es el Admin => solo cambiar contraseña
-			else if(usuarioPulsado.Rol == Roles.Administrador)
+			if(usuarioPulsado.Rol == Roles.Administrador)
 				opcionesUsuario = new string[] { OpcionesUsuario[2] };
-			
 			else
 				opcionesUsuario = OpcionesUsuario;
 

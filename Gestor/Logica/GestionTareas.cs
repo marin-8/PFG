@@ -13,7 +13,7 @@ namespace PFG.Gestor
 	{
 		private const double INTERVALO_GUARDADO_AUTOMATICO = 1000 * 10; // 10 segundos
 
-		const string RUTA_ARCHIVO_JSON = @".\Archivos\Tareas.json";
+		const string RUTA_ARCHIVO_JSON = @".\Guardado\Tareas.json";
 
 		private static uint _nuevoIDTarea;
 		public static uint NuevoIDTarea

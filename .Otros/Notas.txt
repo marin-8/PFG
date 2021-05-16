@@ -6,12 +6,14 @@
                   artículos disponibles o como se dejaron
                 - Intervalo guardado automatico
                 - Intervalo comprobacion desconectados
+                
                 - Intentos conexion gestor->app
       
             - Carta -> Modificar nombre categoría
 
             - Interfaz del flyoutmenu
 
+    - Cambiar First por Single
     - MINIMIZAR CÓDIGO REPETIDO !!!
     - Dividir cosas de las clases Global
     - Hacer lo popups super reutilizables

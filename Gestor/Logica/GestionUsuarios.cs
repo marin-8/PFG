@@ -14,7 +14,7 @@ namespace PFG.Gestor
 {
 	public static class GestionUsuarios
 	{
-		const string RUTA_ARCHIVO_JSON = @".\Archivos\Usuarios.json";
+		const string RUTA_ARCHIVO_JSON = @".\Guardado\Usuarios.json";
 
 		public static List<Usuario> Usuarios { get; private set; } = new();
 

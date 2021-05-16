@@ -379,6 +379,16 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.ModificarAjusteComenzarJornadaConArticulosDisponibles:
+				{
+					Procesar_ModificarAjusteComenzarJornadaConArticulosDisponibles(
+						Comando.DeJson
+							<Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles>
+								(ComandoJson));
+
+					break;
+				}
+
 				//case TiposComando.XXXXX:
 				//{
 				//	comandoRespuesta =
@@ -1015,6 +1025,11 @@ namespace PFG.Gestor
 				});
 			}
 			
+		}
+
+		private static void Procesar_ModificarAjusteComenzarJornadaConArticulosDisponibles(Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles Comando)
+		{
+
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

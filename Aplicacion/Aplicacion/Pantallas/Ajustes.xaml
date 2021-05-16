@@ -4,41 +4,32 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="PFG.Aplicacion.Ajustes"
+    xmlns:sv="clr-namespace:AiForms.Renderers;assembly=SettingsView"
     
     Title="Ajustes">
 
-    <Grid
-        ColumnSpacing="0"
-        RowSpacing="0">
+    <sv:SettingsView
+        HasUnevenRows="true"
+        HeaderFontSize="22"
+        HeaderTextColor="Black"
+        HeaderFontAttributes="Bold"
+        HeaderBackgroundColor="Silver">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+        <sv:Section
+            Title="Artículos">
 
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+            <sv:SwitchCell
+                x:Name="ComenzarJornadaConArticulosDisponibles"
+                PropertyChanged="ComenzarJornadaConArticulosDisponibles_PropertyChanged"
+                Title="Comenzar con artículos disponibles"
+                TitleFontSize="20"
+                TitleColor="Black"
+                TitleFontAttributes="Bold"
+                Description="Al comenzar la jornada, marcar todos los artículos como disponibles"
+                DescriptionFontSize="18"/>
 
-        <StackLayout
-            Spacing="0"
-            Grid.Column="1"
-            VerticalOptions="CenterAndExpand">
+        </sv:Section>
 
-            <BoxView HeightRequest="20" Color="Transparent"/>
-
-            <Label
-                Text="Ajustes"
-                FontSize="Title"
-                TextColor="Black"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"/>
-
-            <BoxView HeightRequest="20" Color="Transparent"/>
-
-        </StackLayout>
-
-    </Grid>
+    </sv:SettingsView>
 
 </ContentPage>

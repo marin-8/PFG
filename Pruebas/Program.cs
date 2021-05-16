@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 
@@ -59,6 +60,12 @@ namespace PFG.Pruebas
 			//	fechasHoras
 			//		.OrderBy(fh => fh)
 			//		.ToArray();
+
+			//var a = Ajustes.MapearClaseEstaticaAObjeto();
+
+			//Ajustes.ComenzarJornadaConArticulosDisponibles = true;
+
+			//var b = Ajustes.MapearClaseEstaticaAObjeto();
 		}
 	}
 }
