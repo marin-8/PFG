@@ -6,20 +6,24 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
+using PFG.Comun;
+
 namespace PFG.Gestor
 {
-	public static class Ajustes
+	public static class GestionAjustes
 	{
 		const string RUTA_ARCHIVO_JSON = @".\Guardado\Ajustes.json";
 
 		private static readonly object GuardadoLock = new();
 
-		public static bool ComenzarJornadaConArticulosDisponibles { get; set; }
+		#pragma warning disable CA2211
+		public static AjustesObjeto Ajustes = new();
+		#pragma warning restore CA2211
 
 		public static void Cargar()
 		{
 			string usuariosJsonString = File.ReadAllText(RUTA_ARCHIVO_JSON);
-			var ajustesCarga  = JsonConvert.DeserializeObject<AjustesCargaGuardado>(usuariosJsonString);
+			var ajustesCarga  = JsonConvert.DeserializeObject<AjustesObjeto>(usuariosJsonString);
 
 			MapearObjetoAClaseEstatica(ajustesCarga);
 		}
@@ -38,17 +42,12 @@ namespace PFG.Gestor
 			});
 		}
 
-		private class AjustesCargaGuardado
-		{
-			[JsonProperty("1")] public static bool ComenzarJornadaConArticulosDisponibles { get; set; }
-		}
-
-		private static void MapearObjetoAClaseEstatica(AjustesCargaGuardado AjustesCarga)
+		private static void MapearObjetoAClaseEstatica(AjustesObjeto AjustesCarga)
 		{
 			var propiedadesOrigen = AjustesCarga.GetType().GetProperties();
 
 			var propiedadesDestino =
-				typeof(Ajustes)
+				typeof(GestionAjustes)
 					.GetProperties(BindingFlags.Public | BindingFlags.Static);
 
 			foreach(var propiedadOrigen in propiedadesOrigen)
@@ -61,12 +60,12 @@ namespace PFG.Gestor
 			}
 		}
 
-		private static AjustesCargaGuardado MapearClaseEstaticaAObjeto()
+		private static AjustesObjeto MapearClaseEstaticaAObjeto()
 		{
-			AjustesCargaGuardado ajustesGuardado = new();
+			AjustesObjeto ajustesGuardado = new();
 
 			var propiedadesOrigen =
-				typeof(Ajustes)
+				typeof(GestionAjustes)
 					.GetProperties(BindingFlags.Public | BindingFlags.Static);
 
 			var propiedadesDestino = ajustesGuardado.GetType().GetProperties();

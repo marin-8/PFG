@@ -42,7 +42,7 @@ namespace PFG.Gestor
 
 		private void Principal_Load(object sender, EventArgs e)
 		{
-			Ajustes.Cargar();
+			GestionAjustes.Cargar();
 			GestionUsuarios.Cargar();
 			GestionMesas.Cargar();
 			GestionArticulos.Cargar();
@@ -74,7 +74,7 @@ namespace PFG.Gestor
 			}
 			else
 			{
-				if(Ajustes.ComenzarJornadaConArticulosDisponibles)
+				if(GestionAjustes.Ajustes.ComenzarJornadaConArticulosDisponibles)
 					foreach(var articulo in GestionArticulos.Articulos)
 						articulo.Disponible = true;
 			}
@@ -96,7 +96,7 @@ namespace PFG.Gestor
 			{
 				if(UltimoCierreCorrecto)
 				{
-					if(Ajustes.ComenzarJornadaConArticulosDisponibles)
+					if(GestionAjustes.Ajustes.ComenzarJornadaConArticulosDisponibles)
 						foreach(var articulo in GestionArticulos.Articulos)
 							articulo.Disponible = true;
 				}
@@ -109,6 +109,11 @@ namespace PFG.Gestor
 			Global.JornadaEnCurso = !Global.JornadaEnCurso;
 
 			ActualizarEstiloBotonComenzarTerminarJornada();
+		}
+
+		private void CerrarSesionAdmin_Click(object sender, EventArgs e)
+		{
+			CerrarSesionAdminManual();
 		}
 
 		private void Salir_Click(object sender, EventArgs e)
@@ -127,7 +132,7 @@ namespace PFG.Gestor
 			{
 				ProcesadorGestor.PararDeComprobarConectados();
 				Servidor.PararEscucha();
-				CerrarSesionAdmin();
+				CerrarSesionAdminManual();
 				GuardarDatos();
 				/*Form*/ Close();
 			}
@@ -163,7 +168,7 @@ namespace PFG.Gestor
 			GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia);
 		}
 
-		private static async void CerrarSesionAdmin()
+		private static async void CerrarSesionAdminManual()
 		{
 			var admin =
 				GestionUsuarios.Usuarios
@@ -184,8 +189,8 @@ namespace PFG.Gestor
 			GestionMesas.Guardar();
 			GestionArticulos.Guardar();
 
-			Ajustes.Guardar();
-		}
+			GestionAjustes.Guardar();
+		} 
 
 		// ============================================================================================== //
 	}

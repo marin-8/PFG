@@ -15,13 +15,21 @@ namespace PFG.Aplicacion
 		public Ajustes()
 		{
 			InitializeComponent();
+
+			Shell.Current.Navigated += OnNavigatedTo;
 		}
 
-		// TODO - CARGAR AJUSTES
+		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		{
+			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
+			{
+				// TODO - CARGAR AJUSTES
+			}
+		}
 
 		private async void ComenzarJornadaConArticulosDisponibles_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if(e.PropertyName == "On")
+			if(e.PropertyName == AiForms.Renderers.SwitchCell.OnProperty.PropertyName)
 			{
 				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
 

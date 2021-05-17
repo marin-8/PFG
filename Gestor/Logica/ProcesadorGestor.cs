@@ -1019,9 +1019,9 @@ namespace PFG.Gestor
 
 		private static void Procesar_ModificarAjusteComenzarJornadaConArticulosDisponibles(Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles Comando)
 		{
-			Ajustes.ComenzarJornadaConArticulosDisponibles = Comando.EstaActivado;
+			GestionAjustes.Ajustes.ComenzarJornadaConArticulosDisponibles = Comando.EstaActivado;
 
-			Ajustes.Guardar();
+			GestionAjustes.Guardar();
 		}
 
 		//private static void Procesar_XXXXX(Comando_XXXXX Comando)

@@ -35,6 +35,7 @@ namespace PFG.Gestor
 			this.IPGestor = new System.Windows.Forms.Label();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.ComenzarTerminarJornada = new System.Windows.Forms.Button();
+			this.CerrarSesionAdmin = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.SuspendLayout();
@@ -55,9 +56,9 @@ namespace PFG.Gestor
 			this.Salir.BackColor = System.Drawing.Color.DarkRed;
 			this.Salir.Font = new System.Drawing.Font("Roboto Mono", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.Salir.ForeColor = System.Drawing.Color.White;
-			this.Salir.Location = new System.Drawing.Point(12, 12);
+			this.Salir.Location = new System.Drawing.Point(309, 12);
 			this.Salir.Name = "Salir";
-			this.Salir.Size = new System.Drawing.Size(505, 50);
+			this.Salir.Size = new System.Drawing.Size(207, 50);
 			this.Salir.TabIndex = 2;
 			this.Salir.Text = "Salir";
 			this.Salir.UseVisualStyleBackColor = false;
@@ -90,6 +91,7 @@ namespace PFG.Gestor
 			// panel3
 			// 
 			this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel3.Controls.Add(this.CerrarSesionAdmin);
 			this.panel3.Controls.Add(this.Salir);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel3.Location = new System.Drawing.Point(0, 143);
@@ -108,6 +110,19 @@ namespace PFG.Gestor
 			this.ComenzarTerminarJornada.Text = "Comenzar Jornada";
 			this.ComenzarTerminarJornada.UseVisualStyleBackColor = false;
 			this.ComenzarTerminarJornada.Click += new System.EventHandler(this.ComenzarTerminarJornada_Click);
+			// 
+			// CerrarSesionAdmin
+			// 
+			this.CerrarSesionAdmin.BackColor = System.Drawing.Color.MidnightBlue;
+			this.CerrarSesionAdmin.Font = new System.Drawing.Font("Roboto Mono", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.CerrarSesionAdmin.ForeColor = System.Drawing.Color.White;
+			this.CerrarSesionAdmin.Location = new System.Drawing.Point(12, 12);
+			this.CerrarSesionAdmin.Name = "CerrarSesionAdmin";
+			this.CerrarSesionAdmin.Size = new System.Drawing.Size(286, 50);
+			this.CerrarSesionAdmin.TabIndex = 3;
+			this.CerrarSesionAdmin.Text = "Cerrar sesión admin";
+			this.CerrarSesionAdmin.UseVisualStyleBackColor = false;
+			this.CerrarSesionAdmin.Click += new System.EventHandler(this.CerrarSesionAdmin_Click);
 			// 
 			// Principal
 			// 
@@ -141,6 +156,8 @@ namespace PFG.Gestor
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Button ComenzarTerminarJornada;
 		private System.Windows.Forms.Label IPGestor;
+		private System.Windows.Forms.Button aa;
+		private System.Windows.Forms.Button CerrarSesionAdmin;
 	}
 }
 
