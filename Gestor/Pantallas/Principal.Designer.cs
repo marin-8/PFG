@@ -156,7 +156,6 @@ namespace PFG.Gestor
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Button ComenzarTerminarJornada;
 		private System.Windows.Forms.Label IPGestor;
-		private System.Windows.Forms.Button aa;
 		private System.Windows.Forms.Button CerrarSesionAdmin;
 	}
 }

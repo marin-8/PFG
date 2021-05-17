@@ -15,10 +15,4 @@
     <ProjectReference Include="..\Comun\Comun.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Guardado\Usuarios.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

@@ -13,6 +13,9 @@ namespace PFG.Comun
 		CerrarSesion,
 		JornadaTerminada,
 
+		PedirAjustes,
+		MandarAjustes,
+
 		PedirUsuarios,
 		MandarUsuarios,
 		CrearUsuario,

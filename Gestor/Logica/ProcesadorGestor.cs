@@ -104,6 +104,14 @@ namespace PFG.Gestor
 					break;
 				}
 
+				case TiposComando.PedirAjustes:
+				{
+					comandoRespuesta =
+						Procesar_PedirAjustes();
+
+					break;
+				}
+
 				case TiposComando.PedirUsuarios:
 				{
 					comandoRespuesta =
@@ -505,6 +513,11 @@ namespace PFG.Gestor
 					Comun.Global.TareasPrioridadesRoles[tarea.TipoTarea].ToArray(),
 					tarea);
 			}
+		}
+
+		private static string Procesar_PedirAjustes()
+		{
+			return new Comando_MandarAjustes(GestionAjustes.Ajustes).ToString();
 		}
 
 		private static string Procesar_PedirUsuarios()

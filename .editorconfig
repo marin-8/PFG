@@ -2,3 +2,6 @@
 
 # CS0618: Type or member is obsolete
 dotnet_diagnostic.CS0618.severity = suggestion
+
+# IDE0005: Using directive is unnecessary.
+dotnet_diagnostic.IDE0005.severity = suggestion

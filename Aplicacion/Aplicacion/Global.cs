@@ -21,6 +21,8 @@ namespace PFG.Aplicacion
 
 		public static ControladorRed Servidor;
 
+		public static AjustesObjeto Ajustes = new();
+
 		public static ObservableCollection<Usuario> Usuarios = new();
 		public static readonly object UsuariosLock = new();
 
@@ -127,6 +129,21 @@ namespace PFG.Aplicacion
 			};
 		}
 
+		public static async Task Get_Ajustes()
+		{
+			UserDialogs.Instance.ShowLoading("Pidiendo ajustes...");
+
+			var comandoRespuesta = await Task.Run(() =>
+			{
+				string respuestaGestor = new Comando_PedirAjustes().Enviar(IPGestor);
+				return Comando.DeJson<Comando_MandarAjustes>(respuestaGestor);
+			});
+			
+			Ajustes = comandoRespuesta.Ajustes;
+
+			UserDialogs.Instance.HideLoading();
+		}
+
 		public static async Task Get_Mesas()
 		{
 			UserDialogs.Instance.ShowLoading("Pidiendo mesas...");
@@ -181,7 +198,7 @@ namespace PFG.Aplicacion
 			UserDialogs.Instance.HideLoading();
 		}
 
-		public static async void Get_TareasPersonales()
+		public static async Task Get_TareasPersonales()
 		{
 			UserDialogs.Instance.ShowLoading("Actualizando lista de tareas...");
 

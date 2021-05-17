@@ -46,9 +46,9 @@ namespace PFG.Aplicacion
 
 		private async void IniciarSesion_Clicked(object sender, EventArgs e)
 		{
-			string ipGestor = IPGestor.Text;
-			string usuario = Usuario.Text;
-			string contrasena = Contrasena.Text;
+			string ipGestor = IPGestor.Text ?? "";
+			string usuario = Usuario.Text ?? "";
+			string contrasena = Contrasena.Text ?? "";
 
 			if(         ipGestor == "") { await DisplayAlert("Alerta", "IP del Gestor vacía. Este campo es obligatorio",    "Aceptar"); return; }
 			if(          usuario == "") { await DisplayAlert("Alerta", "Usuario vacío. Este campo es obligatorio",          "Aceptar"); return; }

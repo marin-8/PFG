@@ -168,19 +168,13 @@ namespace PFG.Gestor
 			GestionMesas.Mesas.ForEach(m => m.EstadoMesa = EstadosMesa.Vacia);
 		}
 
-		private static async void CerrarSesionAdminManual()
+		private static void CerrarSesionAdminManual()
 		{
 			var admin =
 				GestionUsuarios.Usuarios
 					.Single(u => u.Rol == Roles.Administrador);
 
-			if(admin.Conectado)
-			{
-				await Task.Run(() => {
-					new Comando_JornadaTerminada().Enviar(admin.IP); });
-
-				admin.Conectado = false;
-			}
+			admin.Conectado = false;
 		}
 
 		private static void GuardarDatos()

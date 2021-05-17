@@ -32,7 +32,7 @@ namespace PFG.Aplicacion
 			{
 				case TiposComando.Error:
 				{
-					Global.Get_TareasPersonales();
+					Procesar_Error();
 
 					break;
 				}
@@ -88,6 +88,11 @@ namespace PFG.Aplicacion
 			}
 
 			return comandoRespuesta;
+		}
+
+		private static async void Procesar_Error()
+		{
+			await Global.Get_TareasPersonales();
 		}
 
 		private static async void Procesar_JornadaTerminada()

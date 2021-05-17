@@ -12,6 +12,8 @@ namespace PFG.Aplicacion
 {
 	public partial class Ajustes : ContentPage
 	{
+		private bool CargandoAjustes = false;
+
 		public Ajustes()
 		{
 			InitializeComponent();
@@ -19,28 +21,37 @@ namespace PFG.Aplicacion
 			Shell.Current.Navigated += OnNavigatedTo;
 		}
 
-		private void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
+		private async void OnNavigatedTo(object sender, ShellNavigatedEventArgs e)
 		{
 			if(e.Current.Location.OriginalString.Contains(((BaseShellItem)Parent).Route.ToString()))
 			{
-				// TODO - CARGAR AJUSTES
+				await Global.Get_Ajustes();
+
+				CargandoAjustes = true;
+
+				ComenzarJornadaConArticulosDisponibles.On = Global.Ajustes.ComenzarJornadaConArticulosDisponibles;
+
+				CargandoAjustes = false;
 			}
 		}
 
 		private async void ComenzarJornadaConArticulosDisponibles_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if(e.PropertyName == AiForms.Renderers.SwitchCell.OnProperty.PropertyName)
+			if(!CargandoAjustes)
 			{
-				UserDialogs.Instance.ShowLoading("Modificando Nombre de Usuario...");
-
-				bool estaActivado = ((AiForms.Renderers.SwitchCell)sender).On;
-
-				await Task.Run(() =>
+				if(e.PropertyName == AiForms.Renderers.SwitchCell.OnProperty.PropertyName)
 				{
-					new Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles(estaActivado).Enviar(Global.IPGestor);
-				});
+					UserDialogs.Instance.ShowLoading("Modificando ajuste...");
 
-				UserDialogs.Instance.HideLoading();
+					bool estaActivado = ((AiForms.Renderers.SwitchCell)sender).On;
+
+					await Task.Run(() =>
+					{
+						new Comando_ModificarAjusteComenzarJornadaConArticulosDisponibles(estaActivado).Enviar(Global.IPGestor);
+					});
+
+					UserDialogs.Instance.HideLoading();
+				}
 			}
 		}
 	}

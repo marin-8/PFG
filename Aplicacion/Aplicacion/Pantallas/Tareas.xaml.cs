@@ -132,9 +132,9 @@ namespace PFG.Aplicacion
 
 		// Métodos Helper
 
-		private void RefrescarTareasPersonales()
+		private async void RefrescarTareasPersonales()
 		{
-			Global.Get_TareasPersonales();
+			await Global.Get_TareasPersonales();
 
 			ListaTareas.EndRefresh();
 		}
