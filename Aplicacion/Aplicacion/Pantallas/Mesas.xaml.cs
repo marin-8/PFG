@@ -246,6 +246,9 @@ namespace PFG.Aplicacion
 
 				numeroNuevaMesa = byte.Parse(resultado.Text);
 
+				if(numeroNuevaMesa > totalMesas) {
+					await UserDialogs.Instance.AlertAsync("El número introducido es mayor al máximo", "Alerta", "Aceptar"); continue; }
+
 				if(Global.Mesas.Where(m => m.Numero == numeroNuevaMesa).Any())
 					await UserDialogs.Instance.AlertAsync("Ya existe una mesa con ese número", "Alerta", "Aceptar");
 				else

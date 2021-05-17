@@ -11,6 +11,7 @@ namespace PFG.Aplicacion
 {
 	public static class ProcesadorAplicacion
 	{
+
 		#pragma warning disable IDE0060
 		public static string ProcesarComandosRecibidos(string IP, string ComandoJson)
 		#pragma warning restore IDE0060

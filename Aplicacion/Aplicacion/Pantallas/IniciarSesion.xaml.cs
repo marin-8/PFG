@@ -64,10 +64,23 @@ namespace PFG.Aplicacion
 			{
 				Global.IPGestor = ipGestor;
 
-				string respuestaGestor = new Comando_IniciarSesion(usuario,contrasena).Enviar(Global.IPGestor);
-				return Comando.DeJson<Comando_ResultadoIniciarSesion>(respuestaGestor);
+				string respuestaGestor = new Comando_IniciarSesion(usuario,contrasena).Enviar(Global.IPGestor, true);
+
+				return respuestaGestor == null
+				? null
+				: Comando.DeJson<Comando_ResultadoIniciarSesion>(respuestaGestor);
 			});
-			Procesar_ResultadoIniciarSesion(comandoRespuesta); 
+
+			if(comandoRespuesta != null)
+				Procesar_ResultadoIniciarSesion(comandoRespuesta); 
+			else
+				await UserDialogs.Instance.AlertAsync
+				(
+					"No se obtuvo respuesta del Gestor.\n\n" +
+					"Comprueba que la dirección IP es correcta y que no hay problemas de conexión.",
+					"Alerta",
+					"Aceptar"
+				);
 
 			UserDialogs.Instance.HideLoading();
 		}

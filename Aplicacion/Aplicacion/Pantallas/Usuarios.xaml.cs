@@ -76,7 +76,7 @@ namespace PFG.Aplicacion
 
 			string rolString = await UserDialogs.Instance.ActionSheetAsync("Rol", "Cancelar", null, null, RolesBaseToStringArray());
 			if(rolString == "Cancelar") return;
-			nuevoUsuario.Rol = (Roles)(byte.Parse(rolString[0].ToString())-1);
+			nuevoUsuario.Rol = (Roles)Enum.Parse(typeof(Roles), rolString);
 
 			UserDialogs.Instance.ShowLoading("Creando usuario...");
 
@@ -234,7 +234,7 @@ namespace PFG.Aplicacion
 				{
 					string rolString = await UserDialogs.Instance.ActionSheetAsync($"Nuevo Rol (actual = {usuarioPulsado.Rol})", "Cancelar", null, null, RolesBaseToStringArray());
 					if(rolString == "Cancelar") return;
-					nuevoRol = (Roles)(byte.Parse(rolString[0].ToString())-1);
+					nuevoRol = (Roles)Enum.Parse(typeof(Roles), rolString);
 
 					if(nuevoRol != usuarioPulsado.Rol) break;
 
