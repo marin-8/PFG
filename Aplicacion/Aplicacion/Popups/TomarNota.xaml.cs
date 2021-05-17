@@ -102,7 +102,7 @@ namespace PFG.Aplicacion
 					{
 						resultado.Articulo.Unidades = 1;
 						ArticulosSeleccionados.Add(resultado.Articulo);
-						ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
+						ArticulosSeleccionados.Ordenar();
 					}
 				}
 			}
@@ -144,8 +144,6 @@ namespace PFG.Aplicacion
 				if(articuloAModificar.Unidades < 255)
 				{
 					articuloAModificar.Unidades += 1;
-
-					ArticulosSeleccionados.Ordenar((a,b) => a.Nombre.CompareTo(b.Nombre));
 
 					// Sin esto, no se actualiza el ListView, por alguna razón (biende raro)
 					ListaArticulos.ItemsSource = null;

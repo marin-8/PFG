@@ -1,7 +1,5 @@
 ﻿
-using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
@@ -23,12 +21,15 @@ namespace PFG.Comun
 			);
 		}
 
-		public static void Ordenar<T>(this ObservableCollection<T> coleccion, Comparison<T> comparacion)
+		public static void Ordenar(this ObservableCollection<Articulo> coleccion)
 		{
-			var listaOrdenable = new List<T>(coleccion);
-			listaOrdenable.Sort(comparacion);
+			Articulo[] listaOrdenable =
+				coleccion
+					.OrderBy(t => t.Categoria)
+					.ThenBy(t => t.Nombre)
+					.ToArray();
 
-			for(int i = 0 ; i < listaOrdenable.Count; i++)
+			for(int i = 0 ; i < listaOrdenable.Length; i++)
 				coleccion.Move(coleccion.IndexOf(listaOrdenable[i]), i);
 		}
 

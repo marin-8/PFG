@@ -179,9 +179,10 @@ namespace PFG.Gestor
 
 		private static void GuardarDatos()
 		{
-			GestionUsuarios.Guardar();
+			GestionTareas.Guardar();
 			GestionMesas.Guardar();
 			GestionArticulos.Guardar();
+			GestionUsuarios.Guardar();
 
 			GestionAjustes.Guardar();
 		} 

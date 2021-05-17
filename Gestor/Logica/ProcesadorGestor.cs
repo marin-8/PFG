@@ -606,6 +606,11 @@ namespace PFG.Gestor
 
 		private static string Procesar_PedirMesas()
 		{
+			// Este método de abajo está metido aquí poco antes
+			// de la entrega y soluciona un error de última hora.
+
+			ComprobarEstadosMesas();
+
 			return new Comando_MandarMesas
 			(
 				GestionMesas.AnchoGrid,
@@ -1043,5 +1048,51 @@ namespace PFG.Gestor
 		//}
 
 	// ============================================================================================== //
+
+		// Métodos Helper
+
+		private static void ComprobarEstadosMesas()
+		{
+			// Comprobación en caso de error por fallo de conexión
+
+			GestionMesas.Mesas.ForEach(m =>
+			{
+				var tareasMesa =
+					GestionTareas.Tareas
+						.Where(t => t.NumeroMesa == m.Numero);
+
+				if(tareasMesa.Any(t => !t.Completada))
+				{
+					var tareasNoCompletadasMesa = tareasMesa.Where(t => !t.Completada);
+
+					if(tareasNoCompletadasMesa.Any(t => t.TipoTarea == TiposTareas.LimpiarMesa))
+					{
+						m.EstadoMesa = EstadosMesa.Sucia;
+					}
+					else if(tareasNoCompletadasMesa.Any(t => t.TipoTarea == TiposTareas.PrepararArticulosBarra
+												          || t.TipoTarea == TiposTareas.PrepararArticulosCocina
+												          || t.TipoTarea == TiposTareas.ServirArticulos))
+					{
+						m.EstadoMesa = EstadosMesa.Esperando;
+					}
+				}
+				else
+				{
+					var ultimaTareaMesa = tareasMesa.LastOrDefault();
+
+					if(ultimaTareaMesa == null || 
+					   ultimaTareaMesa.TipoTarea == TiposTareas.LimpiarMesa)
+					{
+						m.EstadoMesa = EstadosMesa.Vacia;
+					}
+					else
+					{
+						m.EstadoMesa = EstadosMesa.Ocupada;
+					}
+				}
+			});
+		}
 	}
+
+	// ============================================================================================== //
 }
